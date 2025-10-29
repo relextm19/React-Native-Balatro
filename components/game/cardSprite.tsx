@@ -1,5 +1,5 @@
 import React from "react";
-import { Image } from "react-native";
+import { Image, View, StyleSheet } from "react-native";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 import { SharedValue } from "react-native-reanimated";
 
@@ -18,8 +18,12 @@ export function CardSprite(
   }));
 
   return (
-    <Animated.View style={animatedStyle}>
-      <Image source={spriteSource} style={{ width, height }} />
+    <Animated.View style={[animatedStyle, { width, height }]}>
+        <Image
+          source={spriteSource}
+          style={{ width: "100%", height: "100%" }}
+          resizeMode="contain"
+        />
     </Animated.View>
   );
 }

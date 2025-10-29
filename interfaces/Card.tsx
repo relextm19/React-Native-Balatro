@@ -1,10 +1,10 @@
 import React from "react";
-import { Image } from "react-native";
 import { IRectangle, Shape } from "./Shape";
 import { cardSprites } from "../assets/cardSpritesIndex";
 import { SharedValue, useSharedValue } from "react-native-reanimated";
 import { cards } from "../gameState";
 import { CardSprite } from "../components/game/cardSprite";
+import { RW, RH } from "../utils/ResponsiveDimensions";
 
 export enum Suits {
   Hearts = 'hearts',
@@ -72,11 +72,11 @@ export function generateDeck(): IPlayingCard[]{
     for (const rank of ranks) {
       const x: SharedValue<number> = useSharedValue(xt);
       const y: SharedValue<number> = useSharedValue(yt);
-      const card = createCard(suit, rank, x, y, 48, 64); // width=60, height=90
+      const card = createCard(suit, rank, x, y, RW(100/26), RH(100/9)); 
       deck.push(card);
-      xt += 48;
+      xt += RW(100/26);
     }
-    yt+=64;
+    yt+=RH(100/26);
     xt = 0;
   }
   return deck;
