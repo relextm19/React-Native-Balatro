@@ -16,7 +16,7 @@
   "include": [
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "FpsCounter.js"  ],
   "exclude": [
     "node_modules"
   ],

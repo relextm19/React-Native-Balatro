@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import * as NavigationBar from "expo-navigation-bar";
 import * as ScreenOrientation from 'expo-screen-orientation';
+import FPSCounter from "./utils/FPScounter";
 
 import MovingBackground from "./components/ui/Background";
 import Menu from "./components/ui/Menu";
@@ -20,7 +21,7 @@ export default function App() {
       <View style={StyleSheet.absoluteFill}>
         <MovingBackground />
       </View>
-
+      <FPSCounter />
       <Menu />
     </View>
   );

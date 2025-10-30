@@ -1,16 +1,17 @@
 import React from "react";
 import { useEffect } from "react";
 import { View, StyleSheet } from "react-native";
+import { Canvas, useImage, Group, Image } from "@shopify/react-native-skia";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withRepeat,
   withTiming,
   Easing,
+  useDerivedValue
 } from "react-native-reanimated";
 
 const [IMAGE_WIDTH, IMAGE_HEIGHT] = [2000, 1000];
-//FIXME: The transition between images is not exactly seamless
 export default function MovingBackground() {
   const translateX = useSharedValue(0);
 
@@ -24,39 +25,37 @@ export default function MovingBackground() {
     );
   }, [translateX]);
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: translateX.value }],
-  }));
+  const image = useImage(require("../../assets/backgrounds/background1.png"));
+  const animatedTransform = useDerivedValue(() => {
+    return [{ translateX: translateX.value }];
+  });
 
   return (
-    <View style={styles.container}>
-      <Animated.View style={[styles.scrollingContainer, animatedStyle]}>
-        <Animated.Image
-          source={require("./../../assets/backgrounds/background1.png")}
-          style={styles.image}
-          resizeMode="repeat" 
+    <Canvas style={styles.container}>
+      <Group transform={animatedTransform}>
+        <Image
+          image={image}
+          x={0}
+          y={0}
+          width={IMAGE_WIDTH + 2} //to fix the small crack between images
+          height={IMAGE_HEIGHT}
         />
-        <Animated.Image
-          source={require("../../assets/backgrounds/background1.png")}
-          style={styles.image} 
-          resizeMode="repeat" 
+        <Image
+          image={image}
+          x={IMAGE_WIDTH}
+          y={0}
+          width={IMAGE_WIDTH}
+          height={IMAGE_HEIGHT}
         />
-      </Animated.View>
-    </View>
-  );
+      </Group>
+    </Canvas>
+  )
+
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    overflow: "hidden", 
-  },
-  scrollingContainer: {
-    flexDirection: "row",
-    height: IMAGE_HEIGHT,
-  },
-  image: {
-    width: IMAGE_WIDTH, 
-    height: IMAGE_HEIGHT,
+    overflow: "hidden",
   },
 });
