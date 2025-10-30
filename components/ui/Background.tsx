@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import Animated, {
   useSharedValue,
@@ -7,21 +8,21 @@ import Animated, {
   withTiming,
   Easing,
 } from "react-native-reanimated";
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../utils/ResponsiveDimensions";
 
-const [IMAGE_WIDTH,IMAGE_HEIGHT] = [2000, 1000];
-
+const [IMAGE_WIDTH, IMAGE_HEIGHT] = [2000, 1000];
+//FIXME: The transition between images is not exactly seamless
 export default function MovingBackground() {
   const translateX = useSharedValue(0);
 
-  translateX.value = withRepeat(
-    withTiming(-IMAGE_WIDTH, {
-      duration: 10000,
-      easing: Easing.linear,
-    }),
-    -1,
-    false
-  );
+  useEffect(() => {
+    translateX.value = withRepeat(
+      withTiming(-IMAGE_WIDTH, {
+        duration: 50000,
+        easing: Easing.linear,
+      }),
+      -1, // Repeat infinitely
+    );
+  }, [translateX]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: translateX.value }],
@@ -31,14 +32,14 @@ export default function MovingBackground() {
     <View style={styles.container}>
       <Animated.View style={[styles.scrollingContainer, animatedStyle]}>
         <Animated.Image
-          source={require("../../assets/backgrounds/background1.png")}
+          source={require("./../../assets/backgrounds/background1.png")}
           style={styles.image}
-          resizeMode="cover"
+          resizeMode="repeat" 
         />
         <Animated.Image
           source={require("../../assets/backgrounds/background1.png")}
-          style={styles.image}
-          resizeMode="cover"
+          style={styles.image} 
+          resizeMode="repeat" 
         />
       </Animated.View>
     </View>
@@ -48,11 +49,14 @@ export default function MovingBackground() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    overflow: "hidden", 
   },
   scrollingContainer: {
     flexDirection: "row",
+    height: IMAGE_HEIGHT,
   },
   image: {
-    marginRight: -2
+    width: IMAGE_WIDTH, 
+    height: IMAGE_HEIGHT,
   },
 });
