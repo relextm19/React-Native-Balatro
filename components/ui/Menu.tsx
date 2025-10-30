@@ -1,5 +1,7 @@
 import React from "react";
 import { Image, StyleSheet, View } from "react-native";
+
+import MenuComponent from "./menu/MenuComponent";
 import { RW, RH } from "../../utils/ResponsiveDimensions";
 
 export default function Menu(){
@@ -10,6 +12,9 @@ export default function Menu(){
                 style={styles.logo}
                 resizeMode="contain"
             />
+            <View>
+                <MenuComponent text="Play" color="#00FF00" onPress={() => {}}/>
+            </View>
         </View>
     )
 }
