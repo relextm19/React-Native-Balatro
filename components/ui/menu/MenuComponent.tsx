@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, StyleSheet } from "react-native";
+import MenuButton from "./MenuButton";
 
 type MenuComponentProps = {
     text: string;
@@ -9,11 +10,7 @@ type MenuComponentProps = {
 
 export default function MenuComponent({text, color, onPress}: MenuComponentProps){
     return(
-        <Button 
-            onPress={onPress}
-            title={text}
-            color={color}
-        />
+        <MenuButton />
     )
 
 }

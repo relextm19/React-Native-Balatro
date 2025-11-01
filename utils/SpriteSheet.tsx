@@ -1,17 +1,26 @@
-import React from "react";
-import { SkImage, useImage, SkRect } from "@shopify/react-native-skia";
+import { useRectBuffer, SkHostRect } from "@shopify/react-native-skia";
+import type { Mutable } from "react-native-reanimated/lib/typescript/commonTypes";
 
-export function getSpriteRects(path: string, rows: number, cols: number, spriteWidth: number, spriteHeight: number){
-    const spriteSheet = useImage(path);
-    const images = [] as SkImage[];
+export function useSpriteRects(
+  offsetX: number,
+  offsetY: number,
+  rows: number,
+  cols: number,
+  spriteWidth: number,
+  spriteHeight: number
+): Mutable<SkHostRect[]> {
+  const size = cols * rows;
 
-    const frames: SkRect[] = React.useMemo(() => {
-        const arr: SkRect[] = [];
-        for (let row = 0; row < rows; row++) {
-            for (let col = 0; col < cols; col++) {
-                arr.push({ x: col * spriteWidth, y: row * spriteHeight, width: spriteWidth, height: spriteHeight });
-            }
-        }
-        return arr;
-    }, [rows, cols, spriteWidth, spriteHeight]);
+  return useRectBuffer(size, (rect, i) => {
+    "worklet";
+    const col = i % cols;
+    const row = Math.floor(i / cols);
+
+    rect.setXYWH(
+      col * (spriteWidth + offsetX),
+      row * (spriteHeight + offsetY),
+      spriteWidth,
+      spriteHeight
+    );
+  });
 }
