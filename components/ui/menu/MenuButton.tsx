@@ -4,9 +4,16 @@ import { useSpriteRects } from "../../../utils/SpriteSheet";
 import { useSharedValue, useDerivedValue, withTiming, Easing } from "react-native-reanimated";
 import { Pressable } from "react-native";
 
-export default function MenuButton() {
-    const texture = useImageAsTexture(require("../../../assets/ui/play_button.png"));
-    const spriteRects = useSpriteRects(11, 0, 1, 3, 53, 22);
+import type { SpriteSheetSliceData } from "../../../utils/SpriteSheet";
+
+type MenuButtonProps = {
+    imageAsset: number, //the type of require calls is number due to how metro handles stuff
+    sliceData: SpriteSheetSliceData,
+}
+
+export default function MenuButton({imageAsset, sliceData}: MenuButtonProps) {
+    const texture = useImageAsTexture(imageAsset);
+    const spriteRects = useSpriteRects(sliceData);
     const transforms = [Skia.RSXform(1, 0, 0, 0)]
     const animationDuration = 100;
 
@@ -20,7 +27,7 @@ export default function MenuButton() {
         const currentFrame = Math.round(frame.value);
         return [spriteRects.value[currentFrame]];
 
-    }, [spriteRects]); 
+    }, [spriteRects]);
 
     const onPressIn = () => {
         frame.value = 0;
@@ -39,7 +46,7 @@ export default function MenuButton() {
 
     return (
         <Pressable onPressIn={onPressIn} onPressOut={onPressOut}>
-            <Canvas style={{ width: 53, height: 22 }}>
+            <Canvas style={{ width:sliceData.spriteWidth, height: sliceData.spriteHeight }}>
                 {texture && (
                     <Atlas
                         image={texture}

@@ -1,10 +1,20 @@
 import React from "react";
 import { Image, StyleSheet, View } from "react-native";
 
-import MenuComponent from "./menu/MenuComponent";
+import MenuButton from "./menu/MenuButton";
 import { RW, RH } from "../../utils/ResponsiveDimensions";
+import type { SpriteSheetSliceData } from "../../utils/SpriteSheet";
 
 export default function Menu(){
+    const imageAsset = require("../../assets/ui/play_button.png");
+    const sliceData: SpriteSheetSliceData = {
+        offsetX: 11,
+        offsetY: 0,
+        rows: 1,
+        cols: 3,
+        spriteWidth: 53,
+        spriteHeight: 22
+    };
     return (
         <View style={styles.logoContainer}>
             <Image
@@ -13,7 +23,7 @@ export default function Menu(){
                 resizeMode="contain"
             />
             <View>
-                <MenuComponent text="Play" color="#00FF00" onPress={() => {}}/>
+                <MenuButton imageAsset={imageAsset} sliceData={sliceData} />
             </View>
         </View>
     )
