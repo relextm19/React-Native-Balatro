@@ -16,7 +16,7 @@ export default function MenuButton({imageAsset, sliceData, scale}: MenuButtonPro
     const texture = useImageAsTexture(imageAsset);
     const spriteRects = useSpriteRects(sliceData);
     const transforms = [Skia.RSXform(scale, 0, 0, 0)]
-    const animationDuration = 100;
+    const animationDuration = 70;
 
     const frame = useSharedValue(0);
 
