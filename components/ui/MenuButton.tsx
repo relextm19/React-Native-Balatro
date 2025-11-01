@@ -1,18 +1,19 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { Skia, Canvas, Atlas, useImageAsTexture } from "@shopify/react-native-skia";
-import { useSpriteRects } from "../../../utils/SpriteSheet";
+import { useSpriteRects } from "../../utils/SpriteSheet";
 import { useSharedValue, useDerivedValue, withTiming, Easing } from "react-native-reanimated";
 import { Pressable } from "react-native";
 
-import type { SpriteSheetSliceData } from "../../../utils/SpriteSheet";
+import type { SpriteSheetSliceData } from "../../utils/SpriteSheet";
 
 type MenuButtonProps = {
     imageAsset: number, //the type of require calls is number due to how metro handles stuff
     sliceData: SpriteSheetSliceData,
     scale: number,
+    onClick: () => void;
 }
 
-export default function MenuButton({imageAsset, sliceData, scale}: MenuButtonProps) {
+export default function MenuButton({ imageAsset, sliceData, scale, onClick }: MenuButtonProps): ReactElement {
     const texture = useImageAsTexture(imageAsset);
     const spriteRects = useSpriteRects(sliceData);
     const transforms = [Skia.RSXform(scale, 0, 0, 0)]
@@ -43,11 +44,13 @@ export default function MenuButton({imageAsset, sliceData, scale}: MenuButtonPro
             duration: animationDuration,
             easing: Easing.linear,
         });
+
+        onClick();
     };
 
     return (
         <Pressable onPressIn={onPressIn} onPressOut={onPressOut}>
-            <Canvas style={{ width:sliceData.spriteWidth * scale, height: sliceData.spriteHeight * scale}}>
+            <Canvas style={{ width: sliceData.spriteWidth * scale, height: sliceData.spriteHeight * scale }}>
                 {texture && (
                     <Atlas
                         image={texture}
