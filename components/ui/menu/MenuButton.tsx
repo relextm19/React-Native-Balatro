@@ -9,12 +9,13 @@ import type { SpriteSheetSliceData } from "../../../utils/SpriteSheet";
 type MenuButtonProps = {
     imageAsset: number, //the type of require calls is number due to how metro handles stuff
     sliceData: SpriteSheetSliceData,
+    scale: number,
 }
 
-export default function MenuButton({imageAsset, sliceData}: MenuButtonProps) {
+export default function MenuButton({imageAsset, sliceData, scale}: MenuButtonProps) {
     const texture = useImageAsTexture(imageAsset);
     const spriteRects = useSpriteRects(sliceData);
-    const transforms = [Skia.RSXform(1, 0, 0, 0)]
+    const transforms = [Skia.RSXform(scale, 0, 0, 0)]
     const animationDuration = 100;
 
     const frame = useSharedValue(0);
@@ -46,7 +47,7 @@ export default function MenuButton({imageAsset, sliceData}: MenuButtonProps) {
 
     return (
         <Pressable onPressIn={onPressIn} onPressOut={onPressOut}>
-            <Canvas style={{ width:sliceData.spriteWidth, height: sliceData.spriteHeight }}>
+            <Canvas style={{ width:sliceData.spriteWidth * scale, height: sliceData.spriteHeight * scale}}>
                 {texture && (
                     <Atlas
                         image={texture}
