@@ -42,7 +42,7 @@ export default function AnteSelectScreen(): ReactElement | null {
             justifyContent: 'center',
             alignItems: 'flex-end',
             gap: '5%',
-            height: '70%',
+            height: '65%',
         }
 
     })
