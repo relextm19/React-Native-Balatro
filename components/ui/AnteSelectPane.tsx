@@ -67,12 +67,14 @@ const borderRadius = 7;
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#272521ff',
-        height: "70%",
         width: '20%',
 
         borderWidth: 5,
         borderColor: "#362602ff",
         borderRadius: borderRadius,
+        borderBottomWidth: 0,
+        borderBottomLeftRadius: 0,
+        borderBottomRightRadius: 0,
 
         shadowColor: "#4e3a10ff",
         shadowOffset: { width: 0, height: 0 },
@@ -81,6 +83,7 @@ const styles = StyleSheet.create({
         elevation: 8,
 
         padding: 3,
+        paddingBottom: '5%',
     },
 
     innerContainer: {

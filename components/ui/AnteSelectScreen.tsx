@@ -33,28 +33,33 @@ export default function AnteSelectScreen(): ReactElement | null {
 
     const styles = StyleSheet.create({
         container: {
+            flex: 1,
+            justifyContent: 'flex-end'
+        },
+        anteSelectConainter: {
             width: '100%',
-            height: '100%',
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
-            gap: '10%'
+            gap: '3%',
         }
     })
     return (
         <View style={styles.container}>
-            <AnteSelectPane
-                stakeSpriteSheet={stakeSpriteSheet} stakeSourceRect={stakeSpriteRects[0]}
-                blindSpriteSheet={blindsSpriteSheet} blindSourceRect={blindSpriteRects[0]}
-            />
-            <AnteSelectPane
-                stakeSpriteSheet={stakeSpriteSheet} stakeSourceRect={stakeSpriteRects[0]}
-                blindSpriteSheet={blindsSpriteSheet} blindSourceRect={blindSpriteRects[1]}
-            />
-            <AnteSelectPane
-                stakeSpriteSheet={stakeSpriteSheet} stakeSourceRect={stakeSpriteRects[0]}
-                blindSpriteSheet={blindsSpriteSheet} blindSourceRect={blindSpriteRects[2]}
-            />
-        </View >
+            <View style={styles.anteSelectConainter}>
+                <AnteSelectPane
+                    stakeSpriteSheet={stakeSpriteSheet} stakeSourceRect={stakeSpriteRects[0]}
+                    blindSpriteSheet={blindsSpriteSheet} blindSourceRect={blindSpriteRects[0]}
+                />
+                <AnteSelectPane
+                    stakeSpriteSheet={stakeSpriteSheet} stakeSourceRect={stakeSpriteRects[0]}
+                    blindSpriteSheet={blindsSpriteSheet} blindSourceRect={blindSpriteRects[1]}
+                />
+                <AnteSelectPane
+                    stakeSpriteSheet={stakeSpriteSheet} stakeSourceRect={stakeSpriteRects[0]}
+                    blindSpriteSheet={blindsSpriteSheet} blindSourceRect={blindSpriteRects[2]}
+                />
+            </View >
+        </View>
     );
 }
