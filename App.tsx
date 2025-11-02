@@ -21,7 +21,7 @@ export default function App() {
     const [gameStarted, setGameStarted] = useState(false)
 
     return (
-        <View>
+        <View style={{ flex: 1 }}>
             <View style={StyleSheet.absoluteFill}>
                 <MovingBackground />
                 <FPSCounter />
@@ -33,4 +33,5 @@ export default function App() {
             )}
         </View>
     );
+
 }

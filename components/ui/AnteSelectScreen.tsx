@@ -33,28 +33,35 @@ export default function AnteSelectScreen(): ReactElement | null {
 
     const styles = StyleSheet.create({
         container: {
-            width: '100%',
-            height: '100%',
+            flex: 1,
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+        },
+        anteContainer: {
             flexDirection: 'row',
             justifyContent: 'center',
-            alignItems: 'center',
-            gap: '10%'
+            alignItems: 'flex-end',
+            gap: '5%',
+            height: '70%',
         }
+
     })
     return (
         <View style={styles.container}>
-            <AnteSelectPane
-                stakeSpriteSheet={stakeSpriteSheet} stakeSourceRect={stakeSpriteRects[0]}
-                blindSpriteSheet={blindsSpriteSheet} blindSourceRect={blindSpriteRects[0]}
-            />
-            <AnteSelectPane
-                stakeSpriteSheet={stakeSpriteSheet} stakeSourceRect={stakeSpriteRects[0]}
-                blindSpriteSheet={blindsSpriteSheet} blindSourceRect={blindSpriteRects[1]}
-            />
-            <AnteSelectPane
-                stakeSpriteSheet={stakeSpriteSheet} stakeSourceRect={stakeSpriteRects[0]}
-                blindSpriteSheet={blindsSpriteSheet} blindSourceRect={blindSpriteRects[2]}
-            />
-        </View >
+            <View style={styles.anteContainer}>
+                <AnteSelectPane
+                    stakeSpriteSheet={stakeSpriteSheet} stakeSourceRect={stakeSpriteRects[0]}
+                    blindSpriteSheet={blindsSpriteSheet} blindSourceRect={blindSpriteRects[0]}
+                />
+                <AnteSelectPane
+                    stakeSpriteSheet={stakeSpriteSheet} stakeSourceRect={stakeSpriteRects[0]}
+                    blindSpriteSheet={blindsSpriteSheet} blindSourceRect={blindSpriteRects[1]}
+                />
+                <AnteSelectPane
+                    stakeSpriteSheet={stakeSpriteSheet} stakeSourceRect={stakeSpriteRects[0]}
+                    blindSpriteSheet={blindsSpriteSheet} blindSourceRect={blindSpriteRects[2]}
+                />
+            </View >
+        </View>
     );
 }
