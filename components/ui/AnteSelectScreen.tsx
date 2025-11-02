@@ -34,19 +34,21 @@ export default function AnteSelectScreen(): ReactElement | null {
     const styles = StyleSheet.create({
         container: {
             flex: 1,
-            justifyContent: 'flex-end'
+            justifyContent: 'flex-end',
+            alignItems: 'center',
         },
-        anteSelectConainter: {
-            width: '100%',
+        anteContainer: {
             flexDirection: 'row',
             justifyContent: 'center',
-            alignItems: 'center',
-            gap: '3%',
+            alignItems: 'flex-end',
+            gap: '5%',
+            height: '70%',
         }
+
     })
     return (
         <View style={styles.container}>
-            <View style={styles.anteSelectConainter}>
+            <View style={styles.anteContainer}>
                 <AnteSelectPane
                     stakeSpriteSheet={stakeSpriteSheet} stakeSourceRect={stakeSpriteRects[0]}
                     blindSpriteSheet={blindsSpriteSheet} blindSourceRect={blindSpriteRects[0]}
