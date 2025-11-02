@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, use } from "react";
 import { useImage } from "@shopify/react-native-skia";
 import { View, StyleSheet } from "react-native";
 
@@ -6,19 +6,30 @@ import AnteSelectPane from "./AnteSelectPane";
 import { SpriteSheetSliceData, useSpriteRects } from "../../utils/SpriteSheet";
 
 export default function AnteSelectScreen(): ReactElement | null {
-    const blindIconsSpriteSheet = useImage(require("../../assets/poker_chips/green.png"));
+    //TODO: add a file that will contain coords of each chip
+    const stakeSpriteSheet = useImage(require("../../assets/chips/stake_chips.png"));
+    const blindsSpriteSheet = useImage(require("../../assets/chips/blind_chips.png"));
 
-    const sliceData: SpriteSheetSliceData = {
-        offsetX: 16,
-        offsetY: 0,
-        rows: 1,
-        cols: 3,
+    const stakeSliceData: SpriteSheetSliceData = {
+        offsetX: 2,
+        offsetY: 2,
+        rows: 2,
+        cols: 4,
+        spriteWidth: 27,
+        spriteHeight: 27,
+    };
+    const blindSliceData: SpriteSheetSliceData = {
+        offsetX: 0,
+        offsetY: 2,
+        rows: 30,
+        cols: 1,
         spriteWidth: 32,
-        spriteHeight: 36,
+        spriteHeight: 32,
     };
 
-    const blindSpriteRects = useSpriteRects(sliceData).value ?? [];
-    if (!blindIconsSpriteSheet) return null;
+    const stakeSpriteRects = useSpriteRects(stakeSliceData).value ?? [];
+    const blindSpriteRects = useSpriteRects(blindSliceData).value ?? [];
+    if (!stakeSpriteSheet || !blindsSpriteSheet) return null;
 
     const styles = StyleSheet.create({
         container: {
@@ -27,14 +38,23 @@ export default function AnteSelectScreen(): ReactElement | null {
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
+            gap: '10%'
         }
     })
     return (
         <View style={styles.container}>
-            <AnteSelectPane spriteSheet={blindIconsSpriteSheet} sourceRect={blindSpriteRects[0]} />
-            <AnteSelectPane spriteSheet={blindIconsSpriteSheet} sourceRect={blindSpriteRects[1]} />
-            <AnteSelectPane spriteSheet={blindIconsSpriteSheet} sourceRect={blindSpriteRects[2]} />
+            <AnteSelectPane
+                stakeSpriteSheet={stakeSpriteSheet} stakeSourceRect={stakeSpriteRects[0]}
+                blindSpriteSheet={blindsSpriteSheet} blindSourceRect={blindSpriteRects[0]}
+            />
+            <AnteSelectPane
+                stakeSpriteSheet={stakeSpriteSheet} stakeSourceRect={stakeSpriteRects[0]}
+                blindSpriteSheet={blindsSpriteSheet} blindSourceRect={blindSpriteRects[1]}
+            />
+            <AnteSelectPane
+                stakeSpriteSheet={stakeSpriteSheet} stakeSourceRect={stakeSpriteRects[0]}
+                blindSpriteSheet={blindsSpriteSheet} blindSourceRect={blindSpriteRects[2]}
+            />
         </View >
     );
-
 }
