@@ -1,9 +1,16 @@
 import React, { ReactElement, use } from "react";
-import { useImage } from "@shopify/react-native-skia";
+import { SkImage, SkRect, useImage } from "@shopify/react-native-skia";
 import { View, StyleSheet } from "react-native";
 
 import AnteSelectPane from "./AnteSelectPane";
 import { SpriteSheetSliceData, useSpriteRects } from "../../utils/SpriteSheet";
+
+type paneData = {
+    stakeSpriteSheet: SkImage
+    stakeSourceRect: SkRect
+    blindSpriteSheet: SkImage
+    blindSourceRect: SkRect
+};
 
 export default function AnteSelectScreen(): ReactElement | null {
     //TODO: add a file that will contain coords of each chip
@@ -31,21 +38,6 @@ export default function AnteSelectScreen(): ReactElement | null {
     const blindSpriteRects = useSpriteRects(blindSliceData).value ?? [];
     if (!stakeSpriteSheet || !blindsSpriteSheet) return null;
 
-    const styles = StyleSheet.create({
-        container: {
-            flex: 1,
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-        },
-        anteContainer: {
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'flex-end',
-            gap: '5%',
-            height: '65%',
-        }
-
-    })
     return (
         <View style={styles.container}>
             <View style={styles.anteContainer}>
@@ -65,3 +57,19 @@ export default function AnteSelectScreen(): ReactElement | null {
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+    },
+    anteContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'flex-end',
+        gap: '5%',
+        height: '65%',
+    }
+
+})

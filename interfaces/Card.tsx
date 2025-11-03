@@ -2,7 +2,7 @@ import React from "react";
 import { IRectangle, Shape } from "./Shape";
 import { cardSprites } from "../assets/cardSpritesIndex";
 import { SharedValue, useSharedValue } from "react-native-reanimated";
-import { cards } from "../gameState";
+import { cards } from "../GameState";
 import { CardSprite } from "../components/game/cardSprite";
 import { RW, RH } from "../utils/ResponsiveDimensions";
 
@@ -29,11 +29,11 @@ export enum Ranks {
   Ace = 'A',
 }
 
-export interface IPlayingCard extends IRectangle{
-    suit: Suits;
-    rank: Ranks;
-    isFaceCard: boolean;
-    sprite: React.ReactElement | null;
+export interface IPlayingCard extends IRectangle {
+  suit: Suits;
+  rank: Ranks;
+  isFaceCard: boolean;
+  sprite: React.ReactElement | null;
 }
 
 
@@ -63,20 +63,20 @@ export function createCard(
   return card;
 }
 
-export function generateDeck(): IPlayingCard[]{
+export function generateDeck(): IPlayingCard[] {
   const deck: IPlayingCard[] = [];
   const suits = Object.values(Suits);
   const ranks = Object.values(Ranks);
-  let [xt,yt] = [0,0];
+  let [xt, yt] = [0, 0];
   for (const suit of suits) {
     for (const rank of ranks) {
       const x: SharedValue<number> = useSharedValue(xt);
       const y: SharedValue<number> = useSharedValue(yt);
-      const card = createCard(suit, rank, x, y, RW(100/26), RH(100/9)); 
+      const card = createCard(suit, rank, x, y, RW(100 / 26), RH(100 / 9));
       deck.push(card);
-      xt += RW(100/26);
+      xt += RW(100 / 26);
     }
-    yt+=RH(100/26);
+    yt += RH(100 / 26);
     xt = 0;
   }
   return deck;

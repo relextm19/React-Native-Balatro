@@ -4,11 +4,11 @@ import { Image, StyleSheet, View, BackHandler } from "react-native";
 import MenuButton from "./MenuButton";
 import type { SpriteSheetSliceData } from "../../utils/SpriteSheet";
 
-type MenuProps = {
-    setGameStarted: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import { useAppStore, Views } from "../../GameState";
 
-export default function Menu({ setGameStarted }: MenuProps): ReactElement {
+export default function Menu(): ReactElement {
+    const setCurrentView = useAppStore((state) => state.setCurrentView);
+
     const playButtonImageAsset = require("../../assets/ui/play_button.png");
     const exitButtonImageAsset = require("../../assets/ui/exit_button.png");
 
@@ -21,39 +21,12 @@ export default function Menu({ setGameStarted }: MenuProps): ReactElement {
         spriteHeight: 22
     };
 
-    const styles = StyleSheet.create({
-        container: {
-            width: '100%',
-            height: '100%',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-        },
-        logoContainer: {
-            width: '100%',
-            alignItems: 'center',
-            top: '10%',
-        },
-        logo: {
-            width: '40%',
-            height: '10%',
-            minWidth: 300,
-            minHeight: 150,
-        },
-        buttonContainer: {
-            width: '50%',
-            alignItems: 'center',
-            justifyContent: 'space-evenly',
-            flexDirection: 'row',
-            bottom: '20%',
-        },
-    })
-
     function closeGame(): void {
         BackHandler.exitApp();
     }
 
     function startGame(): void {
-        setGameStarted(true);
+        setCurrentView(Views.DifficultySelect)
     }
 
     return (
@@ -82,3 +55,29 @@ export default function Menu({ setGameStarted }: MenuProps): ReactElement {
         </View>
     )
 }
+const styles = StyleSheet.create({
+    container: {
+        width: '100%',
+        height: '100%',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    logoContainer: {
+        width: '100%',
+        alignItems: 'center',
+        top: '10%',
+    },
+    logo: {
+        width: '40%',
+        height: '10%',
+        minWidth: 300,
+        minHeight: 150,
+    },
+    buttonContainer: {
+        width: '50%',
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
+        flexDirection: 'row',
+        bottom: '20%',
+    },
+})
