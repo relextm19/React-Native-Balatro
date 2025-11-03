@@ -11,12 +11,17 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "types": ["react", "react-native"]
+    "types": [
+      "react",
+      "react-native"
+    ]
   },
   "include": [
     "**/*.ts",
-    "**/*.tsx"
-, "FpsCounter.js"  ],
+    "**/*.tsx",
+    "FpsCounter.js",
+    "nativewind-env.d.ts"
+  ],
   "exclude": [
     "node_modules"
   ],
