@@ -1,6 +1,7 @@
 import React, { ReactElement } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Skia, Canvas, Image, SkImage, SkRect, Atlas } from "@shopify/react-native-skia";
+import { BORDER_RADIUS, CUSTOM_RED } from "../../Constants";
 
 type AnteSelectPaneProps = {
     stakeSpriteSheet: SkImage
@@ -63,7 +64,6 @@ export default function AnteSelectPane({ stakeSpriteSheet, blindSpriteSheet, sta
     );
 }
 
-const borderRadius = 7;
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#272521ff',
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
 
         borderWidth: 5,
         borderColor: "#362602ff",
-        borderRadius: borderRadius,
+        borderRadius: BORDER_RADIUS,
         borderBottomWidth: 0,
         borderBottomEndRadius: 0,
         borderBottomLeftRadius: 0,
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
 
         borderWidth: 2,
         borderColor: "#334444",
-        borderRadius: borderRadius,
+        borderRadius: BORDER_RADIUS,
 
         padding: 10,
 
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     blindStatusWrap: {
         backgroundColor: '#6d3b0aff',
 
-        borderRadius: borderRadius,
+        borderRadius: BORDER_RADIUS,
 
         height: 24,
 
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     blindNameWrap: {
         backgroundColor: '#362602ff',
 
-        borderRadius: borderRadius,
+        borderRadius: BORDER_RADIUS,
         borderColor: '#423004ff',
         borderWidth: 2,
 
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
 
     requirementsContainer: {
         backgroundColor: '#19201fff',
-        borderRadius: borderRadius,
+        borderRadius: BORDER_RADIUS,
         width: '90%'
     },
 
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     },
 
     toScore: {
-        color: '#c01e1eff',
+        color: CUSTOM_RED,
         fontSize: 24,
     },
 

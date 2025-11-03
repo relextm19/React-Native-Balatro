@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import * as NavigationBar from "expo-navigation-bar";
 import * as ScreenOrientation from 'expo-screen-orientation';
 
