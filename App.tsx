@@ -41,8 +41,7 @@ export default function App() {
                 <MovingBackground />
             </View>
             <View className="flex-1">
-
-                {/* {getMainView()} */}
+                {getMainView()}
             </View>
         </>
     );
