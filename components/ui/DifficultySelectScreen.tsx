@@ -8,6 +8,7 @@ import { SpriteSheetSliceData, useSpriteRects } from "../../utils/SpriteSheet";
 import { deckArray } from "../../assets/cards/deckArray";
 import { Button } from "react-native";
 import { BORDER_RADIUS, CUSTOM_RED } from "../../Constants";
+import { stakeArray } from "../../assets/chips/StakeArray";
 
 
 export default function DifficultySelectScreen() {
@@ -73,6 +74,27 @@ export default function DifficultySelectScreen() {
                         </View>
                     </View>
                 </View>
+                <View style={styles.deckContainer}>
+                    <Canvas style={{ width: stakeSliceData.spriteWidth * scale, height: stakeSliceData.spriteHeight * scale }}>
+                        <Atlas
+                            image={stakeSpriteSheet}
+                            sprites={[stakeSpriteRects.value[stakeIndex]]}
+                            transforms={transforms}
+                        />
+                    </Canvas>
+                    <View style={[styles.deckDescWrap, { height: stakeSliceData.spriteHeight * scale }]}>
+                        <Text style={styles.descHeader}>
+                            {stakeArray[stakeIndex].name} Stake
+                        </Text>
+                        <View style={styles.descContentWrap}>
+                            <View style={styles.descContent}>
+                                <Text>
+                                    {stakeArray[stakeIndex].desc}
+                                </Text>
+                            </View>
+                        </View>
+                    </View>
+                </View>
                 {/* <Button
                 onPress={() => { cycleDeck(1) }}
                 title=">"
@@ -112,7 +134,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         gap: 5,
-
         padding: 2 * PADDING,
     },
     deckDescWrap: {
