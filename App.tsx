@@ -1,7 +1,7 @@
 import './global.css'
 
 import React, { useEffect } from "react";
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
 import * as NavigationBar from "expo-navigation-bar";
 import * as ScreenOrientation from 'expo-screen-orientation';
 
@@ -36,11 +36,14 @@ export default function App() {
     }
 
     return (
-        <View className="flex-1">
-            <View className="absolute inset-0">
+        <>
+            <View style={StyleSheet.absoluteFill}>
                 <MovingBackground />
             </View>
-            {getMainView()}
-        </View>
+            <View className="flex-1">
+
+                {/* {getMainView()} */}
+            </View>
+        </>
     );
 }
