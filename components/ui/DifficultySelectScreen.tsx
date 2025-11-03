@@ -22,8 +22,8 @@ export default function DifficultySelectScreen() {
         offsetY: 1,
         rows: 5,
         cols: 7,
-        spriteWidth: 70,
-        spriteHeight: 94,
+        spriteWidth: 63,
+        spriteHeight: 87,
     };
 
     const stakeSliceData: SpriteSheetSliceData = {

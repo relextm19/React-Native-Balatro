@@ -11,12 +11,11 @@ export const deckArray: Deck[] = [
     { name: 'Black', desc: '+1 Joker slot, -1 hand every round' },
     { name: 'Magic', desc: 'Start run with the Crystal Ball voucher and 2 copies of The Fool' },
     { name: 'Nebula', desc: 'Start run with the Telescope voucher, -1 consumable slot' },
-    { name: 'Ghost', desc: 'Spectral cards may appear in the shop, start with a Hex card' },
-    { name: 'Abandoned', desc: 'Start run with no Face Cards in your deck' },
-    { name: 'Checkered', desc: 'Start run with 26 Spades and 26 Hearts in deck' },
     { name: 'Zodiac', desc: 'Start run with Tarot Merchant, Planet Merchant, and Overstock' },
+    { name: 'Checkered', desc: 'Start run with 26 Spades and 26 Hearts in deck' },
     { name: 'Painted', desc: '+2 hand size, -1 Joker slot' },
     { name: 'Anaglyph', desc: 'After defeating each Boss Blind, gain a Double Tag' },
     { name: 'Plasma', desc: 'Balance Chips and Mult when calculating score for played hand, X2 base Blind size' },
-    { name: 'Erratic', desc: 'All Ranks and Suits in deck are randomized' }
+    { name: 'Erratic', desc: 'All Ranks and Suits in deck are randomized' },
+    { name: 'Ghost', desc: 'Spectral cards may appear in the shop, start with a Hex card' },
 ]
