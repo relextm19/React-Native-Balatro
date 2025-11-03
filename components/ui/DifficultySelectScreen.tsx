@@ -5,7 +5,7 @@ import { useDerivedValue, useSharedValue } from "react-native-reanimated";
 
 import { SpriteSheetSliceData, useSpriteRects } from "../../utils/SpriteSheet";
 
-import { deckArray } from "../../assets/chips/deckArray";
+import { deckArray } from "../../assets/cards/deckArray";
 import { Button } from "react-native";
 import { BORDER_RADIUS, CUSTOM_RED } from "../../Constants";
 
