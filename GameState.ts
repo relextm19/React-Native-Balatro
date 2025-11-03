@@ -14,7 +14,7 @@ type AppState = {
 };
 
 export const useAppStore = create<AppState>((set) => ({
-    currentView: Views.Menu,
+    currentView: Views.DifficultySelect,
     selectedStake: "",
     setCurrentView: (view) => set({ currentView: view }),
     setSelectedStake: (stake) => set({ selectedStake: stake }),

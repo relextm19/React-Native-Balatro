@@ -8,8 +8,8 @@ import Menu from "./components/ui/Menu";
 import AnteSelectScreen from "./components/ui/AnteSelectScreen";
 import DifficultySelectScreen from "./components/ui/DifficultySelectScreen";
 
-import { Views } from "./gameState";
-import { useAppStore } from "./gameState";
+import { Views } from "./GameState";
+import { useAppStore } from "./GameState";
 
 export default function App() {
     useEffect(() => {

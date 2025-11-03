@@ -4,7 +4,7 @@ import { Image, StyleSheet, View, BackHandler } from "react-native";
 import MenuButton from "./MenuButton";
 import type { SpriteSheetSliceData } from "../../utils/SpriteSheet";
 
-import { useAppStore, Views } from "../../gameState";
+import { useAppStore, Views } from "../../GameState";
 
 export default function Menu(): ReactElement {
     const setCurrentView = useAppStore((state) => state.setCurrentView);
