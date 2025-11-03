@@ -16,7 +16,6 @@ type MenuButtonProps = {
 export default function MenuButton({ imageAsset, sliceData, scale, onClick }: MenuButtonProps): ReactElement {
     const texture = useImageAsTexture(imageAsset);
     const spriteRects = useSpriteRects(sliceData);
-    const transforms = [Skia.RSXform(scale, 0, 0, 0)]
     const animationDuration = 70;
 
     const frame = useSharedValue(0);
@@ -51,13 +50,11 @@ export default function MenuButton({ imageAsset, sliceData, scale, onClick }: Me
     return (
         <Pressable onPressIn={onPressIn} onPressOut={onPressOut}>
             <Canvas style={{ width: sliceData.spriteWidth * scale, height: sliceData.spriteHeight * scale }}>
-                {texture && (
-                    <Atlas
-                        image={texture}
-                        sprites={derivedSprites}
-                        transforms={transforms}
-                    />
-                )}
+                <Atlas
+                    image={texture}
+                    sprites={derivedSprites}
+                    transforms={[Skia.RSXform(scale, 0, 0, 0)]}
+                />
             </Canvas>
         </Pressable>
     );
