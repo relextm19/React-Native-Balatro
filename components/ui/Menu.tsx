@@ -1,9 +1,7 @@
 import React, { ReactElement } from "react";
-import { Image, StyleSheet, View, BackHandler } from "react-native";
-
+import { Image, View, BackHandler } from "react-native";
 import MenuButton from "./MenuButton";
 import type { SpriteSheetSliceData } from "../../utils/SpriteSheet";
-
 import { useAppStore, Views } from "../../GameState";
 
 export default function Menu(): ReactElement {
@@ -30,15 +28,15 @@ export default function Menu(): ReactElement {
     }
 
     return (
-        <View style={styles.container}>
-            <View style={styles.logoContainer}>
+        <View className="w-full h-full items-center justify-between">
+            <View className="w-full items-center top-[10%]">
                 <Image
                     source={require("../../assets/logo.png")}
-                    style={styles.logo}
+                    className="w-[40%] h-[10%] min-w-[300px] min-h-[150px]"
                     resizeMode="contain"
                 />
             </View>
-            <View style={styles.buttonContainer}>
+            <View className="w-[50%] flex-row items-center justify-evenly bottom-[20%]">
                 <MenuButton
                     scale={2}
                     imageAsset={playButtonImageAsset}
@@ -55,29 +53,3 @@ export default function Menu(): ReactElement {
         </View>
     )
 }
-const styles = StyleSheet.create({
-    container: {
-        width: '100%',
-        height: '100%',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-    },
-    logoContainer: {
-        width: '100%',
-        alignItems: 'center',
-        top: '10%',
-    },
-    logo: {
-        width: '40%',
-        height: '10%',
-        minWidth: 300,
-        minHeight: 150,
-    },
-    buttonContainer: {
-        width: '50%',
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
-        flexDirection: 'row',
-        bottom: '20%',
-    },
-})

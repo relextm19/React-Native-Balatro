@@ -10,7 +10,17 @@ module.exports = {
   ],
   presets: [require("nativewind/preset")],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        customRed: '#c01e1eff',
+        darkBg: '#272521',
+        lightBorder: '#334444',
+        accentGold: '#e0ae07',
+      },
+      borderRadius: {
+        main: '8px',
+      },
+    },
   },
   plugins: [],
 }

@@ -1,7 +1,7 @@
 import './global.css'
 
-import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import React, { useEffect } from "react";
+import { View } from "react-native";
 import * as NavigationBar from "expo-navigation-bar";
 import * as ScreenOrientation from 'expo-screen-orientation';
 
@@ -27,23 +27,20 @@ export default function App() {
     function getMainView(): React.ReactElement {
         switch (currentView) {
             case Views.Menu:
-                return <Menu />
+                return <Menu />;
             case Views.DifficultySelect:
-                return <DifficultySelectScreen />
+                return <DifficultySelectScreen />;
             case Views.AnteSelect:
-                return <AnteSelectScreen />
+                return <AnteSelectScreen />;
         }
     }
 
     return (
-        <View style={{ flex: 1 }}>
-            <View style={StyleSheet.absoluteFill}>
+        <View className="flex-1">
+            <View className="absolute inset-0">
                 <MovingBackground />
             </View>
             {getMainView()}
         </View>
     );
-
 }
-
-const styles = StyleSheet.create({});

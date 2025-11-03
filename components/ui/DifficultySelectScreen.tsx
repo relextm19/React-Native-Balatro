@@ -1,29 +1,23 @@
-import { Skia, Atlas, Canvas, Image, SkImage, useImage } from "@shopify/react-native-skia";
 import React, { useState } from "react";
-import { View, StyleSheet, Text } from "react-native";
-import { useDerivedValue, useSharedValue } from "react-native-reanimated";
-
+import { View, Text } from "react-native";
+import { Skia, Atlas, Canvas, useImage } from "@shopify/react-native-skia";
 import { SpriteSheetSliceData, useSpriteRects } from "../../utils/SpriteSheet";
-
 import { deckArray } from "../../assets/cards/deckArray";
-import { Button } from "react-native";
-import { BORDER_RADIUS, CUSTOM_RED } from "../../Constants";
 import { stakeArray } from "../../assets/chips/StakeArray";
-
 
 export default function DifficultySelectScreen() {
     const decksSpriteSheet = useImage(require("../../assets/cards/decks.png"));
     const stakeSpriteSheet = useImage(require("../../assets/chips/stake_chips.png"));
 
-    //TODO: This is a place holder sprite so the data is not realy correct
     const deckSliceData: SpriteSheetSliceData = {
         offsetX: 1,
         offsetY: 1,
         rows: 5,
         cols: 7,
         spriteWidth: 70,
-        spriteHeight: 94
-    }
+        spriteHeight: 94,
+    };
+
     const stakeSliceData: SpriteSheetSliceData = {
         offsetX: 2,
         offsetY: 2,
@@ -35,133 +29,86 @@ export default function DifficultySelectScreen() {
 
     const deckSpriteRects = useSpriteRects(deckSliceData);
     const deckLength = deckSliceData.cols * deckSliceData.rows;
-    const [deckIndex, setDeckIndex] = useState(0)
+    const [deckIndex, setDeckIndex] = useState(0);
+
+    const stakeSpriteRects = useSpriteRects(stakeSliceData);
+    const stakesLength = stakeSliceData.cols * stakeSliceData.rows;
+    const [stakeIndex, setStakeIndex] = useState(0);
+
+    const scale = 1.5;
+    const transforms = [Skia.RSXform(scale, 0, 0, 0)];
 
     function cycleDeck(direction: number): void {
         setDeckIndex((deckIndex + direction + deckLength) % deckLength);
     }
 
-    const stakeSpriteRects = useSpriteRects(stakeSliceData);
-    const stakesLength = stakeSliceData.cols * stakeSliceData.rows;
-    const [stakeIndex, setStakeIndex] = useState(0);
-    function cylceStakes(direction: number): void {
+    function cycleStakes(direction: number): void {
         setStakeIndex((stakeIndex + direction + stakesLength) % stakesLength);
     }
 
-    const scale = 1.5;
-    const transforms = [Skia.RSXform(scale, 0, 0, 0)]
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <View style={styles.container}>
-                <View style={styles.deckContainer}>
-                    <Canvas style={{ width: deckSliceData.spriteWidth * scale, height: deckSliceData.spriteHeight * scale }}>
+        <View className="flex-1 justify-center items-center">
+            <View className="w-[70%] h-[95%] bg-[#3f5762] border-2 border-white rounded-main justify-center items-center">
+                {/* Deck Section */}
+                <View className="bg-[#1f1f22] rounded-main justify-center items-center flex-row gap-[5px] p-[10px]">
+                    <Canvas
+                        style={{
+                            width: deckSliceData.spriteWidth * scale,
+                            height: deckSliceData.spriteHeight * scale,
+                        }}
+                    >
                         <Atlas
                             image={decksSpriteSheet}
                             sprites={[deckSpriteRects.value[deckIndex]]}
                             transforms={transforms}
                         />
                     </Canvas>
-                    <View style={[styles.deckDescWrap, { height: deckSliceData.spriteHeight * scale }]}>
-                        <Text style={styles.descHeader}>
+
+                    <View
+                        className="bg-[#3c464d] rounded-main"
+                        style={{ height: deckSliceData.spriteHeight * scale }}
+                    >
+                        <Text className="text-white text-lg text-center">
                             {deckArray[deckIndex].name} Deck
                         </Text>
-                        <View style={styles.descContentWrap}>
-                            <View style={styles.descContent}>
-                                <Text>
-                                    {deckArray[deckIndex].desc}
-                                </Text>
+                        <View className="p-[5px] flex-1">
+                            <View className="flex-1 bg-white rounded-main justify-center items-center p-[5px]">
+                                <Text>{deckArray[deckIndex].desc}</Text>
                             </View>
                         </View>
                     </View>
                 </View>
-                <View style={styles.deckContainer}>
-                    <Canvas style={{ width: stakeSliceData.spriteWidth * scale, height: stakeSliceData.spriteHeight * scale }}>
+
+                {/* Stake Section */}
+                <View className="bg-[#1f1f22] rounded-main justify-center items-center flex-row gap-[5px] p-[10px] mt-[15px]">
+                    <Canvas
+                        style={{
+                            width: stakeSliceData.spriteWidth * scale,
+                            height: stakeSliceData.spriteHeight * scale,
+                        }}
+                    >
                         <Atlas
                             image={stakeSpriteSheet}
                             sprites={[stakeSpriteRects.value[stakeIndex]]}
                             transforms={transforms}
                         />
                     </Canvas>
-                    <View style={[styles.deckDescWrap, { height: stakeSliceData.spriteHeight * scale }]}>
-                        <Text style={styles.descHeader}>
+
+                    <View
+                        className="bg-[#3c464d] rounded-main"
+                        style={{ height: stakeSliceData.spriteHeight * scale }}
+                    >
+                        <Text className="text-white text-lg text-center">
                             {stakeArray[stakeIndex].name} Stake
                         </Text>
-                        <View style={styles.descContentWrap}>
-                            <View style={styles.descContent}>
-                                <Text>
-                                    {stakeArray[stakeIndex].desc}
-                                </Text>
+                        <View className="p-[5px] flex-1">
+                            <View className="flex-1 bg-white rounded-main justify-center items-center p-[5px]">
+                                <Text>{stakeArray[stakeIndex].desc}</Text>
                             </View>
                         </View>
                     </View>
                 </View>
-                {/* <Button
-                onPress={() => { cycleDeck(1) }}
-                title=">"
-                style={styles.cycleButton}
-            ></Button>
-            <Button
-                onPress={() => { cycleDeck(-1) }}
-                title="<"
-            ></Button> */}
             </View>
         </View>
-    )
+    );
 }
-
-const PADDING = 5;
-
-const styles = StyleSheet.create({
-    container: {
-        width: '70%',
-        height: '95%',
-
-        backgroundColor: '#3f5762ff',
-
-        borderColor: 'white',
-        borderWidth: 2,
-        borderRadius: BORDER_RADIUS,
-
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    deckContainer: {
-        backgroundColor: '#1f1f22ff',
-
-        borderRadius: BORDER_RADIUS,
-
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'row',
-        gap: 5,
-        padding: 2 * PADDING,
-    },
-    deckDescWrap: {
-        backgroundColor: '#3c464dff',
-
-        borderRadius: BORDER_RADIUS,
-    },
-    descContentWrap: {
-        padding: PADDING,
-        flex: 1,
-    },
-    descHeader: {
-        color: 'white',
-        fontSize: 18,
-        textAlign: 'center',
-    },
-    descContent: {
-        flex: 1,
-        backgroundColor: 'white',
-
-        borderRadius: BORDER_RADIUS,
-
-        justifyContent: 'center',
-        alignItems: 'center',
-
-        padding: PADDING,
-    },
-    cycleButton: {
-        backgroundColor: CUSTOM_RED
-    },
-})
