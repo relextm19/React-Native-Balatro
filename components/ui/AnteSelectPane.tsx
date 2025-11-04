@@ -9,6 +9,7 @@ type AnteSelectPaneProps = {
     blindSourceRect: SkRect;
     requiredScore: number,
     title: String,
+    rewardAmount: number
 };
 
 export default function AnteSelectPane({
@@ -18,6 +19,7 @@ export default function AnteSelectPane({
     blindSourceRect,
     requiredScore,
     title,
+    rewardAmount
 }: AnteSelectPaneProps): ReactElement {
     const stakeTransforms = [Skia.RSXform(1, 0, 0, 0)];
     const blindImgScale = 1.5;
@@ -51,7 +53,7 @@ export default function AnteSelectPane({
                     </Canvas>
                 </View>
 
-                <View className="bg-[#19201fff] rounded-main w-9/10">
+                <View className="bg-[#19201fff] rounded-main p-2">
                     <Text className="text-white text-center">Score at least</Text>
                     <View className="justify-center items-center flex-row-reverse gap-1">
                         <Text className="text-customRed text-2xl">{requiredScore}</Text>
@@ -74,7 +76,7 @@ export default function AnteSelectPane({
                     </View>
                     <View className="flex-row items-center justify-center">
                         <Text className="text-white text-center">Reward: </Text>
-                        <Text className="text-accentGold">$$$+</Text>
+                        <Text className="text-accentGold">{"$".repeat(rewardAmount)}+</Text>
                     </View>
                 </View>
             </View>

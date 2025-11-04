@@ -10,13 +10,6 @@ import { useAppStore } from "../../GameState";
 import { getRandomInt } from "../../utils/Random";
 import { blindsArray } from "../../assets/chips/Blinds";
 
-type PaneData = {
-    stakeSpriteSheet: SkImage;
-    stakeSourceRect: SkRect;
-    blindSpriteSheet: SkImage;
-    blindSourceRect: SkRect;
-};
-
 export default function AnteSelectScreen(): ReactElement | null {
     const stakeSpriteSheet = useImage(require("../../assets/chips/stake_chips.png"));
     const blindsSpriteSheet = useImage(require("../../assets/chips/blind_chips.png"));
@@ -30,6 +23,7 @@ export default function AnteSelectScreen(): ReactElement | null {
 
     const bossBlindIndex = getRandomInt(2, blindsArray.length);// the first two blinds are normal
 
+    const rewardAmount = [3, 4, 5]
     let panes: ReactElement[] = [];
     for (let i = 0; i < 3; i++) {
         const blindIndex = i < 2 ? i : bossBlindIndex;
@@ -41,6 +35,7 @@ export default function AnteSelectScreen(): ReactElement | null {
                 blindSourceRect={blindSpriteRects[blindIndex]}
                 requiredScore={store.currentAnteScore * (i + 1)}
                 title={blindsArray[blindIndex].name}
+                rewardAmount={rewardAmount[i]}
                 key={i}
             />
         )
