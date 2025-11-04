@@ -21,7 +21,7 @@ export default function MovingBackground() {
             }),
             -1 // infinite
         );
-    }, []);
+    }, [SCREEN_WIDTH]);
 
     const image = useImage(require("../../assets/backgrounds/background1.png"));
 

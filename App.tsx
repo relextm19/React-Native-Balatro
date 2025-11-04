@@ -12,6 +12,7 @@ import DifficultySelectScreen from "./components/ui/DifficultySelectScreen";
 
 import { Views } from "./GameState";
 import { useAppStore } from "./GameState";
+import { initScreenDimensions } from './utils/ResponsiveDimensions';
 
 export default function App() {
     useEffect(() => {
@@ -20,6 +21,7 @@ export default function App() {
         };
         lockOrientation();
         NavigationBar.setVisibilityAsync('hidden');
+        initScreenDimensions();
     }, []);
 
     const currentView = useAppStore((state) => state.currentView);
