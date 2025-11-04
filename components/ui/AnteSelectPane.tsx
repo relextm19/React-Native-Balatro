@@ -7,6 +7,8 @@ type AnteSelectPaneProps = {
     blindSpriteSheet: SkImage;
     stakeSourceRect: SkRect;
     blindSourceRect: SkRect;
+    requiredScore: number,
+    title: String,
 };
 
 export default function AnteSelectPane({
@@ -14,6 +16,8 @@ export default function AnteSelectPane({
     blindSpriteSheet,
     stakeSourceRect,
     blindSourceRect,
+    requiredScore,
+    title,
 }: AnteSelectPaneProps): ReactElement {
     const stakeTransforms = [Skia.RSXform(1, 0, 0, 0)];
     const blindImgScale = 1.5;
@@ -27,7 +31,7 @@ export default function AnteSelectPane({
                 </View>
 
                 <View className="bg-[#362602] rounded-main border-[#423004] border-2 h-[30px] w-full items-center justify-center">
-                    <Text className="text-white">Small Blind</Text>
+                    <Text className="text-white">{title}</Text>
                 </View>
 
                 <View>
@@ -50,7 +54,7 @@ export default function AnteSelectPane({
                 <View className="bg-[#19201fff] rounded-main w-9/10">
                     <Text className="text-white text-center">Score at least</Text>
                     <View className="justify-center items-center flex-row-reverse gap-1">
-                        <Text className="text-customRed text-2xl">300</Text>
+                        <Text className="text-customRed text-2xl">{requiredScore}</Text>
                         <View>
                             <Canvas
                                 style={{

@@ -10,18 +10,20 @@ export enum Views {
 
 type AppState = {
     currentView: Views;
-    selectedStake: Stake;
-    selectedDeck: Deck;
+    currentStake: Stake;
+    currentDeck: Deck;
+    currentAnteScore: number;
     setCurrentView: (view: Views) => void;
-    setCurrentDeck: (deck: Deck) => void;
-    setCurrentStake: (stake: Stake) => void;
+    // setCurrentDeck: (deck: Deck) => void;
+    // setCurrentStake: (stake: Stake) => void;
 };
 
 export const useAppStore = create<AppState>((set) => ({
     currentView: Views.Menu,
-    selectedStake: {} as Stake,
-    selectedDeck: {} as Deck,
+    currentStake: {} as Stake,
+    currentDeck: {} as Deck,
+    currentAnteScore: 300,
     setCurrentView: (view) => set({ currentView: view }),
-    setCurrentStake: (stake) => set({ selectedStake: stake }),
-    setCurrentDeck: (deck) => set({ selectedDeck: deck }),
+    // setCurrentStake: (stake) => set({ selectedStake: stake }),
+    // setCurrentDeck: (deck) => set({ selectedDeck: deck }),
 }));
