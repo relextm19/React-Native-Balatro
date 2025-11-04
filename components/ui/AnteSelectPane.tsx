@@ -29,13 +29,13 @@ export default function AnteSelectPane({
     const blindTransforms = [Skia.RSXform(blindImgScale, 0, 0, 0)];
 
     return (
-        <View className="bg-darkBg w-1/5 h-full border-5 border-[#362602] rounded-main border-b-0 rounded-be-none rounded-bl-none p-[3px] pb-[5%]">
-            <View className="bg-[#23353aff] border-2 border-lightBorder rounded-main p-[10px] gap-[10px] items-center">
-                <View className="bg-[#6d3b0aff] rounded-main h-6 shadow-lg w-4/5 items-center justify-center">
+        //TODO: Make the blindState text background the most common color from the logo
+        <View className="bg-darkBg w-1/5 h-full border-5 border-[#362602] rounded-main border-b-0 rounded-be-none rounded-bl-none p-2">
+            <View className="bg-[#23353aff] border-2 border-lightBorder rounded-main p-2 gap-2 items-center">
+                <View className="bg-[#f48b04] rounded-main h-6 shadow-lg w-4/5 items-center justify-center">
                     <Text className="text-white">{blindState}</Text>
                 </View>
-
-                <View className="bg-[#362602] rounded-main border-[#423004] border-2 h-[30px] w-full items-center justify-center">
+                <View className="bg-[#362602] rounded-main border-[#423004] border-2 w-full items-center justify-center">
                     <Text className="text-white">{title}</Text>
                 </View>
 
