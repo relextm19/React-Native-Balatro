@@ -20,7 +20,7 @@ export default function AnteSelectScreen(): ReactElement | null {
     if (!stakeSpriteSheet || !blindsSpriteSheet) return null;
 
     const state = useAppStore.getState();
-    const bossBlindIndex = getRandomInt(2, blindsArray.length);// the first two blinds are normal
+    const bossBlindIndex = getRandomInt(2, blindsArray.length - 5);// the first two blinds are normal and the last 5 are special and will be implemented later
 
     const rewardAmount = [3, 4, 5]
     let panes: ReactElement[] = [];
