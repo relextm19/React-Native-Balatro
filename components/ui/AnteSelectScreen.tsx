@@ -8,7 +8,8 @@ import { useSpriteRects } from "../../utils/SpriteSheet";
 import { stakeSliceData, blindSliceData, deckSliceData } from "../../assets/sliceData";
 import { useAppStore } from "../../GameState";
 import { getRandomInt } from "../../utils/Random";
-import { blindsArray } from "../../assets/chips/Blinds";
+import { blindsArray, BlindState } from "../../assets/chips/Blinds";
+
 
 export default function AnteSelectScreen(): ReactElement | null {
     const state = useAppStore.getState();
@@ -29,6 +30,7 @@ export default function AnteSelectScreen(): ReactElement | null {
     let panes: ReactElement[] = [];
     for (let i = 0; i < 3; i++) {
         const blindIndex = i < 2 ? i : bossBlindIndex;
+        const blindState = i < state.currentBlind ? BlindState.defeated : state.currentBlind % 3 == i ? BlindState.selected : BlindState.upcoming; //Hows he done that then
         panes.push(
             <AnteSelectPane
                 stakeSpriteSheet={stakeSpriteSheet}
@@ -38,6 +40,7 @@ export default function AnteSelectScreen(): ReactElement | null {
                 requiredScore={state.currentAnteScore * (i + 1)}
                 title={blindsArray[blindIndex].name}
                 rewardAmount={rewardAmount[i]}
+                blindState={blindState}
                 key={i}
             />
         )
@@ -50,12 +53,12 @@ export default function AnteSelectScreen(): ReactElement | null {
             </View>
             <View className="absolute right-2 bottom-2">
                 <Canvas style={
-                    { width: deckSpriteRect.width * 1.5, height: deckSpriteRect.height * 1.5 }
+                    { width: deckSpriteRect.width * 1.2, height: deckSpriteRect.height * 1.2 }
                 }>
                     <Atlas
                         sprites={[deckSpriteRect]}
                         image={decksSpriteSheet}
-                        transforms={[Skia.RSXform(1.5, 0, 0, 0)]}
+                        transforms={[Skia.RSXform(1.2, 0, 0, 0)]}
                     >
                     </Atlas>
                 </Canvas>

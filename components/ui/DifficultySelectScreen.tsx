@@ -7,7 +7,7 @@ import MenuButton from "./MenuButton";
 import { deckArray } from "../../assets/cards/deckArray";
 import { stakeArray } from "../../assets/chips/StakeArray";
 import { useAppStore, Views } from "../../GameState";
-import { SpriteSheetSliceData, useSpriteRects } from "../../utils/SpriteSheet";
+import { useSpriteRects } from "../../utils/SpriteSheet";
 
 import { deckSliceData, buttonSliceData, stakeSliceData } from "../../assets/sliceData";
 
@@ -42,7 +42,7 @@ export default function DifficultySelectScreen() {
     const state = useAppStore.getState();
 
     function startGame(): void {
-        deckArray[deckIndex].state = { total: 55, avaliable: 55 }
+        deckArray[deckIndex].state = { total: 52, avaliable: 52 }
         state.setCurrentDeck(deckArray[deckIndex])
         state.setCurrentStake(stakeArray[stakeIndex])
         state.setCurrentView(Views.AnteSelect)

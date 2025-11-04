@@ -1,6 +1,7 @@
 import React, { ReactElement } from "react";
 import { View, Text } from "react-native";
 import { Skia, Canvas, Atlas, SkImage, SkRect } from "@shopify/react-native-skia";
+import { BlindState } from "../../assets/chips/Blinds";
 
 type AnteSelectPaneProps = {
     stakeSpriteSheet: SkImage;
@@ -9,7 +10,8 @@ type AnteSelectPaneProps = {
     blindSourceRect: SkRect;
     requiredScore: number,
     title: String,
-    rewardAmount: number
+    rewardAmount: number,
+    blindState: string
 };
 
 export default function AnteSelectPane({
@@ -19,7 +21,8 @@ export default function AnteSelectPane({
     blindSourceRect,
     requiredScore,
     title,
-    rewardAmount
+    rewardAmount,
+    blindState,
 }: AnteSelectPaneProps): ReactElement {
     const stakeTransforms = [Skia.RSXform(1, 0, 0, 0)];
     const blindImgScale = 1.5;
@@ -29,7 +32,7 @@ export default function AnteSelectPane({
         <View className="bg-darkBg w-1/5 h-full border-5 border-[#362602] rounded-main border-b-0 rounded-be-none rounded-bl-none p-[3px] pb-[5%]">
             <View className="bg-[#23353aff] border-2 border-lightBorder rounded-main p-[10px] gap-[10px] items-center">
                 <View className="bg-[#6d3b0aff] rounded-main h-6 shadow-lg w-4/5 items-center justify-center">
-                    <Text className="text-white">Current</Text>
+                    <Text className="text-white">{blindState}</Text>
                 </View>
 
                 <View className="bg-[#362602] rounded-main border-[#423004] border-2 h-[30px] w-full items-center justify-center">

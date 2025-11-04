@@ -4,6 +4,12 @@ export type Blind = {
     desc: string;
 };
 
+export enum BlindState {
+    selected = "current",
+    defeated = "defeated",
+    upcoming = "upcoming"
+}
+
 export const blindsArray: Blind[] = [
     { index: 0, name: "Small Blind", desc: "A standard smaller blind with no modifiers" },
     { index: 1, name: "Big Blind", desc: "A standard larger blind with no modifiers" },
