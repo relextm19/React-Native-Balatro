@@ -18,7 +18,6 @@ export default function AnteSelectScreen(): ReactElement | null {
     const stakeSpriteSheet = useImage(require("../../assets/chips/stake_chips.png"));
     const blindsSpriteSheet = useImage(require("../../assets/chips/blind_chips.png"));
 
-
     const stakeSpriteRects = useSpriteRects(stakeSliceData).value ?? [];
     const blindSpriteRects = useSpriteRects(blindSliceData).value ?? [];
 
