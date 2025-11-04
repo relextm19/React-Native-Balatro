@@ -49,12 +49,11 @@ export default function MenuButton({ imageAsset, sliceData, scale, onClick, rota
     };
 
     return (
-        <Pressable onPressIn={onPressIn} onPressOut={onPressOut}>
+        <Pressable onPressIn={onPressIn} onPressOut={onPressOut} style={{ transform: [{ rotate: `${rotation}deg` }] }}>
             <Canvas
                 style={{
                     width: sliceData.spriteWidth * scale,
                     height: sliceData.spriteHeight * scale,
-                    transform: [{ rotate: `${rotation}deg` }],
                 }}
             >
                 <Atlas

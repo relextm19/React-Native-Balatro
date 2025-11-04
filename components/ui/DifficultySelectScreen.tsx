@@ -53,7 +53,7 @@ export default function DifficultySelectScreen() {
             <View className="bg-slate-700  border-2 border-slate-400 rounded-main justify-center items-center gap-2 p-2">
                 <View className="gap-2">
                     {/* Deck Section */}
-                    <View className="bg-[#1f1f22] rounded-main justify-center items-center flex-row gap-2 p-2">
+                    <View className="justify-center items-center flex-row">
                         <MenuButton
                             scale={0.5}
                             rotation={-90}
@@ -61,30 +61,30 @@ export default function DifficultySelectScreen() {
                             sliceData={buttonSliceData}
                             onClick={() => cycleDeck(-1)}
                         />
+                        <View className="bg-[#1f1f22] rounded-main justify-center items-center flex-row gap-2 p-2">
+                            <Canvas
+                                style={{
+                                    width: deckSliceData.spriteWidth * scale,
+                                    height: deckSliceData.spriteHeight * scale,
+                                }}
+                            >
+                                <Atlas
+                                    image={decksSpriteSheet}
+                                    sprites={[deckSpriteRects.value[deckIndex]]}
+                                    transforms={transforms}
+                                />
+                            </Canvas>
 
-                        <Canvas
-                            style={{
-                                width: deckSliceData.spriteWidth * scale,
-                                height: deckSliceData.spriteHeight * scale,
-                            }}
-                        >
-                            <Atlas
-                                image={decksSpriteSheet}
-                                sprites={[deckSpriteRects.value[deckIndex]]}
-                                transforms={transforms}
-                            />
-                        </Canvas>
-
-                        <View
-                            className="bg-[#3c464d] rounded-main"
-                            style={{ height: deckSliceData.spriteHeight * scale }}
-                        >
-                            <Text className="text-white text-lg text-center">
-                                {deckArray[deckIndex].name} Deck
-                            </Text>
-                            <View className="p-2 flex-1">
-                                <View className="flex-1 flex-wrap bg-white rounded-main justify-center items-center p-2">
-                                    <Text>{deckArray[deckIndex].desc}</Text>
+                            <View
+                                className="bg-[#3c464d] rounded-main"
+                            >
+                                <Text className="text-white text-lg text-center">
+                                    {deckArray[deckIndex].name} Deck
+                                </Text>
+                                <View className="p-2 flex-1">
+                                    <View className="flex-1 flex-wrap bg-white rounded-main justify-center items-center p-2">
+                                        <Text>{deckArray[deckIndex].desc}</Text>
+                                    </View>
                                 </View>
                             </View>
                         </View>
