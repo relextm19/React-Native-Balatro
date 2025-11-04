@@ -16,7 +16,7 @@ export default function MovingBackground() {
     useEffect(() => {
         translateX.value = withRepeat(
             withTiming(-SCREEN_WIDTH, {
-                duration: 5000,
+                duration: 8000,
                 easing: Easing.linear,
             }),
             -1 // infinite

@@ -20,8 +20,8 @@ export const blindSliceData: SpriteSheetSliceData = {
 export const deckSliceData: SpriteSheetSliceData = {
     offsetX: 1,
     offsetY: 1,
-    rows: 5,
-    cols: 7,
+    rows: 3,
+    cols: 5,
     spriteWidth: 62,
     spriteHeight: 86,
 };
