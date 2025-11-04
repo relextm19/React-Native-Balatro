@@ -42,6 +42,7 @@ export default function DifficultySelectScreen() {
     const state = useAppStore.getState();
 
     function startGame(): void {
+        deckArray[deckIndex].state = { total: 55, avaliable: 55 }
         state.setCurrentDeck(deckArray[deckIndex])
         state.setCurrentStake(stakeArray[stakeIndex])
         state.setCurrentView(Views.AnteSelect)

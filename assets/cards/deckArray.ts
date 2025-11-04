@@ -2,6 +2,7 @@ export type Deck = {
     index: number;
     name: string;
     desc: string;
+    state?: { total: number, avaliable: number };
 };
 
 export const deckArray: Deck[] = [

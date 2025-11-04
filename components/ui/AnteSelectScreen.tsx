@@ -1,25 +1,28 @@
 import React, { ReactElement } from "react";
-import { View } from "react-native";
-import { SkImage, SkRect, useImage } from "@shopify/react-native-skia";
+import { View, Text } from "react-native";
+import { Skia, useImage, Canvas, Atlas } from "@shopify/react-native-skia";
 
 import AnteSelectPane from "./AnteSelectPane";
-import { SpriteSheetSliceData, useSpriteRects } from "../../utils/SpriteSheet";
+import { useSpriteRects } from "../../utils/SpriteSheet";
 
-import { stakeSliceData, blindSliceData } from "../../assets/sliceData";
+import { stakeSliceData, blindSliceData, deckSliceData } from "../../assets/sliceData";
 import { useAppStore } from "../../GameState";
 import { getRandomInt } from "../../utils/Random";
 import { blindsArray } from "../../assets/chips/Blinds";
 
 export default function AnteSelectScreen(): ReactElement | null {
+    const state = useAppStore.getState();
+
     const stakeSpriteSheet = useImage(require("../../assets/chips/stake_chips.png"));
     const blindsSpriteSheet = useImage(require("../../assets/chips/blind_chips.png"));
+    const decksSpriteSheet = useImage(require("../../assets/cards/decks.png"));
 
     const stakeSpriteRects = useSpriteRects(stakeSliceData).value ?? [];
     const blindSpriteRects = useSpriteRects(blindSliceData).value ?? [];
+    const deckSpriteRect = useSpriteRects(deckSliceData).value[state.currentDeck.index] ?? null;
 
     if (!stakeSpriteSheet || !blindsSpriteSheet) return null;
 
-    const state = useAppStore.getState();
     const bossBlindIndex = getRandomInt(2, blindsArray.length - 5);// the first two blinds are normal and the last 5 are special and will be implemented later
 
     const rewardAmount = [3, 4, 5]
@@ -41,9 +44,24 @@ export default function AnteSelectScreen(): ReactElement | null {
     }
 
     return (
-        <View className="flex-1 justify-end items-center">
-            <View className="flex-row justify-center items-end gap-x-[5%] h-4/6">
+        <View className="flex-1 items-center justify-end">
+            <View className="flex-row justify-center items-center gap-x-[5%] h-4/6">
                 {panes}
+            </View>
+            <View className="absolute right-2 bottom-2">
+                <Canvas style={
+                    { width: deckSpriteRect.width * 1.5, height: deckSpriteRect.height * 1.5 }
+                }>
+                    <Atlas
+                        sprites={[deckSpriteRect]}
+                        image={decksSpriteSheet}
+                        transforms={[Skia.RSXform(1.5, 0, 0, 0)]}
+                    >
+                    </Atlas>
+                </Canvas>
+                <Text className="text-white text-center">
+                    {state.currentDeck.state?.avaliable}/{state.currentDeck.state?.total}
+                </Text>
             </View>
         </View>
     );
