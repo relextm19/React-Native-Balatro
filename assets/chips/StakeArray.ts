@@ -1,4 +1,4 @@
-type Stake = {
+export type Stake = {
     name: string;
     desc: string;
 };

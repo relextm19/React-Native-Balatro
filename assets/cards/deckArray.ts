@@ -1,4 +1,4 @@
-type Deck = {
+export type Deck = {
     name: string;
     desc: string;
 }

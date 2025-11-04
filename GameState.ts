@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import { Stake } from "./assets/chips/StakeArray";
+import { Deck } from "./assets/cards/deckArray";
 
 export enum Views {
     Menu,
@@ -8,14 +10,18 @@ export enum Views {
 
 type AppState = {
     currentView: Views;
-    selectedStake: string;
+    selectedStake: Stake;
+    selectedDeck: Deck;
     setCurrentView: (view: Views) => void;
-    setSelectedStake: (stake: string) => void;
+    setCurrentDeck: (deck: Deck) => void;
+    setCurrentStake: (stake: Stake) => void;
 };
 
 export const useAppStore = create<AppState>((set) => ({
     currentView: Views.Menu,
-    selectedStake: "",
+    selectedStake: {} as Stake,
+    selectedDeck: {} as Deck,
     setCurrentView: (view) => set({ currentView: view }),
-    setSelectedStake: (stake) => set({ selectedStake: stake }),
+    setCurrentStake: (stake) => set({ selectedStake: stake }),
+    setCurrentDeck: (deck) => set({ selectedDeck: deck }),
 }));

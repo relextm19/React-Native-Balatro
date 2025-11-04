@@ -97,7 +97,7 @@ export default function DifficultySelectScreen() {
                 {/* Stake Section */}
                 <View className="w-full justify-center items-center flex-row flex-1">
                     <MenuButton
-                        scale={0.25}
+                        scale={0.3}
                         rotation={-90}
                         imageAsset={cycleButtonImageAsset}
                         sliceData={buttonSliceData}
@@ -119,7 +119,7 @@ export default function DifficultySelectScreen() {
 
                         <View className="bg-[#3c464d] rounded-main flex-1 h-4/5">
                             <Text className="text-white text-lg text-center">
-                                {stakeArray[stakeIndex].name} Deck
+                                {stakeArray[stakeIndex].name} stake
                             </Text>
                             <View className="p-2 flex-1">
                                 <View className="flex-1 flex-wrap bg-white rounded-main justify-center items-center p-2">
@@ -129,7 +129,7 @@ export default function DifficultySelectScreen() {
                         </View>
                     </View>
                     <MenuButton
-                        scale={0.25}
+                        scale={0.3}
                         rotation={90}
                         imageAsset={cycleButtonImageAsset}
                         sliceData={buttonSliceData}
