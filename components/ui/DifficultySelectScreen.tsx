@@ -32,7 +32,6 @@ export default function DifficultySelectScreen() {
     const transforms = [Skia.RSXform(scale, 0, 0, 0)];
 
     function cycleDeck(direction: number): void {
-        console.log((deckIndex + direction + deckLength) % deckLength, deckLength)
         setDeckIndex((deckIndex + direction + deckLength) % deckLength);
     }
 
