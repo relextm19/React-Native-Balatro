@@ -25,7 +25,7 @@ export default function DifficultySelectScreen() {
     const [deckIndex, setDeckIndex] = useState(0);
 
     const stakeSpriteRects = useSpriteRects(stakeSliceData);
-    const stakesLength = stakeSliceData.cols * stakeSliceData.rows;
+    const stakesLength = stakeArray.length;
     const [stakeIndex, setStakeIndex] = useState(0);
 
     const scale = 1.5;

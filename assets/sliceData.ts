@@ -4,7 +4,7 @@ export const stakeSliceData: SpriteSheetSliceData = {
     offsetX: 2,
     offsetY: 2,
     rows: 2,
-    cols: 4,
+    cols: 5,
     spriteWidth: 27,
     spriteHeight: 27,
 };
