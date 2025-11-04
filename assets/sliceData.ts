@@ -22,8 +22,8 @@ export const deckSliceData: SpriteSheetSliceData = {
     offsetY: 1,
     rows: 5,
     cols: 7,
-    spriteWidth: 63,
-    spriteHeight: 87,
+    spriteWidth: 62,
+    spriteHeight: 86,
 };
 
 export const buttonSliceData: SpriteSheetSliceData = {

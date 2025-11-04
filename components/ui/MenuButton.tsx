@@ -11,7 +11,7 @@ type MenuButtonProps = {
     sliceData: SpriteSheetSliceData,
     scale: number,
     rotation?: number,
-    onClick: () => void;
+    onClick: (...args: any[]) => void;
 }
 
 export default function MenuButton({ imageAsset, sliceData, scale, onClick, rotation = 0 }: MenuButtonProps): ReactElement {

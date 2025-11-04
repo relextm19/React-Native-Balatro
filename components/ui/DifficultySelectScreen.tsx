@@ -21,7 +21,7 @@ export default function DifficultySelectScreen() {
 
 
     const deckSpriteRects = useSpriteRects(deckSliceData);
-    const deckLength = deckSliceData.cols * deckSliceData.rows;
+    const deckLength = deckArray.length;
     const [deckIndex, setDeckIndex] = useState(0);
 
     const stakeSpriteRects = useSpriteRects(stakeSliceData);
@@ -32,6 +32,7 @@ export default function DifficultySelectScreen() {
     const transforms = [Skia.RSXform(scale, 0, 0, 0)];
 
     function cycleDeck(direction: number): void {
+        console.log((deckIndex + direction + deckLength) % deckLength, deckLength)
         setDeckIndex((deckIndex + direction + deckLength) % deckLength);
     }
 
@@ -53,6 +54,14 @@ export default function DifficultySelectScreen() {
                 <View className="gap-2">
                     {/* Deck Section */}
                     <View className="bg-[#1f1f22] rounded-main justify-center items-center flex-row gap-2 p-2">
+                        <MenuButton
+                            scale={0.5}
+                            rotation={-90}
+                            imageAsset={cycleButtonImageAsset}
+                            sliceData={buttonSliceData}
+                            onClick={() => cycleDeck(-1)}
+                        />
+
                         <Canvas
                             style={{
                                 width: deckSliceData.spriteWidth * scale,
@@ -74,21 +83,29 @@ export default function DifficultySelectScreen() {
                                 {deckArray[deckIndex].name} Deck
                             </Text>
                             <View className="p-2 flex-1">
-                                <View className="flex-1 bg-white rounded-main justify-center items-center p-2">
+                                <View className="flex-1 flex-wrap bg-white rounded-main justify-center items-center p-2">
                                     <Text>{deckArray[deckIndex].desc}</Text>
                                 </View>
                             </View>
                         </View>
                         <MenuButton
                             scale={0.5}
+                            rotation={90}
                             imageAsset={cycleButtonImageAsset}
                             sliceData={buttonSliceData}
-                            onClick={startGame}
+                            onClick={() => cycleDeck(1)}
                         />
                     </View>
 
                     {/* Stake Section */}
                     <View className="bg-[#1f1f22] rounded-main justify-center items-center flex-row gap-2 p-2">
+                        <MenuButton
+                            scale={0.25}
+                            rotation={-90}
+                            imageAsset={cycleButtonImageAsset}
+                            sliceData={buttonSliceData}
+                            onClick={() => cycleStakes(-1)}
+                        />
                         <Canvas
                             style={{
                                 width: stakeSliceData.spriteWidth * scale,
@@ -114,6 +131,13 @@ export default function DifficultySelectScreen() {
                                 </View>
                             </View>
                         </View>
+                        <MenuButton
+                            scale={0.25}
+                            rotation={90}
+                            imageAsset={cycleButtonImageAsset}
+                            sliceData={buttonSliceData}
+                            onClick={() => cycleStakes(1)}
+                        />
                     </View>
                 </View>
 
