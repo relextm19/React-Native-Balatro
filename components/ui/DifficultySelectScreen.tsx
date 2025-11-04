@@ -98,7 +98,7 @@ export default function DifficultySelectScreen() {
                     </View>
 
                     {/* Stake Section */}
-                    <View className="bg-[#1f1f22] rounded-main justify-center items-center flex-row gap-2 p-2">
+                    <View className="justify-center items-center flex-row">
                         <MenuButton
                             scale={0.25}
                             rotation={-90}
@@ -106,28 +106,30 @@ export default function DifficultySelectScreen() {
                             sliceData={buttonSliceData}
                             onClick={() => cycleStakes(-1)}
                         />
-                        <Canvas
-                            style={{
-                                width: stakeSliceData.spriteWidth * scale,
-                                height: stakeSliceData.spriteHeight * scale,
-                            }}
-                        >
-                            <Atlas
-                                image={stakeSpriteSheet}
-                                sprites={[stakeSpriteRects.value[stakeIndex]]}
-                                transforms={transforms}
-                            />
-                        </Canvas>
+                        <View className="bg-[#1f1f22] rounded-main justify-center items-center flex-row gap-2 p-2">
+                            <Canvas
+                                style={{
+                                    width: stakeSliceData.spriteWidth * scale,
+                                    height: stakeSliceData.spriteHeight * scale,
+                                }}
+                            >
+                                <Atlas
+                                    image={stakeSpriteSheet}
+                                    sprites={[stakeSpriteRects.value[stakeIndex]]}
+                                    transforms={transforms}
+                                />
+                            </Canvas>
 
-                        <View
-                            className="bg-[#3c464d] rounded-main flex-1"
-                        >
-                            <Text className="text-white text-lg text-center">
-                                {stakeArray[stakeIndex].name} Stake
-                            </Text>
-                            <View className="p-2">
-                                <View className="bg-white rounded-main justify-center items-center p-2">
-                                    <Text>{stakeArray[stakeIndex].desc}</Text>
+                            <View
+                                className="bg-[#3c464d] rounded-main "
+                            >
+                                <Text className="text-white text-lg text-center">
+                                    {stakeArray[stakeIndex].name} Stake
+                                </Text>
+                                <View className="p-2">
+                                    <View className="bg-white rounded-main justify-center items-center p-2">
+                                        <Text>{stakeArray[stakeIndex].desc}</Text>
+                                    </View>
                                 </View>
                             </View>
                         </View>
