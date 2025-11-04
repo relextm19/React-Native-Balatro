@@ -39,16 +39,15 @@ export default function DifficultySelectScreen() {
         setStakeIndex((stakeIndex + direction + stakesLength) % stakesLength);
     }
 
-    const setCurrentView = useAppStore((state) => state.setCurrentView);
+    const state = useAppStore.getState();
 
     function startGame(): void {
-        const store = useAppStore.getState();
-        store.currentDeck = deckArray[deckIndex];
-        store.currentStake = stakeArray[stakeIndex]
-        setCurrentView(Views.AnteSelect)
+        state.setCurrentDeck(deckArray[deckIndex])
+        state.setCurrentStake(stakeArray[stakeIndex])
+        state.setCurrentView(Views.AnteSelect)
     }
     function returnToMenu(): void {
-        setCurrentView(Views.Menu)
+        state.setCurrentView(Views.Menu)
     }
 
     return (

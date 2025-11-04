@@ -14,8 +14,8 @@ type AppState = {
     currentDeck: Deck;
     currentAnteScore: number;
     setCurrentView: (view: Views) => void;
-    // setCurrentDeck: (deck: Deck) => void;
-    // setCurrentStake: (stake: Stake) => void;
+    setCurrentDeck: (deck: Deck) => void;
+    setCurrentStake: (stake: Stake) => void;
 };
 
 export const useAppStore = create<AppState>((set) => ({
@@ -24,6 +24,6 @@ export const useAppStore = create<AppState>((set) => ({
     currentDeck: {} as Deck,
     currentAnteScore: 300,
     setCurrentView: (view) => set({ currentView: view }),
-    // setCurrentStake: (stake) => set({ selectedStake: stake }),
-    // setCurrentDeck: (deck) => set({ selectedDeck: deck }),
+    setCurrentStake: (stake) => set({ currentStake: stake }),
+    setCurrentDeck: (deck) => set({ currentDeck: deck }),
 }));

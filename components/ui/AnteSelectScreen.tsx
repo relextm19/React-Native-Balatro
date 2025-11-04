@@ -19,8 +19,7 @@ export default function AnteSelectScreen(): ReactElement | null {
 
     if (!stakeSpriteSheet || !blindsSpriteSheet) return null;
 
-    const store = useAppStore.getState();
-
+    const state = useAppStore.getState();
     const bossBlindIndex = getRandomInt(2, blindsArray.length);// the first two blinds are normal
 
     const rewardAmount = [3, 4, 5]
@@ -30,10 +29,10 @@ export default function AnteSelectScreen(): ReactElement | null {
         panes.push(
             <AnteSelectPane
                 stakeSpriteSheet={stakeSpriteSheet}
-                stakeSourceRect={stakeSpriteRects[store.currentStake.index]}
+                stakeSourceRect={stakeSpriteRects[state.currentStake.index]}
                 blindSpriteSheet={blindsSpriteSheet}
                 blindSourceRect={blindSpriteRects[blindIndex]}
-                requiredScore={store.currentAnteScore * (i + 1)}
+                requiredScore={state.currentAnteScore * (i + 1)}
                 title={blindsArray[blindIndex].name}
                 rewardAmount={rewardAmount[i]}
                 key={i}
