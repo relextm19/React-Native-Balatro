@@ -5,6 +5,8 @@ import { SkImage, SkRect, useImage } from "@shopify/react-native-skia";
 import AnteSelectPane from "./AnteSelectPane";
 import { SpriteSheetSliceData, useSpriteRects } from "../../utils/SpriteSheet";
 
+import { stakeSliceData, blindSliceData } from "../../assets/sliceData";
+
 type PaneData = {
     stakeSpriteSheet: SkImage;
     stakeSourceRect: SkRect;
@@ -16,23 +18,6 @@ export default function AnteSelectScreen(): ReactElement | null {
     const stakeSpriteSheet = useImage(require("../../assets/chips/stake_chips.png"));
     const blindsSpriteSheet = useImage(require("../../assets/chips/blind_chips.png"));
 
-    const stakeSliceData: SpriteSheetSliceData = {
-        offsetX: 2,
-        offsetY: 2,
-        rows: 2,
-        cols: 4,
-        spriteWidth: 27,
-        spriteHeight: 27,
-    };
-
-    const blindSliceData: SpriteSheetSliceData = {
-        offsetX: 0,
-        offsetY: 2,
-        rows: 30,
-        cols: 1,
-        spriteWidth: 32,
-        spriteHeight: 32,
-    };
 
     const stakeSpriteRects = useSpriteRects(stakeSliceData).value ?? [];
     const blindSpriteRects = useSpriteRects(blindSliceData).value ?? [];

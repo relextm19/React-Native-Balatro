@@ -7,8 +7,9 @@ import MenuButton from "./MenuButton";
 import { deckArray } from "../../assets/cards/deckArray";
 import { stakeArray } from "../../assets/chips/StakeArray";
 import { useAppStore, Views } from "../../GameState";
-import { buttonSliceData } from "./Menu";
 import { SpriteSheetSliceData, useSpriteRects } from "../../utils/SpriteSheet";
+
+import { deckSliceData, buttonSliceData, stakeSliceData } from "../../assets/sliceData";
 
 export default function DifficultySelectScreen() {
     //TODO: Add a file where where i will keep all the sliceData
@@ -16,24 +17,8 @@ export default function DifficultySelectScreen() {
     const stakeSpriteSheet = useImage(require("../../assets/chips/stake_chips.png"));
     const playButtonImageAsset = require("../../assets/ui/play_button.png");
     const homeButtonImageAsset = require("../../assets/ui/home_button.png");
+    const cycleButtonImageAsset = require("../../assets/ui/cycle_button.png");
 
-    const deckSliceData: SpriteSheetSliceData = {
-        offsetX: 1,
-        offsetY: 1,
-        rows: 5,
-        cols: 7,
-        spriteWidth: 63,
-        spriteHeight: 87,
-    };
-
-    const stakeSliceData: SpriteSheetSliceData = {
-        offsetX: 2,
-        offsetY: 2,
-        rows: 2,
-        cols: 4,
-        spriteWidth: 27,
-        spriteHeight: 27,
-    };
 
     const deckSpriteRects = useSpriteRects(deckSliceData);
     const deckLength = deckSliceData.cols * deckSliceData.rows;
@@ -64,7 +49,7 @@ export default function DifficultySelectScreen() {
 
     return (
         <View className="flex-1 justify-center items-center">
-            <View className="bg-[#3f5762] border-2 border-white rounded-main justify-center items-center gap-2 p-2">
+            <View className="bg-slate-700  border-2 border-slate-400 rounded-main justify-center items-center gap-2 p-2">
                 <View className="gap-2">
                     {/* Deck Section */}
                     <View className="bg-[#1f1f22] rounded-main justify-center items-center flex-row gap-2 p-2">
@@ -94,6 +79,12 @@ export default function DifficultySelectScreen() {
                                 </View>
                             </View>
                         </View>
+                        <MenuButton
+                            scale={0.5}
+                            imageAsset={cycleButtonImageAsset}
+                            sliceData={buttonSliceData}
+                            onClick={startGame}
+                        />
                     </View>
 
                     {/* Stake Section */}
@@ -125,6 +116,7 @@ export default function DifficultySelectScreen() {
                         </View>
                     </View>
                 </View>
+
                 <View className="gap-4 items-center flex-row">
                     <MenuButton
                         scale={0.5}

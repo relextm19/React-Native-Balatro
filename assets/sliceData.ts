@@ -1,0 +1,36 @@
+import { SpriteSheetSliceData } from "../utils/SpriteSheet";
+
+export const stakeSliceData: SpriteSheetSliceData = {
+    offsetX: 2,
+    offsetY: 2,
+    rows: 2,
+    cols: 4,
+    spriteWidth: 27,
+    spriteHeight: 27,
+};
+
+export const blindSliceData: SpriteSheetSliceData = {
+    offsetX: 0,
+    offsetY: 2,
+    rows: 30,
+    cols: 1,
+    spriteWidth: 32,
+    spriteHeight: 32,
+};
+export const deckSliceData: SpriteSheetSliceData = {
+    offsetX: 1,
+    offsetY: 1,
+    rows: 5,
+    cols: 7,
+    spriteWidth: 63,
+    spriteHeight: 87,
+};
+
+export const buttonSliceData: SpriteSheetSliceData = {
+    offsetX: 55,
+    offsetY: 0,
+    rows: 1,
+    cols: 3,
+    spriteWidth: 265,
+    spriteHeight: 115,
+};

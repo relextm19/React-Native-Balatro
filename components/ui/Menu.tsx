@@ -4,14 +4,7 @@ import MenuButton from "./MenuButton";
 import type { SpriteSheetSliceData } from "../../utils/SpriteSheet";
 import { useAppStore, Views } from "../../GameState";
 
-export const buttonSliceData: SpriteSheetSliceData = {
-    offsetX: 55,
-    offsetY: 0,
-    rows: 1,
-    cols: 3,
-    spriteWidth: 265,
-    spriteHeight: 115,
-};
+import { buttonSliceData } from "../../assets/sliceData";
 
 export default function Menu(): ReactElement {
     const setCurrentView = useAppStore((state) => state.setCurrentView);
