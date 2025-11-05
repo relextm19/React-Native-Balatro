@@ -5,7 +5,7 @@ export let SCREEN_WIDTH = 0;
 export let SCREEN_HEIGHT = 0;
 
 export function initScreenDimensions() {
-    const { width, height } = Dimensions.get("screen");
+    const { width, height } = Dimensions.get("window");
     SCREEN_WIDTH = width;
     SCREEN_HEIGHT = height;
 }

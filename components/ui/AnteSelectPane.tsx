@@ -11,7 +11,7 @@ type AnteSelectPaneProps = {
     requiredScore: number,
     title: String,
     rewardAmount: number,
-    blindState: string
+    blindState: BlindState
 };
 
 export default function AnteSelectPane({
@@ -29,8 +29,8 @@ export default function AnteSelectPane({
     const blindTransforms = [Skia.RSXform(blindImgScale, 0, 0, 0)];
 
     return (
-        //TODO: Make the blindState text background the most common color from the logo
-        <View className="bg-darkBg w-1/5 h-full border-5 border-[#362602] rounded-main border-b-0 rounded-be-none rounded-bl-none p-2">
+        //TODO: Make the blindState text background the most common color from the image
+        <View className={`bg-darkBg w-1/5 h-full border-5 border-[#362602] rounded-main border-b-0 rounded-be-none rounded-bl-none p-2 ${!BlindState.selected ? "opacity-50" : ""}`}>
             <View className="bg-[#23353aff] border-2 border-lightBorder rounded-main p-2 gap-2 items-center">
                 <View className="bg-[#f48b04] rounded-main h-6 shadow-lg w-4/5 items-center justify-center">
                     <Text className="text-white">{blindState}</Text>
