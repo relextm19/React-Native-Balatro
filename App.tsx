@@ -12,7 +12,7 @@ import DifficultySelectScreen from "./components/ui/DifficultySelectScreen";
 
 import { Views } from "./GameState";
 import { useAppStore } from "./GameState";
-import { initScreenDimensions } from './utils/ResponsiveDimensions';
+import { initScreenDimensions, SCREEN_HEIGHT, SCREEN_WIDTH } from './utils/ResponsiveDimensions';
 
 export default function App() {
     useEffect(() => {
@@ -20,8 +20,11 @@ export default function App() {
             await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
         };
         lockOrientation();
-        NavigationBar.setVisibilityAsync('hidden');
-        initScreenDimensions();
+        const hideNavBar = async () => {
+            await NavigationBar.setVisibilityAsync('hidden');
+            initScreenDimensions();
+        }
+        hideNavBar();
     }, []);
 
     const currentView = useAppStore((state) => state.currentView);

@@ -1,17 +1,29 @@
-import { Dimensions } from "react-native";
+import { useEffect, useState } from "react";
+import { Dimensions, ScaledSize } from "react-native";
 
-export let [SCREEN_WIDTH, SCREEN_HEIGHT] = [0, 0];
+export let SCREEN_WIDTH = 0;
+export let SCREEN_HEIGHT = 0;
 
 export function initScreenDimensions() {
-    const { width, height } = Dimensions.get('screen');
+    const { width, height } = Dimensions.get("screen");
     SCREEN_WIDTH = width;
     SCREEN_HEIGHT = height;
 }
 
-export function RH(percentage: number) {
-    return (percentage / 100) * SCREEN_HEIGHT;
-}
+export function useScreenDimensions() {
+    const [screen, setScreen] = useState<ScaledSize>(Dimensions.get("screen"));
 
-export function RW(percentage: number) {
-    return (percentage / 100) * SCREEN_WIDTH;
+    useEffect(() => {
+        const handler = ({ screen }: { window: ScaledSize; screen: ScaledSize }) => {
+            setScreen(screen);
+        };
+
+        const subscription = Dimensions.addEventListener("change", handler);
+        return () => subscription?.remove();
+    }, []);
+
+    return {
+        width: screen.width,
+        height: screen.height,
+    };
 }
