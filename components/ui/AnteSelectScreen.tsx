@@ -9,6 +9,7 @@ import { stakeSliceData, blindSliceData, deckSliceData } from "../../assets/slic
 import { useAppStore } from "../../GameState";
 import { getRandomInt } from "../../utils/Random";
 import { blindsArray, BlindState } from "../../assets/chips/Blinds";
+import StatusPane from "./StatusPane";
 
 
 export default function AnteSelectScreen(): ReactElement | null {
@@ -47,11 +48,14 @@ export default function AnteSelectScreen(): ReactElement | null {
     }
 
     return (
-        <View className="flex-1 items-center justify-end">
-            <View className="flex-row justify-center items-center gap-x-[5%] h-4/6">
-                {panes}
+        <View className="flex-1 flex-row justify-center">
+            <StatusPane />
+            <View className="flex-1 items-center justify-end relative">
+                <View className="flex-row justify-center items-center gap-x-[5%] h-4/6">
+                    {panes}
+                </View>
             </View>
-            <View className="absolute right-2 bottom-2">
+            <View className="items-end justify-end p-2">
                 <Canvas style={
                     { width: deckSpriteRect.width * 1.2, height: deckSpriteRect.height * 1.2 }
                 }>
