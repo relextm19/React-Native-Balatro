@@ -22,7 +22,7 @@ export default function StatusPane(): ReactElement {
             <View className="w-full flex-row justify-between items-center bg-darkBg rounded-lg p-2">
                 <Text className="text-gray-300 w-2/5 text-wrap">Round score</Text>
                 <View className="bg-darkGrey flex-row-reverse justify-center items-center flex-1 rounded-lg">
-                    <Text className="text-3xl text-white">0</Text>
+                    <Text className="text-3xl text-white">{store.roundScore}</Text>
                     <Canvas
                         style={{
                             width: stakeSpriteRect.width,
@@ -56,20 +56,20 @@ export default function StatusPane(): ReactElement {
                 <View className="items-center bg-darkBg p-2 rounded-lg w-[49%]">
                     <Text className="text-gray-400 text-xs">Hands</Text>
                     <View className="bg-darkGrey p-2 rounded-lg w-full justify-center items-center">
-                        <Text className="text-blue-700 text-lg font-bold">4</Text>
+                        <Text className="text-blue-700 text-lg font-bold">{store.hands}</Text>
                     </View>
                 </View>
                 <View className="items-center bg-darkBg p-2 rounded-lg w-[49%]">
                     <Text className="text-gray-400 text-xs">Discards</Text>
                     <View className="bg-darkGrey p-2 rounded-lg w-full justify-center items-center">
-                        <Text className="text-customRed text-lg font-bold">3</Text>
+                        <Text className="text-customRed text-lg font-bold">{store.discards}</Text>
                     </View>
                 </View>
             </View>
 
             <View className="w-full bg-darkBg rounded-lg p-2 ">
                 <View className="bg-darkGrey rounded-lg items-center justify-center">
-                    <Text className="text-accentGold text-xl font-bold ">$5</Text>
+                    <Text className="text-accentGold text-xl font-bold ">${store.money}</Text>
                 </View>
             </View>
 
@@ -77,14 +77,14 @@ export default function StatusPane(): ReactElement {
                 <View className="items-center bg-darkBg p-2 rounded-lg w-[49%]">
                     <Text className="text-gray-400 text-xs">Ante</Text>
                     <View className="bg-darkGrey p-2 rounded-lg w-full justify-center items-center flex-row">
-                        <Text className="text-accentGold text-lg font-bold">1</Text>
+                        <Text className="text-accentGold text-lg font-bold">{store.currentAnte}</Text>
                         <Text className="text-white text-lg font-bold">/8</Text>
                     </View>
                 </View>
                 <View className="items-center bg-darkBg p-2 rounded-lg w-[49%]">
                     <Text className="text-gray-400 text-xs">Round</Text>
                     <View className="bg-darkGrey p-2 rounded-lg w-full justify-center items-center">
-                        <Text className="text-accentGold text-lg font-bold">2</Text>
+                        <Text className="text-accentGold text-lg font-bold">{store.currentRound}</Text>
                     </View>
                 </View>
             </View>
