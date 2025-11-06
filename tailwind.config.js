@@ -17,6 +17,8 @@ module.exports = {
         lightBorder: '#334444',
         accentGold: '#e0ae07',
         main: '#23353aff',
+        accentDark: '#19201fff',
+        darkGrey: '#2a2f36',
       },
       borderRadius: {
         main: '8px',
