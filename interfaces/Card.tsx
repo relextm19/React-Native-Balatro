@@ -2,9 +2,9 @@ import React from "react";
 import { IRectangle, Shape } from "./Shape";
 import { cardSprites } from "../assets/cardSpritesIndex";
 import { SharedValue, useSharedValue } from "react-native-reanimated";
-import { cards } from "../GameState";
-import { CardSprite } from "../components/game/cardSprite";
-import { RW, RH } from "../utils/ResponsiveDimensions";
+import { useAppStore } from "../GameState";
+import { useSpriteRects } from "../utils/SpriteSheet";
+import { cardSliceData } from "../assets/sliceData";
 
 export enum Suits {
   Hearts = 'hearts',
@@ -29,26 +29,37 @@ export enum Ranks {
   Ace = 'A',
 }
 
-export interface IPlayingCard extends IRectangle {
+export enum Modifier {
+  Lucky,
+  Bonus,
+  Mult,
+  Wild,
+  Glass
+}
+
+export interface IPlayingCard {
   suit: Suits;
   rank: Ranks;
   isFaceCard: boolean;
-  sprite: React.ReactElement | null;
+  modifier: Modifier | null,
 }
 
 
 export function createCard(
   suit: Suits,
   rank: Ranks,
+  modifier: Modifier,
   x: SharedValue<number>,
   y: SharedValue<number>,
   width: number,
   height: number,
-): IPlayingCard {
+): IPlayingCard | null {
   const isFaceCard = [Ranks.Jack, Ranks.Queen, Ranks.King].includes(rank);
-  const spriteSource = cardSprites[`${rank}_${suit}`]
+  const deck = useAppStore((s) => s.currentDeck);
+  if (!deck.state) { return null }
+  const id = deck.state.total;
   const card = {
-    id: cards.length + 1,
+    id: id,
     suit,
     rank,
     isFaceCard,
@@ -57,9 +68,8 @@ export function createCard(
     width,
     height,
     type: Shape.Rectangle,
-    sprite: CardSprite(spriteSource, x, y, width, height),
+    modifier: modifier,
   };
-  cards.push(card);
   return card;
 }
 
@@ -67,17 +77,10 @@ export function generateDeck(): IPlayingCard[] {
   const deck: IPlayingCard[] = [];
   const suits = Object.values(Suits);
   const ranks = Object.values(Ranks);
-  let [xt, yt] = [0, 0];
+  const cardSpriteRects = useSpriteRects(cardSliceData);
   for (const suit of suits) {
     for (const rank of ranks) {
-      const x: SharedValue<number> = useSharedValue(xt);
-      const y: SharedValue<number> = useSharedValue(yt);
-      const card = createCard(suit, rank, x, y, RW(100 / 26), RH(100 / 9));
-      deck.push(card);
-      xt += RW(100 / 26);
     }
-    yt += RH(100 / 26);
-    xt = 0;
   }
   return deck;
 } 

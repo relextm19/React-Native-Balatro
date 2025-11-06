@@ -34,3 +34,12 @@ export const buttonSliceData: SpriteSheetSliceData = {
     spriteWidth: 265,
     spriteHeight: 115,
 };
+
+export const cardSliceData: SpriteSheetSliceData = {
+    offsetX: 2,
+    offsetY: 2,
+    rows: 4,
+    cols: 13,
+    spriteWidth: 69,
+    spriteHeight: 93,
+}
