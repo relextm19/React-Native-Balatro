@@ -1,11 +1,7 @@
 import React from "react";
-import { IRectangle, Shape } from "./Shape";
-import { cardSprites } from "../assets/cardSpritesIndex";
-import { SharedValue, useSharedValue } from "react-native-reanimated";
+import { Shape } from "./Shape";
 import { useAppStore } from "../GameState";
-import { useSpriteRects } from "../utils/SpriteSheet";
 import { cardSliceData } from "../assets/sliceData";
-import { ColorMatrix } from "@shopify/react-native-skia";
 
 export enum Suits {
   Hearts = 'hearts',
@@ -35,14 +31,20 @@ export enum Modifier {
   Bonus,
   Mult,
   Wild,
-  Glass
+  Glass,
+  Normal
 }
 
 export interface IPlayingCard {
-  suit: Suits;
-  rank: Ranks;
-  isFaceCard: boolean;
+  id: number,
+  suit: Suits,
+  rank: Ranks,
+  isFaceCard: boolean,
   modifier: Modifier | null,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
 }
 
 export function createCard(
@@ -57,7 +59,7 @@ export function createCard(
   const x = (cardSliceData.spriteWidth + cardSliceData.offsetX) * Object.values(Ranks).findIndex((r) => r === rank);
   const y = (cardSliceData.spriteHeight + cardSliceData.offsetY) * Object.values(Suits).findIndex((s) => s === suit);
 
-  const card = {
+  const card: IPlayingCard = {
     id: id,
     suit,
     rank,
@@ -66,7 +68,6 @@ export function createCard(
     y,
     width: cardSliceData.spriteWidth,
     height: cardSliceData.spriteHeight,
-    type: Shape.Rectangle,
     modifier: modifier,
   };
   return card;
