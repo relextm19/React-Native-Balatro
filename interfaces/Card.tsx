@@ -27,12 +27,12 @@ export enum Ranks {
 }
 
 export enum Modifier {
-    Lucky,
+    Normal,
     Bonus,
     Mult,
     Wild,
-    Glass,
-    Normal
+    Lucky,
+    Glass
 }
 
 export interface IPlayingCard {
