@@ -40,7 +40,7 @@ export interface IPlayingCard {
     suit: Suits,
     rank: Ranks,
     isFaceCard: boolean,
-    modifier: Modifier | null,
+    modifier: Modifier,
     x: number,
     y: number,
     width: number,
@@ -71,7 +71,7 @@ export function generateDeck(): Map<number, IPlayingCard> | undefined {
     const deck = new Map<number, IPlayingCard>();
     for (let suit of Object.values(Suits)) {
         for (let rank of Object.values(Ranks)) {
-            const card = createCard(suit, rank, Modifier.Normal);
+            const card = createCard(suit, rank, Modifier.Lucky);
             if (!card) { return }
             deck.set(card.id, card);
             setDeckSize(deckSize + 1);

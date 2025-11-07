@@ -27,8 +27,9 @@ export default function DeckView(): ReactElement | null {
         const drawY = Math.floor(i / cardSliceData.cols) * offsetY;
 
         transforms.push(Skia.RSXform(1, 0, drawX, drawY));
+        console.log(Object.values(Modifier).findIndex(v => v === card.modifier))
         modifierSprites[i] = card.modifier
-            ? modifiersRects.value[Object.values(Modifier).findIndex(v => v === card.modifier)]
+            ? modifiersRects.value[card.modifier]
             : modifiersRects.value[0]
         return sprite;
     });
