@@ -10,9 +10,9 @@ import { useAppStore, Views } from "../../GameState";
 import { useSpriteRects } from "../../utils/SpriteSheet";
 
 import { deckSliceData, buttonSliceData, stakeSliceData } from "../../assets/sliceData";
+import { generateDeck } from "../../interfaces/Card";
 
 export default function DifficultySelectScreen() {
-    //TODO: Add a file where where i will keep all the sliceData
     const decksSpriteSheet = useImage(require("../../assets/cards/decks.png"));
     const stakeSpriteSheet = useImage(require("../../assets/chips/stake_chips.png"));
     const playButtonImageAsset = require("../../assets/ui/play_button.png");
@@ -45,6 +45,9 @@ export default function DifficultySelectScreen() {
         deckArray[deckIndex].state = { total: 52, avaliable: 52 }
         state.setCurrentDeck(deckArray[deckIndex])
         state.setCurrentStake(stakeArray[stakeIndex])
+        const deck = generateDeck();
+        if (!deck) { return }
+        state.setCurrentDeckCards(deck);
         state.setCurrentView(Views.AnteSelect)
     }
     function returnToMenu(): void {
@@ -55,7 +58,6 @@ export default function DifficultySelectScreen() {
         <View className="flex-1 justify-center items-center">
             <View className="bg-slate-700 border-2 border-slate-400 rounded-main justify-between items-center p-4 w-3/5 h-full">
 
-                {/* Deck Section */}
                 <View className="w-full justify-center items-center flex-row flex-1">
                     <MenuButton
                         scale={0.5}
@@ -98,7 +100,6 @@ export default function DifficultySelectScreen() {
                     />
                 </View>
 
-                {/* Stake Section */}
                 <View className="w-full justify-center items-center flex-row flex-1">
                     <MenuButton
                         scale={0.3}
@@ -141,7 +142,6 @@ export default function DifficultySelectScreen() {
                     />
                 </View>
 
-                {/* Bottom Buttons */}
                 <View className="gap-4 items-center flex-row">
                     <MenuButton
                         scale={0.5}

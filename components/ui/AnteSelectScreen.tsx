@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { View, Text } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import { Skia, useImage, Canvas, Atlas } from "@shopify/react-native-skia";
 
 import AnteSelectPane from "./AnteSelectPane";
@@ -10,18 +10,17 @@ import { useAppStore } from "../../GameState";
 import { getRandomInt } from "../../utils/Random";
 import { blindsArray, BlindState } from "../../assets/chips/Blinds";
 import StatusPane from "./StatusPane";
+import DeckIcon from "./DeckIcon";
 
 
 export default function AnteSelectScreen(): ReactElement | null {
-    const state = useAppStore.getState();
+    const store = useAppStore.getState();
 
     const stakeSpriteSheet = useImage(require("../../assets/chips/stake_chips.png"));
     const blindsSpriteSheet = useImage(require("../../assets/chips/blind_chips.png"));
-    const decksSpriteSheet = useImage(require("../../assets/cards/decks.png"));
 
     const stakeSpriteRects = useSpriteRects(stakeSliceData).value ?? [];
     const blindSpriteRects = useSpriteRects(blindSliceData).value ?? [];
-    const deckSpriteRect = useSpriteRects(deckSliceData).value[state.currentDeck.index] ?? null;
 
     if (!stakeSpriteSheet || !blindsSpriteSheet) return null;
 
@@ -31,14 +30,14 @@ export default function AnteSelectScreen(): ReactElement | null {
     let panes: ReactElement[] = [];
     for (let i = 0; i < 3; i++) {
         const blindIndex = i < 2 ? i : bossBlindIndex;
-        const blindState = i < state.currentBlind ? BlindState.defeated : state.currentBlind % 3 == i ? BlindState.selected : BlindState.upcoming; //Hows he done that then
+        const blindState = i < store.currentBlind ? BlindState.defeated : store.currentBlind % 3 == i ? BlindState.selected : BlindState.upcoming; //Hows he done that then
         panes.push(
             <AnteSelectPane
                 stakeSpriteSheet={stakeSpriteSheet}
-                stakeSourceRect={stakeSpriteRects[state.currentStake.index]}
+                stakeSourceRect={stakeSpriteRects[store.currentStake.index]}
                 blindSpriteSheet={blindsSpriteSheet}
                 blindSourceRect={blindSpriteRects[blindIndex]}
-                requiredScore={state.currentAnteScore * (i + 1)}
+                requiredScore={store.currentAnteScore * (i + 1)}
                 title={blindsArray[blindIndex].name}
                 rewardAmount={rewardAmount[i]}
                 blindState={blindState}
@@ -55,21 +54,7 @@ export default function AnteSelectScreen(): ReactElement | null {
                     {panes}
                 </View>
             </View>
-            <View className="items-end justify-end p-2">
-                <Canvas style={
-                    { width: deckSpriteRect.width * 1.2, height: deckSpriteRect.height * 1.2 }
-                }>
-                    <Atlas
-                        sprites={[deckSpriteRect]}
-                        image={decksSpriteSheet}
-                        transforms={[Skia.RSXform(1.2, 0, 0, 0)]}
-                    >
-                    </Atlas>
-                </Canvas>
-                <Text className="text-white text-center">
-                    {state.currentDeck.state?.avaliable}/{state.currentDeck.state?.total}
-                </Text>
-            </View>
+            <DeckIcon />
         </View>
     );
 }

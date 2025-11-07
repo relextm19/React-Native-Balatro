@@ -13,6 +13,7 @@ import DifficultySelectScreen from "./components/ui/DifficultySelectScreen";
 import { Views } from "./GameState";
 import { useAppStore } from "./GameState";
 import { initScreenDimensions, SCREEN_HEIGHT, SCREEN_WIDTH } from './utils/ResponsiveDimensions';
+import DeckView from './components/ui/DeckView';
 
 export default function App() {
     useEffect(() => {
@@ -37,6 +38,8 @@ export default function App() {
                 return <DifficultySelectScreen />;
             case Views.AnteSelect:
                 return <AnteSelectScreen />;
+            case Views.DeckView:
+                return <DeckView />
         }
     }
 

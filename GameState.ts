@@ -1,11 +1,18 @@
 import { create } from "zustand";
 import { Stake } from "./assets/chips/StakeArray";
 import { Deck } from "./assets/cards/deckArray";
+import { IPlayingCard } from "./interfaces/Card";
 
 export enum Views {
     Menu,
     DifficultySelect,
     AnteSelect,
+    DeckView,
+}
+
+export let deckSize = 0;
+export function setDeckSize(value: number): void {
+    deckSize = value;
 }
 
 type AppState = {
@@ -24,6 +31,7 @@ type AppState = {
     // Setters
     setCurrentView: (view: Views) => void;
     setCurrentDeck: (deck: Deck) => void;
+    setCurrentDeckCards: (cards: Map<number, IPlayingCard>) => void;
     setCurrentStake: (stake: Stake) => void;
     setCurrentBlind: (blind: number) => void;
     setCurrentAnteScore: (score: number) => void;
@@ -51,6 +59,13 @@ export const useAppStore = create<AppState>((set) => ({
     setCurrentView: (view: Views) => set({ currentView: view }),
     setCurrentStake: (stake: Stake) => set({ currentStake: stake }),
     setCurrentDeck: (deck: Deck) => set({ currentDeck: deck }),
+    setCurrentDeckCards: (cards) =>
+        set((state) => ({
+            currentDeck: {
+                ...state.currentDeck,
+                cards,
+            },
+        })),
     setCurrentBlind: (blind: number) => set({ currentBlind: blind }),
     setCurrentAnteScore: (score: number) => set({ currentAnteScore: score }),
     setCurrentAnte: (ante: number) => set({ currentAnte: ante }),
