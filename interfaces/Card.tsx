@@ -5,6 +5,7 @@ import { SharedValue, useSharedValue } from "react-native-reanimated";
 import { useAppStore } from "../GameState";
 import { useSpriteRects } from "../utils/SpriteSheet";
 import { cardSliceData } from "../assets/sliceData";
+import { ColorMatrix } from "@shopify/react-native-skia";
 
 export enum Suits {
   Hearts = 'hearts',
@@ -44,20 +45,18 @@ export interface IPlayingCard {
   modifier: Modifier | null,
 }
 
-
 export function createCard(
   suit: Suits,
   rank: Ranks,
   modifier: Modifier,
-  x: SharedValue<number>,
-  y: SharedValue<number>,
-  width: number,
-  height: number,
 ): IPlayingCard | null {
   const isFaceCard = [Ranks.Jack, Ranks.Queen, Ranks.King].includes(rank);
   const deck = useAppStore((s) => s.currentDeck);
   if (!deck.state) { return null }
-  const id = deck.state.total;
+  const id = deck.state.total + 1;
+  const x = (cardSliceData.spriteWidth + cardSliceData.offsetX) * Object.values(Ranks).findIndex((r) => r === rank);
+  const y = (cardSliceData.spriteHeight + cardSliceData.offsetY) * Object.values(Suits).findIndex((s) => s === suit);
+
   const card = {
     id: id,
     suit,
@@ -65,22 +64,10 @@ export function createCard(
     isFaceCard,
     x,
     y,
-    width,
-    height,
+    width: cardSliceData.spriteWidth,
+    height: cardSliceData.spriteHeight,
     type: Shape.Rectangle,
     modifier: modifier,
   };
   return card;
 }
-
-export function generateDeck(): IPlayingCard[] {
-  const deck: IPlayingCard[] = [];
-  const suits = Object.values(Suits);
-  const ranks = Object.values(Ranks);
-  const cardSpriteRects = useSpriteRects(cardSliceData);
-  for (const suit of suits) {
-    for (const rank of ranks) {
-    }
-  }
-  return deck;
-} 

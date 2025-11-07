@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { StyleSheet, useWindowDimensions } from "react-native";
+import { Dimensions, StyleSheet, useWindowDimensions } from "react-native";
 import { Canvas, useImage, Group, Image } from "@shopify/react-native-skia";
 import Animated, {
     useSharedValue,

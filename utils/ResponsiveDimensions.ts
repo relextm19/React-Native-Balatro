@@ -11,19 +11,7 @@ export function initScreenDimensions() {
 }
 
 export function useScreenDimensions() {
-    const [screen, setScreen] = useState<ScaledSize>(Dimensions.get("screen"));
+    const [screenData, setScreenData] = useState(Dimensions.get('screen'));
 
-    useEffect(() => {
-        const handler = ({ screen }: { window: ScaledSize; screen: ScaledSize }) => {
-            setScreen(screen);
-        };
-
-        const subscription = Dimensions.addEventListener("change", handler);
-        return () => subscription?.remove();
-    }, []);
-
-    return {
-        width: screen.width,
-        height: screen.height,
-    };
+    return screenData
 }
