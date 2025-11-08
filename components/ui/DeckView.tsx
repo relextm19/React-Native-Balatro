@@ -5,7 +5,6 @@ import { cardModifierSliceData, cardSliceData } from "../../assets/sliceData";
 import { useSpriteRects } from "../../utils/SpriteSheet";
 import { View } from "react-native";
 import { useScreenDimensions } from "../../utils/ResponsiveDimensions";
-import { Modifier } from "../../interfaces/Card";
 
 export default function DeckView(): ReactElement | null {
     const store = useAppStore();
@@ -15,34 +14,41 @@ export default function DeckView(): ReactElement | null {
         return null;
     }
     const { width: screenWidth, height: screenHeight } = useScreenDimensions();
-    const cardWidth = screenWidth / 16;
-    const cardHeight = screenHeight / 4;
+    const cardWidth = cardSliceData.spriteWidth;
+    const cardHeight = cardSliceData.spriteHeight;
+    let longestRow = 0;
 
     const cardsSpriteSheet = useImage(require("../../assets/cards/playing_cards.png"));
     const modifierSpriteSheet = useImage(require("../../assets/cards/modifiers.png"))
     const modifiersRects = useSpriteRects(cardModifierSliceData);
 
-    const transforms: SkRSXform[] = [];
-    const modifierSprites: SkRect[] = [];
-    const cardSprites: SkRect[] = [];
+    const atlases: ReactElement[] = [];
+
+    const drawOffsetX = 5;
 
     const suitArray = Array.from(suits.values());
     for (let j = 0; j < suitArray.length; j++) {
-        const suit = suitArray[j];
-        const cardsArray = Array.from(suit.values());
+        const suitCards = suitArray[j];
+        const cardsArray = Array.from(suitCards.values());
+
+        const scale = screenWidth / ((cardWidth + cardSliceData.offsetX + drawOffsetX) * cardsArray.length);
+        longestRow = Math.max(longestRow, cardsArray.length * (cardWidth + drawOffsetX) * scale);
+
+        const transforms: SkRSXform[] = [];
+        const modifierSprites: SkRect[] = [];
+        const cardSprites: SkRect[] = [];
         for (let i = 0; i < cardsArray.length; i++) {
             const card = cardsArray[i];
 
             const sprite = rect(card.x, card.y, card.width, card.height);
             cardSprites.push(sprite);
 
-            const offsetX = cardWidth;
-            const offsetY = cardHeight;
 
-            const drawX = i * offsetX;
-            const drawY = j * offsetY;
+            const drawX = i * ((cardWidth + drawOffsetX) * scale);
+            const drawY = j * cardHeight; //vertical spacing between the cards is handled by css
 
-            transforms.push(Skia.RSXform(1, 0, drawX, drawY));
+
+            transforms.push(Skia.RSXform(scale, 0, drawX, drawY));
 
             modifierSprites.push(
                 card.modifier
@@ -50,14 +56,18 @@ export default function DeckView(): ReactElement | null {
                     : modifiersRects.value[0]
             );
         }
+        atlases.push(
+            <>
+                <Atlas image={modifierSpriteSheet} sprites={modifierSprites} transforms={transforms} key={j} />
+                <Atlas image={cardsSpriteSheet} sprites={cardSprites} transforms={transforms} key={j + 1 * scale} />
+            </>
+        )
     }
-    console.log(modifiersRects.value.length)
 
     return (
         <View className="flex-1 justify-center items-center">
-            <Canvas style={{ width: "100%", height: "100%" }}>
-                <Atlas image={modifierSpriteSheet} sprites={modifierSprites} transforms={transforms} />
-                <Atlas image={cardsSpriteSheet} sprites={cardSprites} transforms={transforms} />
+            <Canvas style={{ width: longestRow, height: "100%" }}>
+                {atlases}
             </Canvas>
         </View>
     );
