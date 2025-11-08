@@ -30,8 +30,8 @@ export default function DeckView(): ReactElement | null {
 
     const scale = displayWidth / ((cardWidth) * cardSliceData.cols);
 
-    function backToGameScreen() {
-        store.setCurrentView(Views.AnteSelect);
+    function backToLastView() {
+        store.setCurrentView(store.lastView);
     }
 
     const suitArray = Array.from(suits.values());
@@ -81,7 +81,7 @@ export default function DeckView(): ReactElement | null {
     return (
         <View className="flex-row flex-1 items-center">
             <View className="top-2 self-start">
-                <MenuButton imageAsset={exitButtonImageAsset} sliceData={buttonSliceData} scale={0.3} onClick={backToGameScreen} />
+                <MenuButton imageAsset={exitButtonImageAsset} sliceData={buttonSliceData} scale={0.3} onClick={backToLastView} />
             </View>
             <View className="flex-1 justify-end items-end">
                 <Canvas style={{ width: longestRow, height: suitArray.length * cardSliceData.spriteHeight }}>

@@ -17,6 +17,7 @@ export function setDeckSize(value: number): void {
 
 type AppState = {
     currentView: Views;
+    lastView: Views;
     currentStake: Stake;
     currentDeck: Deck;
     currentAnteScore: number;
@@ -45,6 +46,7 @@ type AppState = {
 
 export const useAppStore = create<AppState>((set) => ({
     currentView: Views.Menu,
+    lastView: Views.Menu,
     currentStake: {} as Stake,
     currentDeck: {} as Deck,
     currentBlind: 0,
@@ -56,7 +58,10 @@ export const useAppStore = create<AppState>((set) => ({
     discards: 3,
     roundScore: 0,
 
-    setCurrentView: (view: Views) => set({ currentView: view }),
+    setCurrentView: (view: Views) => set((state) => ({
+        lastView: state.currentView,
+        currentView: view,
+    })),
     setCurrentStake: (stake: Stake) => set({ currentStake: stake }),
     setCurrentDeck: (deck: Deck) => set({ currentDeck: deck }),
     setCurrentDeckCards: (cardsBySuits) =>
