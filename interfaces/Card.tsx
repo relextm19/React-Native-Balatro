@@ -87,7 +87,10 @@ export function generateDeck(): Map<Suits, Map<number, IPlayingCard>> {
             suitMap.set(card.id, card);
         }
     }
-    const card = createCard(Suits.Clubs, Ranks.Ace, Modifier.Glass);
-    deck.get(Suits.Clubs)?.set(card.id, card)
+    //testing purpose
+    for (let i = 0; i < 4; i++) {
+        const card = createCard(Suits.Clubs, Ranks.Ace, Modifier.Glass);
+        deck.get(Suits.Clubs)?.set(card.id, card)
+    }
     return deck;
 }

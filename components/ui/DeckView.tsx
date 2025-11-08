@@ -24,19 +24,25 @@ export default function DeckView(): ReactElement | null {
 
     const atlases: ReactElement[] = [];
 
-    const drawOffsetX = 5;
+    const scale = screenWidth / ((cardWidth) * cardSliceData.cols);
 
     const suitArray = Array.from(suits.values());
     for (let j = 0; j < suitArray.length; j++) {
         const suitCards = suitArray[j];
         const cardsArray = Array.from(suitCards.values());
+        if (cardsArray.length == 0) { continue };
 
-        const scale = screenWidth / ((cardWidth + cardSliceData.offsetX + drawOffsetX) * cardsArray.length);
-        longestRow = Math.max(longestRow, cardsArray.length * (cardWidth + drawOffsetX) * scale);
+        const totalCardWidth = cardWidth * cardsArray.length;
+        const drawOffsetX = (screenWidth - totalCardWidth) / cardsArray.length; //offset beetwen drawn cards, can be negative if there are too many cards in a row
+        longestRow = Math.max(
+            longestRow,
+            cardsArray.length * cardWidth * scale + (cardsArray.length - 1) * drawOffsetX * scale//first calucalte the width of all cards then the spacing between them
+        );
 
         const transforms: SkRSXform[] = [];
         const modifierSprites: SkRect[] = [];
         const cardSprites: SkRect[] = [];
+
         for (let i = 0; i < cardsArray.length; i++) {
             const card = cardsArray[i];
 
