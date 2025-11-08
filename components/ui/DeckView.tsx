@@ -26,7 +26,7 @@ export default function DeckView(): ReactElement | null {
     const cardHeight = cardSliceData.spriteHeight;
     let longestRow = 0;
 
-    const atlases: ReactElement[] = [];
+    const cards: ReactElement[] = [];
 
     const scale = displayWidth / ((cardWidth) * cardSliceData.cols);
 
@@ -47,35 +47,25 @@ export default function DeckView(): ReactElement | null {
             cardsArray.length * cardWidth * scale + (cardsArray.length - 1) * drawOffsetX * scale//first calucalte the width of all cards then the spacing between them
         );
 
-        const transforms: SkRSXform[] = [];
-        const modifierSprites: SkRect[] = [];
-        const cardSprites: SkRect[] = [];
-
         for (let i = 0; i < cardsArray.length; i++) {
             const card = cardsArray[i];
 
             const sprite = rect(card.x, card.y, card.width, card.height);
-            cardSprites.push(sprite);
-
+            const modifierSprite = card.modifier
+                ? modifiersRects.value[card.modifier]
+                : modifiersRects.value[0]
 
             const drawX = i * ((cardWidth + drawOffsetX) * scale);
             const drawY = j * cardHeight; //vertical spacing between the cards is handled by css
 
-
-            transforms.push(Skia.RSXform(scale, 0, drawX, drawY));
-
-            modifierSprites.push(
-                card.modifier
-                    ? modifiersRects.value[card.modifier]
-                    : modifiersRects.value[0]
-            );
+            const key = `${i}${j}`
+            cards.push(
+                <View key={`w-${key}`}>
+                    <Atlas image={modifierSpriteSheet} sprites={[modifierSprite]} transforms={[Skia.RSXform(scale, 0, drawX, drawY)]} key={`m-${key}`} />
+                    <Atlas image={cardsSpriteSheet} sprites={[sprite]} transforms={[Skia.RSXform(scale, 0, drawX, drawY)]} key={`c-${key}`} />
+                </View>
+            )
         }
-        atlases.push(
-            <>
-                <Atlas image={modifierSpriteSheet} sprites={modifierSprites} transforms={transforms} key={j} />
-                <Atlas image={cardsSpriteSheet} sprites={cardSprites} transforms={transforms} key={j + 1 * scale} />
-            </>
-        )
     }
 
     return (
@@ -85,7 +75,7 @@ export default function DeckView(): ReactElement | null {
             </View>
             <View className="flex-1 justify-end items-end">
                 <Canvas style={{ width: longestRow, height: suitArray.length * cardSliceData.spriteHeight }}>
-                    {atlases}
+                    {cards}
                 </Canvas>
             </View>
         </View>
