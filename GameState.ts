@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { Stake } from "./assets/chips/StakeArray";
 import { Deck } from "./assets/cards/deckArray";
-import { IPlayingCard } from "./interfaces/Card";
+import { IPlayingCard, Suits } from "./interfaces/Card";
 
 export enum Views {
     Menu,
@@ -31,7 +31,7 @@ type AppState = {
     // Setters
     setCurrentView: (view: Views) => void;
     setCurrentDeck: (deck: Deck) => void;
-    setCurrentDeckCards: (cards: Map<number, IPlayingCard>) => void;
+    setCurrentDeckCards: (cards: Map<Suits, Map<number, IPlayingCard>>) => void;
     setCurrentStake: (stake: Stake) => void;
     setCurrentBlind: (blind: number) => void;
     setCurrentAnteScore: (score: number) => void;
@@ -59,11 +59,11 @@ export const useAppStore = create<AppState>((set) => ({
     setCurrentView: (view: Views) => set({ currentView: view }),
     setCurrentStake: (stake: Stake) => set({ currentStake: stake }),
     setCurrentDeck: (deck: Deck) => set({ currentDeck: deck }),
-    setCurrentDeckCards: (cards) =>
+    setCurrentDeckCards: (cardsBySuits) =>
         set((state) => ({
             currentDeck: {
                 ...state.currentDeck,
-                cards,
+                cardsBySuits,
             },
         })),
     setCurrentBlind: (blind: number) => set({ currentBlind: blind }),

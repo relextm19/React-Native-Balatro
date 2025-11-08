@@ -43,11 +43,12 @@ export const cardSliceData: SpriteSheetSliceData = {
     spriteWidth: 69,
     spriteHeight: 93,
 }
+
 export const cardModifierSliceData: SpriteSheetSliceData = {
     offsetX: 0,
     offsetY: 0,
     rows: 1,
-    cols: 5,
+    cols: 6,
     spriteWidth: 69,
     spriteHeight: 93,
 }

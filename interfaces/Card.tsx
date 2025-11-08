@@ -52,6 +52,7 @@ export function createCard(suit: Suits, rank: Ranks, modifier: Modifier): IPlayi
     const id = deckSize + 1;
     const x = (cardSliceData.spriteWidth + cardSliceData.offsetX) * Object.values(Ranks).findIndex((r) => r === rank);
     const y = (cardSliceData.spriteHeight + cardSliceData.offsetY) * Object.values(Suits).findIndex((s) => s === suit);
+    setDeckSize(deckSize + 1);
 
     const card: IPlayingCard = {
         id,
@@ -67,15 +68,26 @@ export function createCard(suit: Suits, rank: Ranks, modifier: Modifier): IPlayi
     return card;
 }
 
-export function generateDeck(): Map<number, IPlayingCard> | undefined {
-    const deck = new Map<number, IPlayingCard>();
-    for (let suit of Object.values(Suits)) {
-        for (let rank of Object.values(Ranks)) {
+export function generateDeck(): Map<Suits, Map<number, IPlayingCard>> {
+    const deck = new Map<Suits, Map<number, IPlayingCard>>();
+
+    for (const suit of Object.values(Suits)) {
+        if (!deck.has(suit)) {
+            deck.set(suit, new Map<number, IPlayingCard>());
+        }
+
+        const suitMap = deck.get(suit)!;
+
+        for (const rank of Object.values(Ranks)) {
             const card = createCard(suit, rank, Modifier.Lucky);
-            if (!card) { return }
-            deck.set(card.id, card);
-            setDeckSize(deckSize + 1);
+            if (!card) {
+                console.log("no, card skipping");
+                continue;
+            };
+            suitMap.set(card.id, card);
         }
     }
+    const card = createCard(Suits.Clubs, Ranks.Ace, Modifier.Glass);
+    deck.get(Suits.Clubs)?.set(card.id, card)
     return deck;
 }

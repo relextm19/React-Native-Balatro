@@ -56,9 +56,9 @@ export default function DifficultySelectScreen() {
 
     return (
         <View className="flex-1 justify-center items-center">
-            <View className="bg-slate-700 border-2 border-slate-400 rounded-main justify-between items-center p-4 w-3/5 h-full">
+            <View className="justify-between items-center bg-slate-700 p-4 border-2 border-slate-400 rounded-main w-3/5 h-full">
 
-                <View className="w-full justify-center items-center flex-row flex-1">
+                <View className="flex-row flex-1 justify-center items-center w-full">
                     <MenuButton
                         scale={0.5}
                         rotation={-90}
@@ -66,7 +66,7 @@ export default function DifficultySelectScreen() {
                         sliceData={buttonSliceData}
                         onClick={() => cycleDeck(-1)}
                     />
-                    <View className="bg-[#1f1f22] rounded-main justify-center items-center flex-row gap-2 p-2">
+                    <View className="flex-row justify-center items-center gap-2 bg-[#1f1f22] p-2 rounded-main">
                         <Canvas
                             style={{
                                 width: deckSliceData.spriteWidth * scale,
@@ -80,12 +80,12 @@ export default function DifficultySelectScreen() {
                             />
                         </Canvas>
 
-                        <View className="bg-[#3c464d] rounded-main flex-1">
+                        <View className="flex-1 bg-[#3c464d] rounded-main">
                             <Text className="text-white text-lg text-center">
                                 {deckArray[deckIndex].name} Deck
                             </Text>
-                            <View className="p-2 flex-1">
-                                <View className="flex-1 flex-wrap bg-white rounded-main justify-center items-center p-2">
+                            <View className="flex-1 p-2">
+                                <View className="flex-wrap flex-1 justify-center items-center bg-white p-2 rounded-main">
                                     <Text>{deckArray[deckIndex].desc}</Text>
                                 </View>
                             </View>
@@ -100,7 +100,7 @@ export default function DifficultySelectScreen() {
                     />
                 </View>
 
-                <View className="w-full justify-center items-center flex-row flex-1">
+                <View className="flex-row flex-1 justify-center items-center w-full">
                     <MenuButton
                         scale={0.3}
                         rotation={-90}
@@ -108,7 +108,7 @@ export default function DifficultySelectScreen() {
                         sliceData={buttonSliceData}
                         onClick={() => cycleStakes(-1)}
                     />
-                    <View className="bg-[#1f1f22] rounded-main justify-center items-center flex-row gap-2 p-2">
+                    <View className="flex-row justify-center items-center gap-2 bg-[#1f1f22] p-2 rounded-main">
                         <Canvas
                             style={{
                                 width: stakeSliceData.spriteWidth * scale,
@@ -122,12 +122,12 @@ export default function DifficultySelectScreen() {
                             />
                         </Canvas>
 
-                        <View className="bg-[#3c464d] rounded-main flex-1 h-4/5">
+                        <View className="flex-1 bg-[#3c464d] rounded-main h-4/5">
                             <Text className="text-white text-lg text-center">
                                 {stakeArray[stakeIndex].name} stake
                             </Text>
-                            <View className="p-2 flex-1">
-                                <View className="flex-1 flex-wrap bg-white rounded-main justify-center items-center p-2">
+                            <View className="flex-1 p-2">
+                                <View className="flex-wrap flex-1 justify-center items-center bg-white p-2 rounded-main">
                                     <Text>{stakeArray[stakeIndex].desc}</Text>
                                 </View>
                             </View>
@@ -142,7 +142,7 @@ export default function DifficultySelectScreen() {
                     />
                 </View>
 
-                <View className="gap-4 items-center flex-row">
+                <View className="flex-row items-center gap-4">
                     <MenuButton
                         scale={0.5}
                         imageAsset={playButtonImageAsset}
