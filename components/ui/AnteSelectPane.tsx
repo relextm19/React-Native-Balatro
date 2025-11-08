@@ -1,7 +1,8 @@
 import React, { ReactElement } from "react";
-import { View, Text } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import { Skia, Canvas, Atlas, SkImage, SkRect } from "@shopify/react-native-skia";
 import { BlindState } from "../../assets/chips/Blinds";
+import { useAppStore, Views } from "../../GameState";
 
 type AnteSelectPaneProps = {
     stakeSpriteSheet: SkImage;
@@ -14,27 +15,27 @@ type AnteSelectPaneProps = {
     blindState: BlindState
 };
 
-export default function AnteSelectPane({
-    stakeSpriteSheet,
-    blindSpriteSheet,
-    stakeSourceRect,
-    blindSourceRect,
-    requiredScore,
-    title,
-    rewardAmount,
-    blindState,
-}: AnteSelectPaneProps): ReactElement {
+export default function AnteSelectPane({ stakeSpriteSheet, blindSpriteSheet, stakeSourceRect, blindSourceRect, requiredScore, title, rewardAmount, blindState, }: AnteSelectPaneProps): ReactElement {
     const stakeTransforms = [Skia.RSXform(1, 0, 0, 0)];
     const blindImgScale = 1.5;
     const blindTransforms = [Skia.RSXform(blindImgScale, 0, 0, 0)];
+
+    const store = useAppStore();
+    function setGameView() {
+        store.setCurrentView(Views.GameScreen)
+    }
+
     return (
         //TODO: Make the blindState text background the most common color from the image
-        <View className={`bg-darkBg w-1/4 h-full border-5 border-[#362602] rounded-main border-b-0 rounded-be-none rounded-bl-none p-2 ${blindState != BlindState.selected ? "opacity-50" : ""}`}>
-            <View className="bg-main border-2 border-lightBorder rounded-main p-2 gap-2 items-center">
-                <View className="bg-[#f48b04] rounded-main h-6 shadow-lg w-4/5 items-center justify-center">
+        <Pressable
+            className={`bg-darkBg w-1/4 h-full border-5 border-[#362602] rounded-main border-b-0 rounded-be-none rounded-bl-none p-2 ${blindState != BlindState.selected ? "opacity-50" : ""}`}
+            onPress={setGameView}
+        >
+            <View className="items-center gap-2 bg-main p-2 border-2 border-lightBorder rounded-main">
+                <View className="justify-center items-center bg-[#f48b04] shadow-lg rounded-main w-4/5 h-6">
                     <Text className="text-white">{blindState}</Text>
                 </View>
-                <View className="bg-[#362602] rounded-main border-[#423004] border-2 w-full items-center justify-center">
+                <View className="justify-center items-center bg-[#362602] border-[#423004] border-2 rounded-main w-full">
                     <Text className="text-white">{title}</Text>
                 </View>
 
@@ -55,9 +56,9 @@ export default function AnteSelectPane({
                     </Canvas>
                 </View>
 
-                <View className="bg-[#19201fff] rounded-main p-2">
+                <View className="bg-[#19201fff] p-2 rounded-main">
                     <Text className="text-white text-center">Score at least</Text>
-                    <View className="justify-center items-center flex-row-reverse gap-1">
+                    <View className="flex-row-reverse justify-center items-center gap-1">
                         <Text className="text-customRed text-2xl">{requiredScore}</Text>
                         <View>
                             <Canvas
@@ -76,12 +77,12 @@ export default function AnteSelectPane({
                             </Canvas>
                         </View>
                     </View>
-                    <View className="flex-row items-center justify-center">
+                    <View className="flex-row justify-center items-center">
                         <Text className="text-white text-center">Reward: </Text>
                         <Text className="text-accentGold">{"$".repeat(rewardAmount)}+</Text>
                     </View>
                 </View>
             </View>
-        </View>
+        </Pressable>
     );
 }

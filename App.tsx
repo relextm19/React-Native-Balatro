@@ -12,8 +12,8 @@ import DifficultySelectScreen from "./components/ui/DifficultySelectScreen";
 
 import { Views } from "./GameState";
 import { useAppStore } from "./GameState";
-import { initScreenDimensions, SCREEN_HEIGHT, SCREEN_WIDTH } from './utils/ResponsiveDimensions';
 import DeckView from './components/ui/DeckView';
+import GameScreen from './components/ui/GameScreen';
 
 export default function App() {
     useEffect(() => {
@@ -23,7 +23,6 @@ export default function App() {
         lockOrientation();
         const hideNavBar = async () => {
             await NavigationBar.setVisibilityAsync('hidden');
-            initScreenDimensions();
         }
         hideNavBar();
     }, []);
@@ -40,6 +39,8 @@ export default function App() {
                 return <AnteSelectScreen />;
             case Views.DeckView:
                 return <DeckView />
+            case Views.GameScreen:
+                return <GameScreen />
         }
     }
 

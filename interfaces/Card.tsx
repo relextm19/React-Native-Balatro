@@ -3,6 +3,8 @@ import { Shape } from "./Shape";
 import { deckSize, setDeckSize, useAppStore } from "../GameState";
 import { cardSliceData } from "../assets/sliceData";
 
+import { getRandomInt } from "../utils/Random";
+
 export enum Suits {
     Hearts = 'hearts',
     Spades = 'spades',
@@ -45,6 +47,7 @@ export interface IPlayingCard {
     y: number,
     width: number,
     height: number,
+    avaliable: boolean,
 }
 
 export function createCard(suit: Suits, rank: Ranks, modifier: Modifier): IPlayingCard {
@@ -64,6 +67,7 @@ export function createCard(suit: Suits, rank: Ranks, modifier: Modifier): IPlayi
         width: cardSliceData.spriteWidth,
         height: cardSliceData.spriteHeight,
         modifier,
+        avaliable: true
     };
     return card;
 }
@@ -93,4 +97,19 @@ export function generateDeck(): Map<Suits, Map<number, IPlayingCard>> {
         deck.get(Suits.Clubs)?.set(card.id, card)
     }
     return deck;
+}
+
+export function getRandomCard(cardsBySuits: Map<Suits, Map<number, IPlayingCard>>): IPlayingCard | undefined {
+    if (cardsBySuits.size === 0) return undefined;
+
+    const availableCards: IPlayingCard[] = [];
+    for (const suit of cardsBySuits.values()) {
+        for (const card of suit.values()) {
+            if (card.avaliable) availableCards.push(card);
+        }
+    }
+
+    if (availableCards.length === 0) return undefined;
+
+    return availableCards[getRandomInt(0, availableCards.length - 1)];
 }

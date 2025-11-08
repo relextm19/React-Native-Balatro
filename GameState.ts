@@ -8,6 +8,7 @@ export enum Views {
     DifficultySelect,
     AnteSelect,
     DeckView,
+    GameScreen,
 }
 
 export let deckSize = 0;
@@ -24,10 +25,13 @@ type AppState = {
     currentBlind: number;
     currentAnte: number;
     currentRound: number;
+
+    roundScore: number;
+
     money: number;
     hands: number;
     discards: number;
-    roundScore: number;
+    handSize: number;
 
     // Setters
     setCurrentView: (view: Views) => void;
@@ -53,10 +57,13 @@ export const useAppStore = create<AppState>((set) => ({
     currentAnteScore: 300,
     currentAnte: 1,
     currentRound: 1,
+
+    roundScore: 0,
+
     money: 5,
     hands: 4,
     discards: 3,
-    roundScore: 0,
+    handSize: 7,
 
     setCurrentView: (view: Views) => set((state) => ({
         lastView: state.currentView,

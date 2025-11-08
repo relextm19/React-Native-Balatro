@@ -69,6 +69,7 @@ export default function DeckView(): ReactElement | null {
     }
 
     return (
+        //TODO: add a mechanism for like selecting a single card
         <View className="flex-row flex-1 items-center">
             <View className="top-2 self-start">
                 <MenuButton imageAsset={exitButtonImageAsset} sliceData={buttonSliceData} scale={0.3} onClick={backToLastView} />
