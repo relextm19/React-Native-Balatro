@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { View, Text } from "react-native";
+import { View, Text, LayoutChangeEvent } from "react-native";
 import { Skia, useImage, Canvas, Atlas } from "@shopify/react-native-skia";
 
 import { useSpriteRects } from "../../utils/SpriteSheet";
@@ -7,22 +7,34 @@ import { useSpriteRects } from "../../utils/SpriteSheet";
 import { stakeSliceData } from "../../assets/sliceData";
 import { useAppStore } from "../../GameState";
 
-export default function StatusPane(): ReactElement {
+type statusPaneProps = {
+    setWidth?: React.Dispatch<React.SetStateAction<number>>
+}
+
+export default function StatusPane({ setWidth }: statusPaneProps): ReactElement {
     const store = useAppStore();
     const stakeSpriteSheet = useImage(require("../../assets/chips/stake_chips.png"));
     const stakeSpriteRect = useSpriteRects(stakeSliceData).value[store.currentStake.index] ?? null;
     return (
-        <View className="h-full w-1/5 bg-darkGrey p-2 justify-between">
+        <View
+            className="justify-between bg-darkGrey p-2 w-1/5 h-full"
+            onLayout={(event: LayoutChangeEvent) => {
+                if (setWidth) {
+                    const { width } = event.nativeEvent.layout;
+                    setWidth(width);
+                }
+            }}
+        >
             <View className="items-center w-full">
-                <Text className="text-white w-full text-lg font-semibold text-center text-wrap">
+                <Text className="w-full font-semibold text-white text-lg text-center text-wrap">
                     Choose your next Blind
                 </Text>
             </View>
 
-            <View className="w-full flex-row justify-between items-center bg-darkBg rounded-lg p-2">
-                <Text className="text-gray-300 w-2/5 text-wrap">Round score</Text>
-                <View className="bg-darkGrey flex-row-reverse justify-center items-center flex-1 rounded-lg">
-                    <Text className="text-3xl text-white">{store.roundScore}</Text>
+            <View className="flex-row justify-between items-center bg-darkBg p-2 rounded-lg w-full">
+                <Text className="w-2/5 text-gray-300 text-wrap">Round score</Text>
+                <View className="flex-row-reverse flex-1 justify-center items-center bg-darkGrey rounded-lg">
+                    <Text className="text-white text-3xl">{store.roundScore}</Text>
                     <Canvas
                         style={{
                             width: stakeSpriteRect.width,
@@ -40,51 +52,51 @@ export default function StatusPane(): ReactElement {
                 </View>
             </View>
 
-            <View className="w-full h-1/5 bg-darkBg justify-end items-center rounded-lg p-2">
-                <View className="flex-row justify-between items-center ">
-                    <View className=" bg-customRed flex-1 rounded-md items-end justify-center">
-                        <Text className="text-white text-xl font-bold ">0</Text>
+            <View className="justify-end items-center bg-darkBg p-2 rounded-lg w-full h-1/5">
+                <View className="flex-row justify-between items-center">
+                    <View className="flex-1 justify-center items-end bg-customRed rounded-md">
+                        <Text className="font-bold text-white text-xl">0</Text>
                     </View>
-                    <Text className="text-white text-xl font-bold">x</Text>
-                    <View className=" bg-blue-700 flex-1 rounded-md items-start justify-center">
-                        <Text className="text-white text-xl font-bold ">0</Text>
+                    <Text className="font-bold text-white text-xl">x</Text>
+                    <View className="flex-1 justify-center items-start bg-blue-700 rounded-md">
+                        <Text className="font-bold text-white text-xl">0</Text>
                     </View>
                 </View>
             </View>
 
-            <View className="w-full flex-row  justify-between">
+            <View className="flex-row justify-between w-full">
                 <View className="items-center bg-darkBg p-2 rounded-lg w-[49%]">
                     <Text className="text-gray-400 text-xs">Hands</Text>
-                    <View className="bg-darkGrey p-2 rounded-lg w-full justify-center items-center">
-                        <Text className="text-blue-700 text-lg font-bold">{store.hands}</Text>
+                    <View className="justify-center items-center bg-darkGrey p-2 rounded-lg w-full">
+                        <Text className="font-bold text-blue-700 text-lg">{store.hands}</Text>
                     </View>
                 </View>
                 <View className="items-center bg-darkBg p-2 rounded-lg w-[49%]">
                     <Text className="text-gray-400 text-xs">Discards</Text>
-                    <View className="bg-darkGrey p-2 rounded-lg w-full justify-center items-center">
-                        <Text className="text-customRed text-lg font-bold">{store.discards}</Text>
+                    <View className="justify-center items-center bg-darkGrey p-2 rounded-lg w-full">
+                        <Text className="font-bold text-customRed text-lg">{store.discards}</Text>
                     </View>
                 </View>
             </View>
 
-            <View className="w-full bg-darkBg rounded-lg p-2 ">
-                <View className="bg-darkGrey rounded-lg items-center justify-center">
-                    <Text className="text-accentGold text-xl font-bold ">${store.money}</Text>
+            <View className="bg-darkBg p-2 rounded-lg w-full">
+                <View className="justify-center items-center bg-darkGrey rounded-lg">
+                    <Text className="font-bold text-accentGold text-xl">${store.money}</Text>
                 </View>
             </View>
 
-            <View className="w-full flex-row justify-between">
+            <View className="flex-row justify-between w-full">
                 <View className="items-center bg-darkBg p-2 rounded-lg w-[49%]">
                     <Text className="text-gray-400 text-xs">Ante</Text>
-                    <View className="bg-darkGrey p-2 rounded-lg w-full justify-center items-center flex-row">
-                        <Text className="text-accentGold text-lg font-bold">{store.currentAnte}</Text>
-                        <Text className="text-white text-lg font-bold">/8</Text>
+                    <View className="flex-row justify-center items-center bg-darkGrey p-2 rounded-lg w-full">
+                        <Text className="font-bold text-accentGold text-lg">{store.currentAnte}</Text>
+                        <Text className="font-bold text-white text-lg">/8</Text>
                     </View>
                 </View>
                 <View className="items-center bg-darkBg p-2 rounded-lg w-[49%]">
                     <Text className="text-gray-400 text-xs">Round</Text>
-                    <View className="bg-darkGrey p-2 rounded-lg w-full justify-center items-center">
-                        <Text className="text-accentGold text-lg font-bold">{store.currentRound}</Text>
+                    <View className="justify-center items-center bg-darkGrey p-2 rounded-lg w-full">
+                        <Text className="font-bold text-accentGold text-lg">{store.currentRound}</Text>
                     </View>
                 </View>
             </View>

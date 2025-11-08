@@ -21,7 +21,8 @@ export default function AnteSelectPane({ stakeSpriteSheet, blindSpriteSheet, sta
     const blindTransforms = [Skia.RSXform(blindImgScale, 0, 0, 0)];
 
     const store = useAppStore();
-    function setGameView() {
+    function setGameView(): void {
+        if (blindState !== BlindState.selected) return
         store.setCurrentView(Views.GameScreen)
     }
 

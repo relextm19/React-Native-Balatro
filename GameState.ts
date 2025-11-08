@@ -3,6 +3,8 @@ import { Stake } from "./assets/chips/StakeArray";
 import { Deck } from "./assets/cards/deckArray";
 import { IPlayingCard, Suits } from "./interfaces/Card";
 
+export const defaultHandSize = 7;
+
 export enum Views {
     Menu,
     DifficultySelect,
@@ -63,7 +65,7 @@ export const useAppStore = create<AppState>((set) => ({
     money: 5,
     hands: 4,
     discards: 3,
-    handSize: 7,
+    handSize: defaultHandSize,
 
     setCurrentView: (view: Views) => set((state) => ({
         lastView: state.currentView,
