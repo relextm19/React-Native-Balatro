@@ -1,12 +1,19 @@
 import { Atlas, Canvas, useImage, rect, Skia, SkRSXform, useRectBuffer, SkRect } from "@shopify/react-native-skia";
-import { useAppStore } from "../../GameState"
+import { useAppStore, Views } from "../../GameState"
 import { ReactElement } from "react";
-import { cardModifierSliceData, cardSliceData } from "../../assets/sliceData";
+import { buttonSliceData, cardModifierSliceData, cardSliceData } from "../../assets/sliceData";
 import { useSpriteRects } from "../../utils/SpriteSheet";
 import { View } from "react-native";
 import { useScreenDimensions } from "../../utils/ResponsiveDimensions";
+import MenuButton from "./MenuButton";
+
 
 export default function DeckView(): ReactElement | null {
+    const exitButtonImageAsset = require("../../assets/ui/exit_button.png");
+    const cardsSpriteSheet = useImage(require("../../assets/cards/playing_cards.png"));
+    const modifierSpriteSheet = useImage(require("../../assets/cards/modifiers.png"))
+    const modifiersRects = useSpriteRects(cardModifierSliceData);
+
     const store = useAppStore();
     const suits = store.currentDeck.cardsBySuits;
     if (!suits) {
@@ -14,17 +21,18 @@ export default function DeckView(): ReactElement | null {
         return null;
     }
     const { width: screenWidth, height: screenHeight } = useScreenDimensions();
+    const displayWidth = screenWidth * 0.95;
     const cardWidth = cardSliceData.spriteWidth;
     const cardHeight = cardSliceData.spriteHeight;
     let longestRow = 0;
 
-    const cardsSpriteSheet = useImage(require("../../assets/cards/playing_cards.png"));
-    const modifierSpriteSheet = useImage(require("../../assets/cards/modifiers.png"))
-    const modifiersRects = useSpriteRects(cardModifierSliceData);
-
     const atlases: ReactElement[] = [];
 
-    const scale = screenWidth / ((cardWidth) * cardSliceData.cols);
+    const scale = displayWidth / ((cardWidth) * cardSliceData.cols);
+
+    function backToGameScreen() {
+        store.setCurrentView(Views.AnteSelect);
+    }
 
     const suitArray = Array.from(suits.values());
     for (let j = 0; j < suitArray.length; j++) {
@@ -33,7 +41,7 @@ export default function DeckView(): ReactElement | null {
         if (cardsArray.length == 0) { continue };
 
         const totalCardWidth = cardWidth * cardsArray.length;
-        const drawOffsetX = (screenWidth - totalCardWidth) / cardsArray.length; //offset beetwen drawn cards, can be negative if there are too many cards in a row
+        const drawOffsetX = (displayWidth - totalCardWidth) / cardsArray.length; //offset beetwen drawn cards, can be negative if there are too many cards in a row
         longestRow = Math.max(
             longestRow,
             cardsArray.length * cardWidth * scale + (cardsArray.length - 1) * drawOffsetX * scale//first calucalte the width of all cards then the spacing between them
@@ -71,10 +79,15 @@ export default function DeckView(): ReactElement | null {
     }
 
     return (
-        <View className="flex-1 justify-center items-center">
-            <Canvas style={{ width: longestRow, height: "100%" }}>
-                {atlases}
-            </Canvas>
+        <View className="flex-row flex-1 items-center">
+            <View className="top-2 self-start">
+                <MenuButton imageAsset={exitButtonImageAsset} sliceData={buttonSliceData} scale={0.3} onClick={backToGameScreen} />
+            </View>
+            <View className="flex-1 justify-end items-end">
+                <Canvas style={{ width: longestRow, height: suitArray.length * cardSliceData.spriteHeight }}>
+                    {atlases}
+                </Canvas>
+            </View>
         </View>
     );
 }
