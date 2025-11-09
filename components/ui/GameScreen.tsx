@@ -73,7 +73,6 @@ export default function GameScreen(): ReactElement | null {
             <View
                 key={i}
                 style={{ position: 'absolute', left: drawX, height: cardHeight * scale }}
-                className="border-2 border-red-500"
             >
                 <Card sprite={sprite} modifierSprite={modifierSprite} scale={scale} animationHeight={animationHeight} />
             </View>
