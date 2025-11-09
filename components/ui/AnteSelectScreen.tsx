@@ -47,14 +47,16 @@ export default function AnteSelectScreen(): ReactElement | null {
     }
 
     return (
-        <View className="flex-1 flex-row justify-center">
+        <View className="flex-row flex-1 justify-center">
             <StatusPane />
-            <View className="flex-1 items-center justify-end relative">
+            <View className="relative flex-1 justify-end items-center">
                 <View className="flex-row justify-center items-center gap-x-[5%] h-4/6">
                     {panes}
                 </View>
             </View>
-            <DeckIcon />
+            <View className="justify-end items-end">
+                <DeckIcon />
+            </View>
         </View>
     );
 }
