@@ -54,7 +54,7 @@ export default function AnteSelectScreen(): ReactElement | null {
                     {panes}
                 </View>
             </View>
-            <View className="justify-end items-end">
+            <View className="justify-end items-end min-w-24 min-h-24">
                 <DeckIcon />
             </View>
         </View>

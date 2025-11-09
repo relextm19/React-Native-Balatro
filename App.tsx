@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import * as NavigationBar from "expo-navigation-bar";
 import * as ScreenOrientation from 'expo-screen-orientation';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import MovingBackground from "./components/ui/Background";
 import Menu from "./components/ui/Menu";
@@ -45,13 +46,13 @@ export default function App() {
     }
 
     return (
-        <>
+        <GestureHandlerRootView>
             <View style={StyleSheet.absoluteFill}>
                 <MovingBackground />
             </View>
             <View className="flex-1">
                 {getMainView()}
             </View>
-        </>
+        </GestureHandlerRootView>
     );
 }

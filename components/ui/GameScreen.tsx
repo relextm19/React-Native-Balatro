@@ -11,6 +11,8 @@ import { useScreenDimensions } from "../../utils/ResponsiveDimensions";
 import { getRandomCard, IPlayingCard } from "../../interfaces/Card";
 import { cardModifierSliceData, cardSliceData } from "../../assets/sliceData";
 import { defaultHandSize } from "../../GameState";
+import Card from "./Card";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 
 export default function GameScreen(): ReactElement | null {
@@ -67,12 +69,13 @@ export default function GameScreen(): ReactElement | null {
             : modifiersRects.value[0];
 
         const drawX = i * ((cardWidth * scale + drawOffsetX));
-        const drawY = 0;
 
         cardViews.push(
-            <View key={`w-${i}`}>
-                <Atlas image={modifierSpriteSheet} sprites={[modifierSprite]} transforms={[Skia.RSXform(scale, 0, drawX, drawY)]} key={`m-${i}`} />
-                <Atlas image={cardsSpriteSheet} sprites={[sprite]} transforms={[Skia.RSXform(scale, 0, drawX, drawY)]} key={`c-${i}`} />
+            <View
+                key={i}
+                style={{ position: 'absolute', left: drawX }}
+            >
+                <Card sprite={sprite} modifierSprite={modifierSprite} scale={scale} />
             </View>
         );
     }
@@ -80,13 +83,8 @@ export default function GameScreen(): ReactElement | null {
     return (
         <View className="flex-row flex-1 justify-center items-end">
             <StatusPane setWidth={setStatusPaneWidth} />
-            <View className="flex-1 justify-end items-center mb-2">
-                <Canvas style={{
-                    width: displayWidth,
-                    height: cardHeight * scale,
-                }}>
-                    {cardViews}
-                </Canvas>
+            <View className="flex-1 justify-end mb-2 ml-1">
+                {cardViews}
             </View>
             <View className="justify-end items-end"
                 style={{ height: cardHeight }}>

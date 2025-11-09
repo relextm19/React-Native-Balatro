@@ -5,12 +5,13 @@ import { useSpriteRects } from "../../utils/SpriteSheet";
 import { useAppStore, Views } from "../../GameState";
 
 import { deckSliceData } from "../../assets/sliceData";
+import { ReactElement } from "react";
 
 type deckIconProps = {
     setWidth?: React.Dispatch<React.SetStateAction<number>>
 }
 
-export default function DeckIcon({ setWidth }: deckIconProps) {
+export default function DeckIcon({ setWidth }: deckIconProps): ReactElement {
     const store = useAppStore();
     const decksSpriteSheet = useImage(require("../../assets/cards/decks.png"));
     const deckSpriteRect = useSpriteRects(deckSliceData).value[store.currentDeck.index] ?? null;
