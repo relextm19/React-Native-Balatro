@@ -11,6 +11,7 @@ type deckIconProps = {
     setWidth?: React.Dispatch<React.SetStateAction<number>>
 }
 
+//TODO: make the deck icon scale with card size
 export default function DeckIcon({ setWidth }: deckIconProps): ReactElement {
     const store = useAppStore();
     const decksSpriteSheet = useImage(require("../../assets/cards/decks.png"));
