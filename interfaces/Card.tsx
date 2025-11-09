@@ -113,3 +113,11 @@ export function getRandomCard(cardsBySuits: Map<Suits, Map<number, IPlayingCard>
 
     return availableCards[getRandomInt(0, availableCards.length - 1)];
 }
+
+export function makeAllCardsAvaliable(cardsBySuits: Map<Suits, Map<number, IPlayingCard>>): void {
+    for (const [, suitMap] of cardsBySuits.entries()) {
+        for (const [, card] of suitMap.entries()) {
+            card.avaliable = true;
+        }
+    }
+}

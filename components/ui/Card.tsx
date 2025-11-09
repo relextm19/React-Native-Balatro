@@ -1,4 +1,4 @@
-import { Skia, Atlas, useImage, SkImage, SkRect, Canvas } from "@shopify/react-native-skia";
+import { Skia, Atlas, useImage, SkImage, SkRect, Canvas, rrect } from "@shopify/react-native-skia";
 import { ReactElement } from "react";
 import { View } from "react-native";
 
@@ -16,24 +16,31 @@ export default function Card({ scale, modifierSprite, sprite }: cardProps): Reac
     const cardsSpriteSheet = useImage(require("../../assets/cards/playing_cards.png"));
     const modifierSpriteSheet = useImage(require("../../assets/cards/modifiers.png"))
 
+    const animationHeight = 20;
 
-    const transform = [Skia.RSXform(scale, 0, 0, 0)];
+    const y = useSharedValue(0)
 
-    // function goUp() {
-    //     y.value = y.value - 20; // or withTiming for animation
-    // }
+    const transform = useDerivedValue(() => {
+        return [Skia.RSXform(scale, 0, 0, y.value)]
+    }, [y])
 
     const gesture = Gesture.Tap().onEnd(() => {
-        console.log("hello")
+        let to;
+        if (y.value != 0) {
+            to = 0;
+        } else {
+            to = -animationHeight;
+        }
+        y.value = withTiming(to, { duration: 200 })
     });
-
+    console.log(scale)
     return (
         <View style={{
             width: cardSliceData.spriteWidth * scale,
             height: cardSliceData.spriteHeight * scale,
-        }}>
+        }} className="overflow-visible">
             <GestureDetector gesture={gesture}>
-                <Canvas style={{ width: '100%', height: '100%' }}>
+                <Canvas style={{ width: cardSliceData.spriteWidth * scale, height: cardSliceData.spriteHeight * scale }}>
                     <Atlas image={modifierSpriteSheet} sprites={[modifierSprite]} transforms={transform} />
                     <Atlas image={cardsSpriteSheet} sprites={[sprite]} transforms={transform} />
                 </Canvas>
