@@ -58,7 +58,7 @@ export default function GameScreen(): ReactElement | null {
     const scale = displayWidth / (cardWidth * defaultHandSize);
 
     const drawOffsetX = (displayWidth - (cardWidth * scale * hand.length)) / (hand.length - 1);
-    console.log(screenWidth, displayWidth, scale)
+    const animationHeight = 20;
     for (let i = 0; i < hand.length; i++) {
         const card = hand[i];
 
@@ -72,9 +72,10 @@ export default function GameScreen(): ReactElement | null {
         cardViews.push(
             <View
                 key={i}
-                style={{ position: 'absolute', left: drawX }}
+                style={{ position: 'absolute', left: drawX, bottom: 100, height: cardHeight * scale + animationHeight }}
+                className="border-2 border-red-500"
             >
-                <Card sprite={sprite} modifierSprite={modifierSprite} scale={scale} />
+                <Card sprite={sprite} modifierSprite={modifierSprite} scale={scale} animationHeight={animationHeight} />
             </View>
         );
     }
@@ -82,7 +83,7 @@ export default function GameScreen(): ReactElement | null {
     return (
         <View className="flex-row flex-1 justify-center items-end">
             <StatusPane setWidth={setStatusPaneWidth} />
-            <View className="flex-1 justify-end mb-2">
+            <View className="relative flex-1 mb-2">
                 {ready ? cardViews : null}
             </View>
             <View className="justify-end items-end"
