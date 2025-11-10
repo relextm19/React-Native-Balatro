@@ -101,7 +101,19 @@ export default function GameScreen(): ReactElement | null {
             <Pressable
                 key={card.id}
                 onPress={() => {
-                    setSelectedCards(prev => [...prev, card]);
+                    setSelectedCards(prev => {
+                        const alreadySelected = prev.some(sel => sel.id === card.id);
+
+                        if (alreadySelected) {
+                            return prev.filter(sel => sel.id !== card.id);
+                        }
+
+                        if (prev.length < 5) {
+                            return [...prev, card];
+                        }
+
+                        return prev;
+                    });
                 }}
                 style={{
                     position: "absolute",
