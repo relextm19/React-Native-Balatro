@@ -12,12 +12,11 @@ type cardProps = {
     animationHeight: number,
     modifierSprite: SkRect,
     sprite: SkRect,
+    cardsSpriteSheet: SkImage
+    modifierSpriteSheet: SkImage,
 }
 
-export default function Card({ scale, modifierSprite, sprite, animationHeight }: cardProps): ReactElement {
-    const cardsSpriteSheet = useImage(require("../../assets/cards/playing_cards.png"));
-    const modifierSpriteSheet = useImage(require("../../assets/cards/modifiers.png"))
-
+export default function Card({ scale, modifierSprite, sprite, animationHeight, cardsSpriteSheet, modifierSpriteSheet }: cardProps): ReactElement {
     const transform = [Skia.RSXform(scale, 0, 0, 0)]
 
     const y = useSharedValue(0)

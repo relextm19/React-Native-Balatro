@@ -15,6 +15,8 @@ import Card from "./Card";
 
 
 export default function GameScreen(): ReactElement | null {
+    const cardsSpriteSheet = useImage(require("../../assets/cards/playing_cards.png"))
+    const modifierSpriteSheet = useImage(require("../../assets/cards/modifiers.png"))
     const modifiersRects = useSpriteRects(cardModifierSliceData);
 
     const store = useAppStore();
@@ -57,6 +59,8 @@ export default function GameScreen(): ReactElement | null {
     const cardHeight = cardSliceData.spriteHeight;
     const scale = displayWidth / (cardWidth * defaultHandSize);
 
+    if (!modifierSpriteSheet || !cardsSpriteSheet) return null;
+
     const drawOffsetX = (displayWidth - (cardWidth * scale * hand.length)) / (hand.length - 1);
     const animationHeight = 20;
     for (let i = 0; i < hand.length; i++) {
@@ -74,7 +78,7 @@ export default function GameScreen(): ReactElement | null {
                 key={i}
                 style={{ position: 'absolute', left: drawX, height: cardHeight * scale }}
             >
-                <Card sprite={sprite} modifierSprite={modifierSprite} scale={scale} animationHeight={animationHeight} />
+                <Card sprite={sprite} modifierSprite={modifierSprite} scale={scale} animationHeight={animationHeight} cardsSpriteSheet={cardsSpriteSheet} modifierSpriteSheet={modifierSpriteSheet} />
             </View>
         );
     }
