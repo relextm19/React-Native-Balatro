@@ -30,7 +30,7 @@ export default function GameScreen(): ReactElement | null {
         function generateStartingHand(): IPlayingCard[] | undefined {
             const newHand: IPlayingCard[] = [];
             if (!cardsBySuits) return;
-            while (newHand.length < store.handSize + 11) {
+            while (newHand.length < store.handSize + 0) {
                 const card = getRandomCard(cardsBySuits);
                 if (!card) { return }
                 card.avaliable = false;
@@ -49,7 +49,7 @@ export default function GameScreen(): ReactElement | null {
     const [deckIconWidth, setDeckIconWidth] = useState(0);
     const [statusPaneWidth, setStatusPaneWidth] = useState(0);
     const avaliableWidth = screenWidth - deckIconWidth - statusPaneWidth;
-    const displayWidth = avaliableWidth //* 0.9;
+    const displayWidth = avaliableWidth * 0.98;
 
     const cardViews: ReactElement[] = [];
 
@@ -68,7 +68,7 @@ export default function GameScreen(): ReactElement | null {
     const totalHandWidth = (cardWidth * scale * hand.length)
     const drawOffsetX = (displayWidth - totalHandWidth) / (hand.length - 1);
 
-    // const startX = (avaliableWidth - totalVisibleWidth) / 2;
+    const startX = (avaliableWidth - displayWidth) / 2;
 
     const animationHeight = 20;
     const archHeight = 400 / hand.length;
@@ -94,7 +94,7 @@ export default function GameScreen(): ReactElement | null {
 
         const currentRotation = rotationGoal * relativeIndex / midIndex;
 
-        const drawX = i * (cardWidth * scale + drawOffsetX);
+        const drawX = startX + i * (cardWidth * scale + drawOffsetX);
 
         cardViews.push(
             <View

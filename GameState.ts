@@ -3,7 +3,7 @@ import { Stake } from "./assets/chips/StakeArray";
 import { Deck } from "./assets/cards/deckArray";
 import { IPlayingCard, Suits } from "./interfaces/Card";
 
-export const defaultHandSize = 7;
+export const defaultHandSize = 8;
 
 export enum Views {
     Menu,
