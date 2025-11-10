@@ -9,7 +9,7 @@ import { buttonSliceData } from "../../assets/sliceData";
 export default function Menu(): ReactElement {
     const setCurrentView = useAppStore((state) => state.setCurrentView);
 
-    const playButtonImageAsset = require("../../assets/ui/play_button.png");
+    const playButtonImageAsset = require("../../assets/ui/start_button.png");
     const exitButtonImageAsset = require("../../assets/ui/exit_button.png");
 
     function closeGame(): void {
@@ -21,15 +21,15 @@ export default function Menu(): ReactElement {
     }
 
     return (
-        <View className="w-full h-full items-center justify-between">
-            <View className="w-full items-center top-1/10">
+        <View className="justify-between items-center w-full h-full">
+            <View className="top-1/10 items-center w-full">
                 <Image
                     source={require("../../assets/logo.png")}
-                    className="w-2/5 h-1/10 min-w-[300px] min-h-[150px]"
+                    className="w-2/5 min-w-[300px] h-1/10 min-h-[150px]"
                     resizeMode="contain"
                 />
             </View>
-            <View className="w-1/2 flex-row items-center justify-evenly bottom-1/5">
+            <View className="bottom-1/5 flex-row justify-evenly items-center w-1/2">
                 <MenuButton
                     scale={0.5}
                     imageAsset={playButtonImageAsset}

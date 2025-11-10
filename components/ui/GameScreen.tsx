@@ -19,6 +19,7 @@ export default function GameScreen(): ReactElement | null {
     const cardsSpriteSheet = useImage(require("../../assets/cards/playing_cards.png"));
     const modifierSpriteSheet = useImage(require("../../assets/cards/modifiers.png"));
     const playButtonImageAsset = require("../../assets/ui/play_button.png");
+    const discardButtomImageAsset = require("../../assets/ui/discard_button.png");
     const modifiersRects = useSpriteRects(cardModifierSliceData);
 
     const store = useAppStore();
@@ -60,7 +61,7 @@ export default function GameScreen(): ReactElement | null {
     //FIXME: this is shared logic between deck view and here so i can put it in a single function
     const cardWidth = cardSliceData.spriteWidth;
     const cardHeight = cardSliceData.spriteHeight;
-    const scale = displayWidth / (cardWidth * defaultHandSize);
+    const scale = displayWidth / (cardWidth * (defaultHandSize - 1));
 
     let drawOffsetY = useRef(0);
     if (!modifierSpriteSheet || !cardsSpriteSheet) return null;
@@ -137,11 +138,11 @@ export default function GameScreen(): ReactElement | null {
                         className="flex-row items-center gap-2 w-2/4"
                     >
                         <MenuButton imageAsset={playButtonImageAsset} sliceData={buttonSliceData} onClick={() => { }} scale={0.35} />
-                        <MenuButton imageAsset={playButtonImageAsset} sliceData={buttonSliceData} onClick={() => { }} scale={0.35} />
+                        <MenuButton imageAsset={discardButtomImageAsset} sliceData={buttonSliceData} onClick={() => { }} scale={0.35} />
                     </View>
                 </View>
             </View>
-            <View className="justify-end items-end border-2 border-red-500"
+            <View className="justify-end items-end"
                 style={{ height: cardHeight * scale, width: cardWidth * scale, }}>
                 <DeckIcon setWidth={setDeckIconWidth} />
             </View>
