@@ -48,7 +48,6 @@ export interface IPlayingCard {
     width: number,
     height: number,
     avaliable: boolean,
-    selected: boolean,
 }
 
 export function createCard(suit: Suits, rank: Ranks, modifier: Modifier): IPlayingCard {
@@ -69,17 +68,16 @@ export function createCard(suit: Suits, rank: Ranks, modifier: Modifier): IPlayi
         height: cardSliceData.spriteHeight,
         modifier,
         avaliable: true,
-        selected: false,
     };
     return card;
 }
 
-export function generateDeck(): Map<Suits, Map<number, IPlayingCard>> {
-    const deck = new Map<Suits, Map<number, IPlayingCard>>();
+export function generateDeck(): Map<Suits, Map<Ranks, IPlayingCard>> {
+    const deck = new Map<Suits, Map<Ranks, IPlayingCard>>();
 
     for (const suit of Object.values(Suits)) {
         if (!deck.has(suit)) {
-            deck.set(suit, new Map<number, IPlayingCard>());
+            deck.set(suit, new Map<Ranks, IPlayingCard>());
         }
 
         const suitMap = deck.get(suit)!;
@@ -90,18 +88,18 @@ export function generateDeck(): Map<Suits, Map<number, IPlayingCard>> {
                 console.log("no, card skipping");
                 continue;
             };
-            suitMap.set(card.id, card);
+            suitMap.set(card.rank, card);
         }
     }
     //TODO: Remove. testing purpose
     for (let i = 0; i < 6; i++) {
         const card = createCard(Suits.Clubs, Ranks.Ace, Modifier.Glass);
-        deck.get(Suits.Clubs)?.set(card.id, card)
+        deck.get(Suits.Clubs)?.set(card.rank, card)
     }
     return deck;
 }
 
-export function getRandomCard(cardsBySuits: Map<Suits, Map<number, IPlayingCard>>): IPlayingCard | undefined {
+export function getRandomCard(cardsBySuits: Map<Suits, Map<Ranks, IPlayingCard>>): IPlayingCard | undefined {
     if (cardsBySuits.size === 0) return undefined;
 
     const availableCards: IPlayingCard[] = [];
@@ -116,7 +114,7 @@ export function getRandomCard(cardsBySuits: Map<Suits, Map<number, IPlayingCard>
     return availableCards[getRandomInt(0, availableCards.length - 1)];
 }
 
-export function makeAllCardsAvaliable(cardsBySuits: Map<Suits, Map<number, IPlayingCard>>): void {
+export function makeAllCardsAvaliable(cardsBySuits: Map<Suits, Map<Ranks, IPlayingCard>>): void {
     for (const [, suitMap] of cardsBySuits.entries()) {
         for (const [, card] of suitMap.entries()) {
             card.avaliable = true;
@@ -124,9 +122,9 @@ export function makeAllCardsAvaliable(cardsBySuits: Map<Suits, Map<number, IPlay
     }
 }
 
-export function setCardAvaliablity(card: IPlayingCard, cardsBySuits: Map<Suits, Map<number, IPlayingCard>> | undefined, avaliability: boolean): void {
+export function setCardAvaliablity(card: IPlayingCard, cardsBySuits: Map<Suits, Map<Ranks, IPlayingCard>> | undefined, avaliability: boolean): void {
     if (!cardsBySuits) return;
-    const cardReference = cardsBySuits.get(card.suit)?.get(card.id);
+    const cardReference = cardsBySuits.get(card.suit)?.get(card.rank);
     if (!cardReference) return;
     cardReference.avaliable = avaliability;
 }

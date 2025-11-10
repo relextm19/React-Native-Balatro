@@ -1,11 +1,11 @@
-import { IPlayingCard, Suits } from "../../interfaces/Card";
+import { IPlayingCard, Suits, Ranks } from "../../interfaces/Card";
 
 export type Deck = {
     index: number;
     name: string;
     desc: string;
     state?: { total: number, avaliable: number };
-    cardsBySuits?: Map<Suits, Map<number, IPlayingCard>>;
+    cardsBySuits?: Map<Suits, Map<Ranks, IPlayingCard>>;
 };
 
 export const deckArray: Deck[] = [

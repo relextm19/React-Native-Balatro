@@ -12,12 +12,21 @@ type deckIconProps = {
 }
 
 //TODO: make the deck icon scale with card size
-export default function DeckIcon({ setWidth }: deckIconProps): ReactElement {
+export default function DeckIcon({ setWidth }: deckIconProps): ReactElement | null {
     const store = useAppStore();
     const decksSpriteSheet = useImage(require("../../assets/cards/decks.png"));
     const deckSpriteRect = useSpriteRects(deckSliceData).value[store.currentDeck.index] ?? null;
     function showDeckView() {
         store.setCurrentView(Views.DeckView);
+    }
+
+    let avaliableCardCount = 0;
+    const cards = store.currentDeck.cardsBySuits;
+    if (!cards) return null;
+    for (const suit of cards.values()) {
+        for (const card of suit.values()) {
+            if (card.avaliable) avaliableCardCount++;
+        }
     }
     return (
         <Pressable
@@ -45,7 +54,7 @@ export default function DeckIcon({ setWidth }: deckIconProps): ReactElement {
             <Text
                 style={{ width: deckSpriteRect.width * 1.2 }}
                 className="text-white text-center">
-                {store.currentDeck.state?.avaliable}/{store.currentDeck.state?.total}
+                {avaliableCardCount}/{store.currentDeck.state?.total}
             </Text>
         </Pressable>
     )
