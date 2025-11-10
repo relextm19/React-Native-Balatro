@@ -41,7 +41,11 @@ export default function GameScreen(): ReactElement | null {
     }
     useEffect(() => {
         const cardsBySuits = store.currentDeck.cardsBySuits;
-        if (!cardsBySuits) { return };
+        const deckState = store.currentDeck.state;
+        if (!cardsBySuits || !deckState) { return };
+
+        //reset the deck state at the begining of ante
+        deckState.avaliable = 52;
         makeAllCardsAvaliable(cardsBySuits);
 
         const startingHand = getNRandomCards(store.handSize) || [];
