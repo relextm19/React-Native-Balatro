@@ -28,16 +28,15 @@ export default function Card({ scale, modifierSprite, sprite, animationHeight, c
     //TODO: render the card on front when tapped
     const gesture = Gesture.Tap().onEnd(() => {
         if (animationHeight === undefined) { return }
-        let to;
-        if (y.value != 0) {
-            to = 0;
+        console.log(selectedCards.current)
+        if (y.value === -animationHeight) {
             selectedCards.current -= 1;
-        } else {
+            y.value = withTiming(0, { duration: 200 })
+        } else if (y.value === 0) {
             if (selectedCards.current >= 5) { return } //cant select more cards than there are in a poker hand
-            to = -animationHeight;
             selectedCards.current += 1;
+            y.value = withTiming(-animationHeight, { duration: 200 })
         }
-        y.value = withTiming(to, { duration: 200 })
     });
 
     return (
