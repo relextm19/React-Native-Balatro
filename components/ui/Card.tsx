@@ -14,9 +14,10 @@ type cardProps = {
     sprite: SkRect,
     cardsSpriteSheet: SkImage
     modifierSpriteSheet: SkImage,
+    selectedCards: React.RefObject<number>,
 }
 
-export default function Card({ scale, modifierSprite, sprite, animationHeight, cardsSpriteSheet, modifierSpriteSheet }: cardProps): ReactElement {
+export default function Card({ scale, modifierSprite, sprite, animationHeight, cardsSpriteSheet, modifierSpriteSheet, selectedCards }: cardProps): ReactElement {
     const transform = [Skia.RSXform(scale, 0, 0, 0)]
 
     const y = useSharedValue(0)
@@ -26,12 +27,16 @@ export default function Card({ scale, modifierSprite, sprite, animationHeight, c
     }))
     //TODO: render the card on front when tapped
     const gesture = Gesture.Tap().onEnd(() => {
+        console.log(selectedCards.current)
         if (animationHeight === undefined) { return }
         let to;
         if (y.value != 0) {
             to = 0;
+            selectedCards.current -= 1;
         } else {
+            if (selectedCards.current >= 5) { return } //cant select more cards than there are in a poker hand
             to = -animationHeight;
+            selectedCards.current += 1;
         }
         y.value = withTiming(to, { duration: 200 })
     });

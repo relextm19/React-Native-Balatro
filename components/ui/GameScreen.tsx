@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement, useEffect, useRef, useState } from "react";
 import { View } from "react-native";
 import { Skia, useImage, rect, Canvas, Atlas } from "@shopify/react-native-skia";
 import { useAppStore } from "../../GameState";
@@ -12,11 +12,12 @@ import { getRandomCard, IPlayingCard, makeAllCardsAvaliable } from "../../interf
 import { cardModifierSliceData, cardSliceData } from "../../assets/sliceData";
 import { defaultHandSize } from "../../GameState";
 import Card from "./Card";
+import { useSharedValue } from "react-native-reanimated";
 
 
 export default function GameScreen(): ReactElement | null {
-    const cardsSpriteSheet = useImage(require("../../assets/cards/playing_cards.png"))
-    const modifierSpriteSheet = useImage(require("../../assets/cards/modifiers.png"))
+    const cardsSpriteSheet = useImage(require("../../assets/cards/playing_cards.png"));
+    const modifierSpriteSheet = useImage(require("../../assets/cards/modifiers.png"));
     const modifiersRects = useSpriteRects(cardModifierSliceData);
 
     const store = useAppStore();
@@ -28,7 +29,7 @@ export default function GameScreen(): ReactElement | null {
         function generateStartingHand(): IPlayingCard[] | undefined {
             const newHand: IPlayingCard[] = [];
             if (!cardsBySuits) return;
-            while (newHand.length < store.handSize + 8) {
+            while (newHand.length < store.handSize) {
                 const card = getRandomCard(cardsBySuits);
                 if (!card) { return }
                 card.avaliable = false;
@@ -52,6 +53,7 @@ export default function GameScreen(): ReactElement | null {
     const cardViews: ReactElement[] = [];
 
     const [hand, setHand] = useState([] as IPlayingCard[]);
+    const selectedCards = useRef(0);
 
     const ready = statusPaneWidth > 10 && deckIconWidth > 10;
     //FIXME: this is shared logic between deck view and here so i can put it in a single function
@@ -78,7 +80,7 @@ export default function GameScreen(): ReactElement | null {
                 key={i}
                 style={{ position: 'absolute', left: drawX, height: cardHeight * scale }}
             >
-                <Card sprite={sprite} modifierSprite={modifierSprite} scale={scale} animationHeight={animationHeight} cardsSpriteSheet={cardsSpriteSheet} modifierSpriteSheet={modifierSpriteSheet} />
+                <Card sprite={sprite} modifierSprite={modifierSprite} scale={scale} animationHeight={animationHeight} cardsSpriteSheet={cardsSpriteSheet} modifierSpriteSheet={modifierSpriteSheet} selectedCards={selectedCards} />
             </View>
         );
     }
