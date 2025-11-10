@@ -25,24 +25,26 @@ export default function GameScreen(): ReactElement | null {
 
     const store = useAppStore();
 
+    function getNRandomCards(n: number): IPlayingCard[] | undefined {
+        const cardsBySuits = store.currentDeck.cardsBySuits;
+        const deckState = store.currentDeck.state;
+        const newHand: IPlayingCard[] = [];
+        if (!cardsBySuits || !deckState) return;
+        while (newHand.length < n && deckState.avaliable > 0) {
+            const card = getRandomCard(cardsBySuits);
+            if (!card) { return }
+            card.avaliable = false;
+            deckState.avaliable -= 1;
+            newHand.push(card)
+        }
+        return newHand;
+    }
     useEffect(() => {
         const cardsBySuits = store.currentDeck.cardsBySuits;
         if (!cardsBySuits) { return };
         makeAllCardsAvaliable(cardsBySuits);
-        function generateStartingHand(): IPlayingCard[] | undefined {
-            const newHand: IPlayingCard[] = [];
-            if (!cardsBySuits) return;
-            while (newHand.length < store.handSize + 0) {
-                const card = getRandomCard(cardsBySuits);
-                if (!card) { return }
-                card.avaliable = false;
-                newHand.push(card)
-            }
 
-            return newHand;
-        }
-
-        const startingHand = generateStartingHand() || [];
+        const startingHand = getNRandomCards(store.handSize) || [];
         setHand(startingHand);
     }, [])
 
@@ -142,9 +144,16 @@ export default function GameScreen(): ReactElement | null {
     function discard(): void {
         if (selectedCards.length === 0) return;
 
-        setHand(prevHand => prevHand.filter(
-            card => !selectedCards.some(sel => sel.id === card.id)
-        ));
+        setHand(prevHand => {
+            const newHand = prevHand.filter(
+                card => !selectedCards.some(sel => sel.id === card.id)
+            );
+
+            const cardsToDraw = store.handSize - newHand.length;
+            const newCards = getNRandomCards(cardsToDraw) || [];
+
+            return [...newHand, ...newCards];
+        });
 
         setSelectedCards([]);
     }

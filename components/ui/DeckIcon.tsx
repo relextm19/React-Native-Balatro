@@ -20,14 +20,6 @@ export default function DeckIcon({ setWidth }: deckIconProps): ReactElement | nu
         store.setCurrentView(Views.DeckView);
     }
 
-    let avaliableCardCount = 0;
-    const cards = store.currentDeck.cardsBySuits;
-    if (!cards) return null;
-    for (const suit of cards.values()) {
-        for (const card of suit.values()) {
-            if (card.avaliable) avaliableCardCount++;
-        }
-    }
     return (
         <Pressable
             className="justify-end items-end"
@@ -54,7 +46,7 @@ export default function DeckIcon({ setWidth }: deckIconProps): ReactElement | nu
             <Text
                 style={{ width: deckSpriteRect.width * 1.2 }}
                 className="text-white text-center">
-                {avaliableCardCount}/{store.currentDeck.state?.total}
+                {store.currentDeck.state?.avaliable}/{store.currentDeck.state?.total}
             </Text>
         </Pressable>
     )
