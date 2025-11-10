@@ -1,40 +1,50 @@
-import { Skia, Atlas, useImage, SkImage, SkRect, Canvas, rrect } from "@shopify/react-native-skia";
+import { Skia, Atlas, useImage, SkImage, SkRect, Canvas } from "@shopify/react-native-skia";
 import { ReactElement } from "react";
 import { View } from "react-native";
-import Animated from "react-native-reanimated";
-import { useSharedValue, useDerivedValue, withTiming, useAnimatedStyle } from "react-native-reanimated";
+import Animated, { runOnJS } from "react-native-reanimated";
+import { useSharedValue, withTiming, useAnimatedStyle } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
 import { cardSliceData } from "../../assets/sliceData";
+import { IPlayingCard } from "../../interfaces/Card";
 
 type cardProps = {
     scale: number,
     animationHeight: number,
     modifierSprite: SkRect,
     sprite: SkRect,
-    cardsSpriteSheet: SkImage
+    cardsSpriteSheet: SkImage,
     modifierSpriteSheet: SkImage,
-    selectedCards: React.RefObject<number>,
+    selectedCards: IPlayingCard[],
+    setSelectedCards: React.Dispatch<React.SetStateAction<IPlayingCard[]>>,
+    cardGameObject: IPlayingCard,
 }
 
-export default function Card({ scale, modifierSprite, sprite, animationHeight, cardsSpriteSheet, modifierSpriteSheet, selectedCards }: cardProps): ReactElement {
-    const transform = [Skia.RSXform(scale, 0, 0, 0)]
-
-    const y = useSharedValue(0)
+export default function Card({
+    scale,
+    modifierSprite,
+    sprite,
+    animationHeight,
+    cardsSpriteSheet,
+    modifierSpriteSheet,
+    selectedCards,
+    setSelectedCards,
+    cardGameObject
+}: cardProps): ReactElement {
+    const transform = [Skia.RSXform(scale, 0, 0, 0)];
+    const y = useSharedValue(0);
 
     const animatedStyle = useAnimatedStyle(() => ({
         transform: [{ translateY: y.value ?? 0 }]
-    }))
-    //TODO: render the card on front when tapped
+    }));
+
+    //TODO: run on js is depecated but nothing else works so its that for now
     const gesture = Gesture.Tap().onEnd(() => {
-        if (animationHeight === undefined) { return }
         if (y.value === -animationHeight) {
-            selectedCards.current -= 1;
-            y.value = withTiming(0, { duration: 200 })
+            y.value = withTiming(0, { duration: 200 });
         } else if (y.value === 0) {
-            if (selectedCards.current >= 5) { return } //cant select more cards than there are in a poker hand
-            selectedCards.current += 1;
-            y.value = withTiming(-animationHeight, { duration: 200 })
+            if (selectedCards.length >= 5) return; // max 5 cards
+            y.value = withTiming(-animationHeight, { duration: 200 });
         }
     });
 

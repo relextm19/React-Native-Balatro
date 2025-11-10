@@ -2,13 +2,14 @@ import { ReactElement, useEffect, useRef, useState } from "react";
 import { View, Text } from "react-native";
 import { Skia, useImage, rect, Canvas, Atlas } from "@shopify/react-native-skia";
 import { useAppStore } from "../../GameState";
+import { Pressable } from "react-native";
 
 import StatusPane from "./StatusPane";
 import DeckIcon from "./DeckIcon";
 
 import { useSpriteRects } from "../../utils/SpriteSheet";
 import { useScreenDimensions } from "../../utils/ResponsiveDimensions";
-import { getRandomCard, IPlayingCard, makeAllCardsAvaliable } from "../../interfaces/Card";
+import { getRandomCard, IPlayingCard, makeAllCardsAvaliable, setCardAvaliablity } from "../../interfaces/Card";
 import { buttonSliceData, cardModifierSliceData, cardSliceData } from "../../assets/sliceData";
 import { defaultHandSize } from "../../GameState";
 import Card from "./Card";
@@ -55,7 +56,7 @@ export default function GameScreen(): ReactElement | null {
     const cardViews: ReactElement[] = [];
 
     const [hand, setHand] = useState([] as IPlayingCard[]);
-    const selectedCards = useRef(0);
+    const [selectedCards, setSelectedCards] = useState([] as IPlayingCard[])
 
     const ready = statusPaneWidth > 10 && deckIconWidth > 10;
     //FIXME: this is shared logic between deck view and here so i can put it in a single function
@@ -76,7 +77,6 @@ export default function GameScreen(): ReactElement | null {
     const rotationGoal = 15 / Math.sqrt(hand.length);
 
     const midIndex = (hand.length - 1) / 2;
-
     for (let i = 0; i < hand.length; i++) {
         const card = hand[i];
 
@@ -98,14 +98,17 @@ export default function GameScreen(): ReactElement | null {
         const drawX = startX + i * (cardWidth * scale + drawOffsetX);
 
         cardViews.push(
-            <View
-                key={i}
+            <Pressable
+                key={card.id}
+                onPress={() => {
+                    setSelectedCards(prev => [...prev, card]);
+                }}
                 style={{
-                    position: 'absolute',
+                    position: "absolute",
                     left: drawX,
                     bottom: drawOffsetY.current + currentElevation,
                     height: cardHeight * scale,
-                    transform: [{ rotate: `${currentRotation}deg` }]
+                    transform: [{ rotate: `${currentRotation}deg` }],
                 }}
             >
                 <Card
@@ -115,13 +118,24 @@ export default function GameScreen(): ReactElement | null {
                     animationHeight={animationHeight}
                     cardsSpriteSheet={cardsSpriteSheet}
                     modifierSpriteSheet={modifierSpriteSheet}
+                    cardGameObject={card}
                     selectedCards={selectedCards}
+                    setSelectedCards={setSelectedCards}
                 />
-            </View>
+            </Pressable>
         );
+
     }
 
+    function discard(): void {
+        if (selectedCards.length === 0) return;
 
+        setHand(prevHand => prevHand.filter(
+            card => !selectedCards.some(sel => sel.id === card.id)
+        ));
+
+        setSelectedCards([]);
+    }
     return (
         <View className="flex-row flex-1 justify-center items-end">
             <StatusPane setWidth={setStatusPaneWidth} />
@@ -138,7 +152,7 @@ export default function GameScreen(): ReactElement | null {
                         className="flex-row items-center gap-2 w-2/4"
                     >
                         <MenuButton imageAsset={playButtonImageAsset} sliceData={buttonSliceData} onClick={() => { }} scale={0.35} />
-                        <MenuButton imageAsset={discardButtomImageAsset} sliceData={buttonSliceData} onClick={() => { }} scale={0.35} />
+                        <MenuButton imageAsset={discardButtomImageAsset} sliceData={buttonSliceData} onClick={() => { discard() }} scale={0.35} />
                     </View>
                 </View>
             </View>

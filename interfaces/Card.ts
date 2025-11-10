@@ -48,6 +48,7 @@ export interface IPlayingCard {
     width: number,
     height: number,
     avaliable: boolean,
+    selected: boolean,
 }
 
 export function createCard(suit: Suits, rank: Ranks, modifier: Modifier): IPlayingCard {
@@ -67,7 +68,8 @@ export function createCard(suit: Suits, rank: Ranks, modifier: Modifier): IPlayi
         width: cardSliceData.spriteWidth,
         height: cardSliceData.spriteHeight,
         modifier,
-        avaliable: true
+        avaliable: true,
+        selected: false,
     };
     return card;
 }
@@ -91,7 +93,7 @@ export function generateDeck(): Map<Suits, Map<number, IPlayingCard>> {
             suitMap.set(card.id, card);
         }
     }
-    //testing purpose
+    //TODO: Remove. testing purpose
     for (let i = 0; i < 6; i++) {
         const card = createCard(Suits.Clubs, Ranks.Ace, Modifier.Glass);
         deck.get(Suits.Clubs)?.set(card.id, card)
@@ -120,4 +122,11 @@ export function makeAllCardsAvaliable(cardsBySuits: Map<Suits, Map<number, IPlay
             card.avaliable = true;
         }
     }
+}
+
+export function setCardAvaliablity(card: IPlayingCard, cardsBySuits: Map<Suits, Map<number, IPlayingCard>> | undefined, avaliability: boolean): void {
+    if (!cardsBySuits) return;
+    const cardReference = cardsBySuits.get(card.suit)?.get(card.id);
+    if (!cardReference) return;
+    cardReference.avaliable = avaliability;
 }
