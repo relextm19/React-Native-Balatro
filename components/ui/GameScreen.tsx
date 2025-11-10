@@ -30,7 +30,7 @@ export default function GameScreen(): ReactElement | null {
         function generateStartingHand(): IPlayingCard[] | undefined {
             const newHand: IPlayingCard[] = [];
             if (!cardsBySuits) return;
-            while (newHand.length < store.handSize + 1) {
+            while (newHand.length < store.handSize + 11) {
                 const card = getRandomCard(cardsBySuits);
                 if (!card) { return }
                 card.avaliable = false;
@@ -49,7 +49,7 @@ export default function GameScreen(): ReactElement | null {
     const [deckIconWidth, setDeckIconWidth] = useState(0);
     const [statusPaneWidth, setStatusPaneWidth] = useState(0);
     const avaliableWidth = screenWidth - deckIconWidth - statusPaneWidth;
-    const displayWidth = avaliableWidth * 0.9;
+    const displayWidth = avaliableWidth //* 0.9;
 
     const cardViews: ReactElement[] = [];
 
@@ -60,20 +60,19 @@ export default function GameScreen(): ReactElement | null {
     //FIXME: this is shared logic between deck view and here so i can put it in a single function
     const cardWidth = cardSliceData.spriteWidth;
     const cardHeight = cardSliceData.spriteHeight;
+    const scale = displayWidth / (cardWidth * defaultHandSize);
 
     let drawOffsetY = useRef(0);
     if (!modifierSpriteSheet || !cardsSpriteSheet) return null;
 
-    const scale = displayWidth / (cardWidth * defaultHandSize);
     const totalHandWidth = (cardWidth * scale * hand.length)
     const drawOffsetX = (displayWidth - totalHandWidth) / (hand.length - 1);
-    const totalVisibleWidth = totalHandWidth - drawOffsetX * (hand.length - 1);
 
-    const startX = (avaliableWidth - totalVisibleWidth) / 2;
+    // const startX = (avaliableWidth - totalVisibleWidth) / 2;
 
     const animationHeight = 20;
-    const archHeight = 80;
-    const rotationGoal = 10;
+    const archHeight = 400 / hand.length;
+    const rotationGoal = 15 / Math.sqrt(hand.length);
 
     const midIndex = (hand.length - 1) / 2;
 
@@ -88,11 +87,14 @@ export default function GameScreen(): ReactElement | null {
         const relativeIndex = i - midIndex;
 
         const archFactor = 0.28;
-        const currentElevation = archHeight * (1 - Math.abs(relativeIndex / midIndex) * 2) * archFactor;
 
-        const currentRotation = rotationGoal * (relativeIndex / midIndex);
+        const normalized = Math.abs(relativeIndex / midIndex);
+        const inverted = 1 - normalized;
+        const currentElevation = archHeight * inverted * archFactor;
 
-        const drawX = startX + i * (cardWidth * scale - drawOffsetX * scale);
+        const currentRotation = rotationGoal * relativeIndex / midIndex;
+
+        const drawX = i * (cardWidth * scale + drawOffsetX);
 
         cardViews.push(
             <View
@@ -102,7 +104,7 @@ export default function GameScreen(): ReactElement | null {
                     left: drawX,
                     bottom: drawOffsetY.current + currentElevation,
                     height: cardHeight * scale,
-                    // transform: [{ rotate: `${currentRotation}deg` }]
+                    transform: [{ rotate: `${currentRotation}deg` }]
                 }}
             >
                 <Card
