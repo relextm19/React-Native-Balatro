@@ -27,7 +27,6 @@ export default function Card({ scale, modifierSprite, sprite, animationHeight, c
     }))
     //TODO: render the card on front when tapped
     const gesture = Gesture.Tap().onEnd(() => {
-        console.log(selectedCards.current)
         if (animationHeight === undefined) { return }
         let to;
         if (y.value != 0) {
