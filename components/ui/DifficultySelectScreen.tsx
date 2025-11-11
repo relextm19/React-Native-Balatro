@@ -7,7 +7,7 @@ import MenuButton from "./MenuButton";
 import { deckArray } from "../../assets/cards/deckArray";
 import { stakeArray } from "../../assets/chips/StakeArray";
 import { useAppStore, Views } from "../../GameState";
-import { useSpriteRects } from "../../utils/SpriteSheet";
+import { useSpriteRects } from "../../logic/SpriteSheet";
 
 import { deckSliceData, buttonSliceData, stakeSliceData } from "../../assets/sliceData";
 import { generateDeck } from "../../interfaces/Card";

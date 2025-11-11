@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 import { Image, View, BackHandler } from "react-native";
 import MenuButton from "./MenuButton";
-import type { SpriteSheetSliceData } from "../../utils/SpriteSheet";
+import type { SpriteSheetSliceData } from "../../logic/SpriteSheet";
 import { useAppStore, Views } from "../../GameState";
 
 import { buttonSliceData } from "../../assets/sliceData";

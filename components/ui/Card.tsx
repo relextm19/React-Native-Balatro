@@ -10,14 +10,12 @@ import { IPlayingCard } from "../../interfaces/Card";
 
 type cardProps = {
     scale: number,
-    animationHeight: number,
+    animationHeight?: number,
     modifierSprite: SkRect,
     sprite: SkRect,
     cardsSpriteSheet: SkImage,
     modifierSpriteSheet: SkImage,
-    selectedCards: IPlayingCard[],
-    setSelectedCards: React.Dispatch<React.SetStateAction<IPlayingCard[]>>,
-    cardGameObject: IPlayingCard,
+    selectedCards?: IPlayingCard[],
 }
 
 export default function Card({
@@ -28,8 +26,6 @@ export default function Card({
     cardsSpriteSheet,
     modifierSpriteSheet,
     selectedCards,
-    setSelectedCards,
-    cardGameObject
 }: cardProps): ReactElement {
     const transform = [Skia.RSXform(scale, 0, 0, 0)];
     const y = useSharedValue(0);
@@ -40,6 +36,8 @@ export default function Card({
 
     //TODO: run on js is depecated but nothing else works so its that for now
     const gesture = Gesture.Tap().onEnd(() => {
+        if (!animationHeight || !selectedCards) return;
+
         if (y.value === -animationHeight) {
             y.value = withTiming(0, { duration: 200 });
         } else if (y.value === 0) {

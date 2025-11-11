@@ -3,7 +3,7 @@ import { Shape } from "./Shape";
 import { deckSize, setDeckSize, useAppStore } from "../GameState";
 import { cardSliceData } from "../assets/sliceData";
 
-import { getRandomInt } from "../utils/Random";
+import { getRandomInt } from "../logic/Random";
 
 export enum Suits {
     Hearts = 'hearts',
@@ -13,20 +13,21 @@ export enum Suits {
 }
 
 export enum Ranks {
-    Two = '2',
-    Three = '3',
-    Four = '4',
-    Five = '5',
-    Six = '6',
-    Seven = '7',
-    Eight = '8',
-    Nine = '9',
-    Ten = '10',
-    Jack = 'J',
-    Queen = 'Q',
-    King = 'K',
-    Ace = 'A',
+    Two = 2,
+    Three,
+    Four,
+    Five,
+    Six,
+    Seven,
+    Eight,
+    Nine,
+    Ten,
+    Jack,
+    Queen,
+    King,
+    Ace
 }
+
 
 export enum Modifier {
     Normal,
@@ -53,8 +54,12 @@ export interface IPlayingCard {
 export function createCard(suit: Suits, rank: Ranks, modifier: Modifier): IPlayingCard {
     const isFaceCard = [Ranks.Jack, Ranks.Queen, Ranks.King].includes(rank);
     const id = deckSize + 1;
-    const x = (cardSliceData.spriteWidth + cardSliceData.offsetX) * Object.values(Ranks).findIndex((r) => r === rank);
-    const y = (cardSliceData.spriteHeight + cardSliceData.offsetY) * Object.values(Suits).findIndex((s) => s === suit);
+    const rankValues = Object.values(Ranks).filter(v => typeof v === 'number');
+    const suitValues = Object.values(Suits);
+
+    const x = (cardSliceData.spriteWidth + cardSliceData.offsetX) * rankValues.findIndex(r => r === rank);
+    const y = (cardSliceData.spriteHeight + cardSliceData.offsetY) * suitValues.findIndex(s => s === suit);
+
     setDeckSize(deckSize + 1);
 
     const card: IPlayingCard = {
@@ -79,22 +84,12 @@ export function generateDeck(): Map<Suits, Map<Ranks, IPlayingCard>> {
         if (!deck.has(suit)) {
             deck.set(suit, new Map<Ranks, IPlayingCard>());
         }
-
         const suitMap = deck.get(suit)!;
 
-        for (const rank of Object.values(Ranks)) {
+        for (const rank of Object.values(Ranks).filter(r => typeof r === 'number')) {//typesciprt returns both the number and the string so it must be filtered to just nums
             const card = createCard(suit, rank, Modifier.Lucky);
-            if (!card) {
-                console.log("no, card skipping");
-                continue;
-            };
             suitMap.set(card.rank, card);
         }
-    }
-    //TODO: Remove. testing purpose
-    for (let i = 0; i < 6; i++) {
-        const card = createCard(Suits.Clubs, Ranks.Ace, Modifier.Glass);
-        deck.get(Suits.Clubs)?.set(card.rank, card)
     }
     return deck;
 }

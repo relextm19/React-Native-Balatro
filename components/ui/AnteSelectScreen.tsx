@@ -3,11 +3,11 @@ import { View, Text, Pressable } from "react-native";
 import { Skia, useImage, Canvas, Atlas } from "@shopify/react-native-skia";
 
 import AnteSelectPane from "./AnteSelectPane";
-import { useSpriteRects } from "../../utils/SpriteSheet";
+import { useSpriteRects } from "../../logic/SpriteSheet";
 
 import { stakeSliceData, blindSliceData, deckSliceData } from "../../assets/sliceData";
 import { useAppStore } from "../../GameState";
-import { getRandomInt } from "../../utils/Random";
+import { getRandomInt } from "../../logic/Random";
 import { blindsArray, BlindState } from "../../assets/chips/Blinds";
 import StatusPane from "./StatusPane";
 import DeckIcon from "./DeckIcon";

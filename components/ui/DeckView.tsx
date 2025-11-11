@@ -2,9 +2,9 @@ import { Atlas, Canvas, useImage, rect, Skia, SkRSXform, useRectBuffer, SkRect }
 import { useAppStore, Views } from "../../GameState"
 import { ReactElement } from "react";
 import { buttonSliceData, cardModifierSliceData, cardSliceData } from "../../assets/sliceData";
-import { useSpriteRects } from "../../utils/SpriteSheet";
+import { useSpriteRects } from "../../logic/SpriteSheet";
 import { View } from "react-native";
-import { useScreenDimensions } from "../../utils/ResponsiveDimensions";
+import { useScreenDimensions } from "../../logic/ResponsiveDimensions";
 import MenuButton from "./MenuButton";
 
 

@@ -7,13 +7,14 @@ import { Pressable } from "react-native";
 import StatusPane from "./StatusPane";
 import DeckIcon from "./DeckIcon";
 
-import { useSpriteRects } from "../../utils/SpriteSheet";
-import { useScreenDimensions } from "../../utils/ResponsiveDimensions";
+import { useSpriteRects } from "../../logic/SpriteSheet";
+import { useScreenDimensions } from "../../logic/ResponsiveDimensions";
 import { getRandomCard, IPlayingCard, makeAllCardsAvaliable, setCardAvaliablity } from "../../interfaces/Card";
 import { buttonSliceData, cardModifierSliceData, cardSliceData } from "../../assets/sliceData";
 import { defaultHandSize } from "../../GameState";
 import Card from "./Card";
 import MenuButton from "./MenuButton";
+import { checkHandType } from "../../logic/CheckHandType";
 
 
 export default function GameScreen(): ReactElement | null {
@@ -48,8 +49,8 @@ export default function GameScreen(): ReactElement | null {
         deckState.avaliable = 52;
         makeAllCardsAvaliable(cardsBySuits);
 
-        const startingHand = getNRandomCards(store.handSize) || [];
-        setHand(startingHand);
+        const startingHand = getNRandomCards(store.handSize)?.sort((a, b) => b.rank - a.rank) || [];
+        setHand(sortHand(startingHand))
     }, [])
 
     const { width: screenWidth, height: screenHeight } = useScreenDimensions();
@@ -63,9 +64,14 @@ export default function GameScreen(): ReactElement | null {
 
     const [hand, setHand] = useState([] as IPlayingCard[]);
     const [selectedCards, setSelectedCards] = useState([] as IPlayingCard[])
+    const [playedHand, setPlayedHand] = useState([] as IPlayingCard[]);
+
+    function sortHand(cards: IPlayingCard[]) {
+        return [...cards].sort((a, b) => b.rank - a.rank); // copy so react triggers a renrender
+    }
 
     const ready = statusPaneWidth > 10 && deckIconWidth > 10;
-    //FIXME: this is shared logic between deck view and here so i can put it in a single function
+
     const cardWidth = cardSliceData.spriteWidth;
     const cardHeight = cardSliceData.spriteHeight;
     const scale = displayWidth / (cardWidth * (defaultHandSize - 1));
@@ -81,6 +87,7 @@ export default function GameScreen(): ReactElement | null {
     const animationHeight = 20;
     const archHeight = 400 / hand.length;
     const rotationGoal = 15 / Math.sqrt(hand.length);
+    const archFactor = 0.28;
 
     const midIndex = (hand.length - 1) / 2;
     for (let i = 0; i < hand.length; i++) {
@@ -93,7 +100,6 @@ export default function GameScreen(): ReactElement | null {
 
         const relativeIndex = i - midIndex;
 
-        const archFactor = 0.28;
 
         const normalized = Math.abs(relativeIndex / midIndex);
         const inverted = 1 - normalized;
@@ -102,10 +108,9 @@ export default function GameScreen(): ReactElement | null {
         const currentRotation = rotationGoal * relativeIndex / midIndex;
 
         const drawX = startX + i * (cardWidth * scale + drawOffsetX);
-
         cardViews.push(
             <Pressable
-                key={card.id}
+                key={`${i}${card.id}`}
                 onPress={() => {
                     setSelectedCards(prev => {
                         const alreadySelected = prev.some(sel => sel.id === card.id);
@@ -136,9 +141,7 @@ export default function GameScreen(): ReactElement | null {
                     animationHeight={animationHeight}
                     cardsSpriteSheet={cardsSpriteSheet}
                     modifierSpriteSheet={modifierSpriteSheet}
-                    cardGameObject={card}
                     selectedCards={selectedCards}
-                    setSelectedCards={setSelectedCards}
                 />
             </Pressable>
         );
@@ -156,15 +159,66 @@ export default function GameScreen(): ReactElement | null {
             const cardsToDraw = store.handSize - newHand.length;
             const newCards = getNRandomCards(cardsToDraw) || [];
 
-            return [...newHand, ...newCards];
+            return sortHand([...newHand, ...newCards]);
         });
 
         setSelectedCards([]);
     }
+
+    function playHand(): void {
+        if (selectedCards.length === 0) return;
+
+        setHand(prevHand => {
+            const { kept, removed } = prevHand.reduce<{
+                kept: IPlayingCard[];
+                removed: IPlayingCard[];
+            }>(
+                (acc, card) => {
+                    if (selectedCards.some(sel => sel.id === card.id)) {
+                        acc.removed.push(card);
+                    } else {
+                        acc.kept.push(card);
+                    }
+                    return acc;
+                },
+                { kept: [], removed: [] }
+            );
+
+            checkHandType(removed);
+            setPlayedHand(removed);
+
+            const cardsToDraw = store.handSize - kept.length;
+            const newCards = getNRandomCards(cardsToDraw) || [];
+
+            return sortHand([...kept, ...newCards]);
+        });
+
+        setSelectedCards([]);
+    }
+
     return (
         <View className="flex-row flex-1 justify-center items-end">
             <StatusPane setWidth={setStatusPaneWidth} />
             <View className="relative flex-1 justify-end items-center">
+                <View
+                    className="flex-row justify-evenly items-end w-full h-full"
+                    style={{ bottom: cardHeight + archHeight }}
+                >
+                    {playedHand.map((card, i) => {
+                        const modifierSprite = card.modifier
+                            ? modifiersRects.value[card.modifier]
+                            : modifiersRects.value[0];
+                        return <Card
+                            scale={scale}
+                            modifierSprite={modifierSprite}
+                            sprite={rect(card.x, card.y, card.width, card.height)}
+                            cardsSpriteSheet={cardsSpriteSheet}
+                            modifierSpriteSheet={modifierSpriteSheet}
+                            key={`${i}${card.id}`}
+                        />
+                    }
+                    )}
+                </View>
                 {ready ? cardViews : null}
                 <View
                     className="justify-center items-center"
@@ -176,8 +230,8 @@ export default function GameScreen(): ReactElement | null {
                     <View
                         className="flex-row items-center gap-2 w-2/4"
                     >
-                        <MenuButton imageAsset={playButtonImageAsset} sliceData={buttonSliceData} onClick={() => { }} scale={0.35} />
-                        <MenuButton imageAsset={discardButtomImageAsset} sliceData={buttonSliceData} onClick={() => { discard() }} scale={0.35} />
+                        <MenuButton imageAsset={playButtonImageAsset} sliceData={buttonSliceData} onClick={playHand} scale={0.35} />
+                        <MenuButton imageAsset={discardButtomImageAsset} sliceData={buttonSliceData} onClick={discard} scale={0.35} />
                     </View>
                 </View>
             </View>

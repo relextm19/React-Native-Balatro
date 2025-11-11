@@ -1,7 +1,7 @@
 import { View, Text, Pressable, LayoutChangeEvent } from "react-native";
 import { Skia, Canvas, Atlas, useImage } from "@shopify/react-native-skia";
 
-import { useSpriteRects } from "../../utils/SpriteSheet";
+import { useSpriteRects } from "../../logic/SpriteSheet";
 import { useAppStore, Views } from "../../GameState";
 
 import { deckSliceData } from "../../assets/sliceData";

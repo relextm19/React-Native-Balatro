@@ -1,4 +1,4 @@
-import { SpriteSheetSliceData } from "../utils/SpriteSheet";
+import { SpriteSheetSliceData } from "../logic/SpriteSheet";
 
 export const stakeSliceData: SpriteSheetSliceData = {
     offsetX: 2,
