@@ -1,8 +1,8 @@
 import { Skia, Atlas, useImage, SkImage, SkRect, Canvas } from "@shopify/react-native-skia";
-import { ReactElement } from "react";
+import { ReactElement, useEffect } from "react";
 import { View } from "react-native";
 import Animated, { runOnJS } from "react-native-reanimated";
-import { useSharedValue, withTiming, useAnimatedStyle } from "react-native-reanimated";
+import { useSharedValue, withTiming, useAnimatedStyle, withSequence, Easing } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
 import { cardSliceData } from "../../assets/sliceData";
@@ -16,6 +16,7 @@ type cardProps = {
     cardsSpriteSheet: SkImage,
     modifierSpriteSheet: SkImage,
     selectedCards?: IPlayingCard[],
+    shake?: boolean,
 }
 
 export default function Card({
@@ -26,15 +27,19 @@ export default function Card({
     cardsSpriteSheet,
     modifierSpriteSheet,
     selectedCards,
+    shake
 }: cardProps): ReactElement {
     const transform = [Skia.RSXform(scale, 0, 0, 0)];
     const y = useSharedValue(0);
+    const rotation = useSharedValue(0);
 
     const animatedStyle = useAnimatedStyle(() => ({
-        transform: [{ translateY: y.value ?? 0 }]
+        transform: [
+            { translateY: y.value ?? 0 },
+            { rotateZ: `${rotation.value}deg` },
+        ]
     }));
 
-    //TODO: run on js is depecated but nothing else works so its that for now
     const gesture = Gesture.Tap().onEnd(() => {
         if (!animationHeight || !selectedCards) return;
 
@@ -45,6 +50,19 @@ export default function Card({
             y.value = withTiming(-animationHeight, { duration: 200 });
         }
     });
+
+    useEffect(() => {
+        if (shake) {
+            rotation.value = withSequence(
+                withTiming(10, { duration: 100, easing: Easing.inOut(Easing.ease) }),
+                withTiming(-8, { duration: 100, easing: Easing.inOut(Easing.ease) }),
+                withTiming(6, { duration: 100, easing: Easing.inOut(Easing.ease) }),
+                withTiming(-4, { duration: 100, easing: Easing.inOut(Easing.ease) }),
+                withTiming(2, { duration: 100, easing: Easing.inOut(Easing.ease) }),
+                withTiming(0, { duration: 100, easing: Easing.inOut(Easing.ease) }),
+            );
+        }
+    }, [shake]);
 
     return (
         <GestureDetector gesture={gesture}>

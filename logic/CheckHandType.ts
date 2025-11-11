@@ -15,7 +15,7 @@ export enum HandType {
 }
 
 const handTypeBaseValues: Record<HandType, [number, number]> = {
-    [HandType.None]: [0, 1],
+    [HandType.None]: [0, 0],
     [HandType.HighCard]: [5, 1],
     [HandType.Pair]: [10, 2],
     [HandType.TwoPair]: [20, 2],

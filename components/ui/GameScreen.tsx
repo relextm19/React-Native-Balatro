@@ -66,7 +66,7 @@ export default function GameScreen(): ReactElement | null {
     const [selectedCards, setSelectedCards] = useState([] as IPlayingCard[])
     const [playedHand, setPlayedHand] = useState([] as IPlayingCard[]);
 
-    const handType = checkHandType(selectedCards);
+    const handType = checkHandType(selectedCards.length > 0 ? selectedCards : playedHand);
     const [chips, mult] = getChipsAndMultForHandType(handType);
 
     function sortHand(cards: IPlayingCard[]) {
@@ -189,7 +189,6 @@ export default function GameScreen(): ReactElement | null {
 
             setPlayedHand(removed);
 
-
             const cardsToDraw = store.handSize - kept.length;
             const newCards = getNRandomCards(cardsToDraw) || [];
 
@@ -218,6 +217,7 @@ export default function GameScreen(): ReactElement | null {
                             cardsSpriteSheet={cardsSpriteSheet}
                             modifierSpriteSheet={modifierSpriteSheet}
                             key={`${i}${card.id}`}
+                            shake={true}
                         />
                     }
                     )}
