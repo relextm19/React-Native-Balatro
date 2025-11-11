@@ -1,6 +1,7 @@
 import { IPlayingCard } from "../interfaces/Card";
 
 export enum HandType {
+    None = "",
     HighCard = "High Card",
     Pair = "Pair",
     TwoPair = "Two Pair",
@@ -13,7 +14,22 @@ export enum HandType {
     RoyalFlush = "Royal Flush"
 }
 
+const handTypeBaseValues: Record<HandType, [number, number]> = {
+    [HandType.None]: [0, 1],
+    [HandType.HighCard]: [5, 1],
+    [HandType.Pair]: [10, 2],
+    [HandType.TwoPair]: [20, 2],
+    [HandType.Three]: [30, 3],
+    [HandType.Straight]: [30, 4],
+    [HandType.Flush]: [35, 4],
+    [HandType.FullHouse]: [40, 4],
+    [HandType.Four]: [60, 7],
+    [HandType.StraightFlush]: [100, 8],
+    [HandType.RoyalFlush]: [100, 8],
+};
+
 export function checkHandType(hand: IPlayingCard[]): HandType {
+    if (hand.length === 0) return HandType.None
     const sortedHand = [...hand].sort((a, b) => a.rank - b.rank);
 
     const isFlush = checkFlush(sortedHand);

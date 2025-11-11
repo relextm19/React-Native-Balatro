@@ -65,6 +65,11 @@ export default function GameScreen(): ReactElement | null {
     const [hand, setHand] = useState([] as IPlayingCard[]);
     const [selectedCards, setSelectedCards] = useState([] as IPlayingCard[])
     const [playedHand, setPlayedHand] = useState([] as IPlayingCard[]);
+    const [handName, setHandName] = useState("");
+
+    useEffect(() => {
+        setHandName(checkHandType(selectedCards));
+    }, [selectedCards])
 
     function sortHand(cards: IPlayingCard[]) {
         return [...cards].sort((a, b) => b.rank - a.rank); // copy so react triggers a renrender
@@ -184,7 +189,6 @@ export default function GameScreen(): ReactElement | null {
                 { kept: [], removed: [] }
             );
 
-            console.log(checkHandType(removed));
             setPlayedHand(removed);
 
             const cardsToDraw = store.handSize - kept.length;
@@ -198,7 +202,7 @@ export default function GameScreen(): ReactElement | null {
 
     return (
         <View className="flex-row flex-1 justify-center items-end">
-            <StatusPane setWidth={setStatusPaneWidth} />
+            <StatusPane setWidth={setStatusPaneWidth} handName={handName} />
             <View className="relative flex-1 justify-end items-center">
                 <View
                     className="flex-row justify-evenly items-end w-full h-full"

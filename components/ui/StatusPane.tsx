@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, RefObject } from "react";
 import { View, Text, LayoutChangeEvent } from "react-native";
 import { Skia, useImage, Canvas, Atlas } from "@shopify/react-native-skia";
 
@@ -9,9 +9,10 @@ import { useAppStore } from "../../GameState";
 
 type statusPaneProps = {
     setWidth?: React.Dispatch<React.SetStateAction<number>>
+    handName?: string,
 }
 
-export default function StatusPane({ setWidth }: statusPaneProps): ReactElement {
+export default function StatusPane({ setWidth, handName }: statusPaneProps): ReactElement {
     const store = useAppStore();
     const stakeSpriteSheet = useImage(require("../../assets/chips/stake_chips.png"));
     const stakeSpriteRect = useSpriteRects(stakeSliceData).value[store.currentStake.index] ?? null;
@@ -53,6 +54,16 @@ export default function StatusPane({ setWidth }: statusPaneProps): ReactElement 
             </View>
 
             <View className="justify-end items-center bg-darkBg p-2 rounded-lg w-full h-1/5">
+                <View className="flex-1 justify-center items-center">
+                    <Text
+                        className="text-white text-2xl text-wrap"
+                        minimumFontScale={0.5}
+                        adjustsFontSizeToFit
+                        numberOfLines={1}
+                    >
+                        {handName}
+                    </Text>
+                </View>
                 <View className="flex-row justify-between items-center">
                     <View className="flex-1 justify-center items-end bg-customRed rounded-md">
                         <Text className="font-bold text-white text-xl">0</Text>
