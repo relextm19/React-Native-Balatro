@@ -14,7 +14,7 @@ import { buttonSliceData, cardModifierSliceData, cardSliceData } from "../../ass
 import { defaultHandSize } from "../../GameState";
 import Card from "./Card";
 import MenuButton from "./MenuButton";
-import { checkHandType } from "../../logic/CheckHandType";
+import { checkHandType, getChipsAndMultForHandType, HandType } from "../../logic/CheckHandType";
 
 
 export default function GameScreen(): ReactElement | null {
@@ -65,11 +65,9 @@ export default function GameScreen(): ReactElement | null {
     const [hand, setHand] = useState([] as IPlayingCard[]);
     const [selectedCards, setSelectedCards] = useState([] as IPlayingCard[])
     const [playedHand, setPlayedHand] = useState([] as IPlayingCard[]);
-    const [handName, setHandName] = useState("");
 
-    useEffect(() => {
-        setHandName(checkHandType(selectedCards));
-    }, [selectedCards])
+    const handType = checkHandType(selectedCards);
+    const [chips, mult] = getChipsAndMultForHandType(handType);
 
     function sortHand(cards: IPlayingCard[]) {
         return [...cards].sort((a, b) => b.rank - a.rank); // copy so react triggers a renrender
@@ -191,6 +189,7 @@ export default function GameScreen(): ReactElement | null {
 
             setPlayedHand(removed);
 
+
             const cardsToDraw = store.handSize - kept.length;
             const newCards = getNRandomCards(cardsToDraw) || [];
 
@@ -202,7 +201,7 @@ export default function GameScreen(): ReactElement | null {
 
     return (
         <View className="flex-row flex-1 justify-center items-end">
-            <StatusPane setWidth={setStatusPaneWidth} handName={handName} />
+            <StatusPane setWidth={setStatusPaneWidth} handName={handType} chips={chips} mult={mult} />
             <View className="relative flex-1 justify-end items-center">
                 <View
                     className="flex-row justify-evenly items-end w-full h-full"

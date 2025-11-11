@@ -28,6 +28,10 @@ const handTypeBaseValues: Record<HandType, [number, number]> = {
     [HandType.RoyalFlush]: [100, 8],
 };
 
+export function getChipsAndMultForHandType(handType: HandType): [number, number] {
+    return handTypeBaseValues[handType];
+}
+
 export function checkHandType(hand: IPlayingCard[]): HandType {
     if (hand.length === 0) return HandType.None
     const sortedHand = [...hand].sort((a, b) => a.rank - b.rank);

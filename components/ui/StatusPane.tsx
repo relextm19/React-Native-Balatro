@@ -10,9 +10,11 @@ import { useAppStore } from "../../GameState";
 type statusPaneProps = {
     setWidth?: React.Dispatch<React.SetStateAction<number>>
     handName?: string,
+    chips?: number,
+    mult?: number,
 }
 
-export default function StatusPane({ setWidth, handName }: statusPaneProps): ReactElement {
+export default function StatusPane({ setWidth, handName, chips, mult }: statusPaneProps): ReactElement {
     const store = useAppStore();
     const stakeSpriteSheet = useImage(require("../../assets/chips/stake_chips.png"));
     const stakeSpriteRect = useSpriteRects(stakeSliceData).value[store.currentStake.index] ?? null;
@@ -66,11 +68,11 @@ export default function StatusPane({ setWidth, handName }: statusPaneProps): Rea
                 </View>
                 <View className="flex-row justify-between items-center">
                     <View className="flex-1 justify-center items-end bg-customRed rounded-md">
-                        <Text className="font-bold text-white text-xl">0</Text>
+                        <Text className="font-bold text-white text-xl">{chips}</Text>
                     </View>
                     <Text className="font-bold text-white text-xl">x</Text>
                     <View className="flex-1 justify-center items-start bg-blue-700 rounded-md">
-                        <Text className="font-bold text-white text-xl">0</Text>
+                        <Text className="font-bold text-white text-xl">{mult}</Text>
                     </View>
                 </View>
             </View>
