@@ -10,8 +10,8 @@ import { useAppStore } from "../../GameState";
 type statusPaneProps = {
     setWidth?: React.Dispatch<React.SetStateAction<number>>
     handName?: string,
-    chips?: number,
-    mult?: number,
+    chips?: RefObject<number>,
+    mult?: RefObject<number>,
 }
 
 export default function StatusPane({ setWidth, handName, chips, mult }: statusPaneProps): ReactElement {
@@ -68,11 +68,11 @@ export default function StatusPane({ setWidth, handName, chips, mult }: statusPa
                 </View>
                 <View className="flex-row justify-between items-center">
                     <View className="flex-1 justify-center items-end bg-customRed rounded-md">
-                        <Text className="font-bold text-white text-xl">{chips}</Text>
+                        <Text className="font-bold text-white text-xl">{chips?.current}</Text>
                     </View>
                     <Text className="font-bold text-white text-xl">x</Text>
                     <View className="flex-1 justify-center items-start bg-blue-700 rounded-md">
-                        <Text className="font-bold text-white text-xl">{mult}</Text>
+                        <Text className="font-bold text-white text-xl">{mult?.current}</Text>
                     </View>
                 </View>
             </View>

@@ -28,6 +28,23 @@ export enum Ranks {
     Ace
 }
 
+export const rankValues: Record<Ranks, number> = {
+    [Ranks.Two]: 2,
+    [Ranks.Three]: 3,
+    [Ranks.Four]: 4,
+    [Ranks.Five]: 5,
+    [Ranks.Six]: 6,
+    [Ranks.Seven]: 7,
+    [Ranks.Eight]: 8,
+    [Ranks.Nine]: 9,
+    [Ranks.Ten]: 10,
+    [Ranks.Jack]: 10,
+    [Ranks.Queen]: 10,
+    [Ranks.King]: 10,
+    [Ranks.Ace]: 11,
+};
+
+
 
 export enum Modifier {
     Normal,

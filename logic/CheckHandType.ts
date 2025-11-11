@@ -28,8 +28,11 @@ const handTypeBaseValues: Record<HandType, [number, number]> = {
     [HandType.RoyalFlush]: [100, 8],
 };
 
-export function getChipsAndMultForHandType(handType: HandType): [number, number] {
-    return handTypeBaseValues[handType];
+export function getChipsForHandType(handType: HandType): number {
+    return handTypeBaseValues[handType][0];
+}
+export function getMultForHandType(handType: HandType): number {
+    return handTypeBaseValues[handType][1];
 }
 
 export function checkHandType(hand: IPlayingCard[]): HandType {

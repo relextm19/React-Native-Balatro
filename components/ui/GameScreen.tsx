@@ -9,12 +9,13 @@ import DeckIcon from "./DeckIcon";
 
 import { useSpriteRects } from "../../logic/SpriteSheet";
 import { useScreenDimensions } from "../../logic/ResponsiveDimensions";
-import { getRandomCard, IPlayingCard, makeAllCardsAvaliable, setCardAvaliablity } from "../../interfaces/Card";
+import { getRandomCard, IPlayingCard, makeAllCardsAvaliable, rankValues, setCardAvaliablity } from "../../interfaces/Card";
 import { buttonSliceData, cardModifierSliceData, cardSliceData } from "../../assets/sliceData";
 import { defaultHandSize } from "../../GameState";
 import Card from "./Card";
 import MenuButton from "./MenuButton";
-import { checkHandType, getChipsAndMultForHandType, HandType } from "../../logic/CheckHandType";
+import { checkHandType, getChipsForHandType, getMultForHandType, HandType } from "../../logic/CheckHandType";
+import { prepareUIRegistry } from "react-native-reanimated/lib/typescript/frameCallback/FrameCallbackRegistryUI";
 
 
 export default function GameScreen(): ReactElement | null {
@@ -68,7 +69,16 @@ export default function GameScreen(): ReactElement | null {
     const [shakingIndex, setShakingIndex] = useState(-1); //xd
 
     const handType = checkHandType(selectedCards.length > 0 ? selectedCards : playedHand);
-    const [chips, mult] = getChipsAndMultForHandType(handType);
+    //if i use refs for that i have to force a rerender but its fine
+    const chips = useRef(getChipsForHandType(handType));
+    const mult = useRef(getMultForHandType(handType));
+    const [, forceRender] = useState(0);
+
+    useEffect(() => {
+        mult.current = getMultForHandType(handType)
+        chips.current = getChipsForHandType(handType)
+        forceRender(prev => prev + 1);
+    }, [handType])
 
     function sortHand(cards: IPlayingCard[]) {
         return [...cards].sort((a, b) => b.rank - a.rank); // copy so react triggers a renrender
@@ -191,9 +201,16 @@ export default function GameScreen(): ReactElement | null {
             setPlayedHand(removed);
 
             removed.forEach((_, i) => {
-                setTimeout(() => setShakingIndex(i), i * shakeDuration + shakeDuration)
+                setTimeout(() => {
+                    setShakingIndex(i);
+                    chips.current += rankValues[removed[i].rank]
+                }, i * shakeDuration + shakeDuration)
             })
-            setTimeout(() => setShakingIndex(-1), removed.length * shakeDuration + shakeDuration);
+            setTimeout(() => {
+                setShakingIndex(-1)
+                setPlayedHand([]);
+                chips.current = 0;
+            }, removed.length * shakeDuration + shakeDuration);
 
             const cardsToDraw = store.handSize - kept.length;
             const newCards = getNRandomCards(cardsToDraw) || [];
