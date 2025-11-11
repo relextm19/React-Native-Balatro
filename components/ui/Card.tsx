@@ -17,6 +17,7 @@ type cardProps = {
     modifierSpriteSheet: SkImage,
     selectedCards?: IPlayingCard[],
     shake?: boolean,
+    shakeDuration?: number,
 }
 
 export default function Card({
@@ -27,7 +28,8 @@ export default function Card({
     cardsSpriteSheet,
     modifierSpriteSheet,
     selectedCards,
-    shake
+    shake,
+    shakeDuration
 }: cardProps): ReactElement {
     const transform = [Skia.RSXform(scale, 0, 0, 0)];
     const y = useSharedValue(0);
@@ -54,12 +56,12 @@ export default function Card({
     useEffect(() => {
         if (shake) {
             rotation.value = withSequence(
-                withTiming(10, { duration: 100, easing: Easing.inOut(Easing.ease) }),
-                withTiming(-8, { duration: 100, easing: Easing.inOut(Easing.ease) }),
-                withTiming(6, { duration: 100, easing: Easing.inOut(Easing.ease) }),
-                withTiming(-4, { duration: 100, easing: Easing.inOut(Easing.ease) }),
-                withTiming(2, { duration: 100, easing: Easing.inOut(Easing.ease) }),
-                withTiming(0, { duration: 100, easing: Easing.inOut(Easing.ease) }),
+                withTiming(10, { duration: shakeDuration, easing: Easing.inOut(Easing.ease) }),
+                withTiming(-8, { duration: shakeDuration, easing: Easing.inOut(Easing.ease) }),
+                withTiming(6, { duration: shakeDuration, easing: Easing.inOut(Easing.ease) }),
+                withTiming(-4, { duration: shakeDuration, easing: Easing.inOut(Easing.ease) }),
+                withTiming(2, { duration: shakeDuration, easing: Easing.inOut(Easing.ease) }),
+                withTiming(0, { duration: shakeDuration, easing: Easing.inOut(Easing.ease) }),
             );
         }
     }, [shake]);

@@ -65,6 +65,7 @@ export default function GameScreen(): ReactElement | null {
     const [hand, setHand] = useState([] as IPlayingCard[]);
     const [selectedCards, setSelectedCards] = useState([] as IPlayingCard[])
     const [playedHand, setPlayedHand] = useState([] as IPlayingCard[]);
+    const [shakingIndex, setShakingIndex] = useState(-1); //xd
 
     const handType = checkHandType(selectedCards.length > 0 ? selectedCards : playedHand);
     const [chips, mult] = getChipsAndMultForHandType(handType);
@@ -168,9 +169,9 @@ export default function GameScreen(): ReactElement | null {
         setSelectedCards([]);
     }
 
+    const shakeDuration = 300;
     function playHand(): void {
         if (selectedCards.length === 0) return;
-
         setHand(prevHand => {
             const { kept, removed } = prevHand.reduce<{
                 kept: IPlayingCard[];
@@ -188,6 +189,11 @@ export default function GameScreen(): ReactElement | null {
             );
 
             setPlayedHand(removed);
+
+            removed.forEach((_, i) => {
+                setTimeout(() => setShakingIndex(i), i * shakeDuration + shakeDuration)
+            })
+            setTimeout(() => setShakingIndex(-1), removed.length * shakeDuration + shakeDuration);
 
             const cardsToDraw = store.handSize - kept.length;
             const newCards = getNRandomCards(cardsToDraw) || [];
@@ -217,7 +223,8 @@ export default function GameScreen(): ReactElement | null {
                             cardsSpriteSheet={cardsSpriteSheet}
                             modifierSpriteSheet={modifierSpriteSheet}
                             key={`${i}${card.id}`}
-                            shake={true}
+                            shake={i === shakingIndex}
+                            shakeDuration={shakeDuration}
                         />
                     }
                     )}
