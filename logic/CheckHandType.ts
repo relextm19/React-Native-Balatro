@@ -15,7 +15,8 @@ enum HandType {
 export function checkHandType(hand: IPlayingCard[]) {
     const sortedHand = [...hand].sort((a, b) => a.rank - b.rank)
     checkMultiples(sortedHand)
-    console.log(checkFlush(sortedHand));
+    console.log("Flush: ", checkFlush(sortedHand));
+    console.log("Straight: ", checkStraight(sortedHand));
 }
 
 function checkMultiples(hand: IPlayingCard[]) {
@@ -43,9 +44,18 @@ function checkMultiples(hand: IPlayingCard[]) {
 
 function checkFlush(hand: IPlayingCard[]): boolean {
     if (hand.length != 5) return false;
-    let lastCard: IPlayingCard | undefined = hand[0];
     for (let i = 1; i < hand.length; i++) {
-        if (lastCard && hand[i].suit !== lastCard.suit) {
+        if (hand[i].suit !== hand[i - 1].suit) {
+            return false;
+        }
+    }
+    return true;
+}
+
+function checkStraight(hand: IPlayingCard[]): boolean {
+    if (hand.length != 5) return false;
+    for (let i = 1; i < hand.length; i++) {
+        if (hand[i].rank !== hand[i - 1].rank + 1) {
             return false;
         }
     }
