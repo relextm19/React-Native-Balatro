@@ -169,7 +169,7 @@ export default function GameScreen(): ReactElement | null {
         setSelectedCards([]);
     }
 
-    const shakeDuration = 300;
+    const shakeDuration = 700;
     function playHand(): void {
         if (selectedCards.length === 0) return;
         setHand(prevHand => {

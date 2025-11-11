@@ -54,14 +54,14 @@ export default function Card({
     });
 
     useEffect(() => {
-        if (shake) {
+        if (shake && shakeDuration) {
             rotation.value = withSequence(
-                withTiming(10, { duration: shakeDuration, easing: Easing.inOut(Easing.ease) }),
-                withTiming(-8, { duration: shakeDuration, easing: Easing.inOut(Easing.ease) }),
-                withTiming(6, { duration: shakeDuration, easing: Easing.inOut(Easing.ease) }),
-                withTiming(-4, { duration: shakeDuration, easing: Easing.inOut(Easing.ease) }),
-                withTiming(2, { duration: shakeDuration, easing: Easing.inOut(Easing.ease) }),
-                withTiming(0, { duration: shakeDuration, easing: Easing.inOut(Easing.ease) }),
+                withTiming(10, { duration: shakeDuration / 6, easing: Easing.inOut(Easing.ease) }),
+                withTiming(-8, { duration: shakeDuration / 6, easing: Easing.inOut(Easing.ease) }),
+                withTiming(6, { duration: shakeDuration / 6, easing: Easing.inOut(Easing.ease) }),
+                withTiming(-4, { duration: shakeDuration / 6, easing: Easing.inOut(Easing.ease) }),
+                withTiming(2, { duration: shakeDuration / 6, easing: Easing.inOut(Easing.ease) }),
+                withTiming(0, { duration: shakeDuration / 6, easing: Easing.inOut(Easing.ease) }),
             );
         }
     }, [shake]);
