@@ -184,7 +184,7 @@ export default function GameScreen(): ReactElement | null {
                 { kept: [], removed: [] }
             );
 
-            checkHandType(removed);
+            console.log(checkHandType(removed));
             setPlayedHand(removed);
 
             const cardsToDraw = store.handSize - kept.length;

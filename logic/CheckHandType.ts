@@ -1,23 +1,48 @@
 import { IPlayingCard } from "../interfaces/Card";
 
-enum HandType {
-    HighCard,
-    Pair,
-    Three,
-    Straight,
-    Flush,
-    FullHouse,
-    Four,
-    StraightFlush,
-    RoyalFlush
+export enum HandType {
+    HighCard = "High Card",
+    Pair = "Pair",
+    TwoPair = "Two Pair",
+    Three = "Three Of a Kind",
+    Straight = "Straight",
+    Flush = "Flush",
+    FullHouse = "Full House",
+    Four = "Four Of a Kind",
+    StraightFlush = "Straight Flush",
+    RoyalFlush = "Royal Flush"
 }
 
-export function checkHandType(hand: IPlayingCard[]) {
-    const sortedHand = [...hand].sort((a, b) => a.rank - b.rank)
-    checkMultiples(sortedHand)
-    console.log("Flush: ", checkFlush(sortedHand));
-    console.log("Straight: ", checkStraight(sortedHand));
+export function checkHandType(hand: IPlayingCard[]): HandType {
+    const sortedHand = [...hand].sort((a, b) => a.rank - b.rank);
+
+    const isFlush = checkFlush(sortedHand);
+    const isStraight = checkStraight(sortedHand);
+    const multiples = checkMultiples(sortedHand);
+
+    if (isStraight && isFlush) {
+        if (sortedHand[0].rank === 10) return HandType.RoyalFlush;
+        return HandType.StraightFlush;
+    }
+
+    if (multiples.includes(4)) return HandType.Four;
+
+    if (multiples.includes(3) && multiples.includes(2)) return HandType.FullHouse;
+
+    if (isFlush) return HandType.Flush;
+
+    if (isStraight) return HandType.Straight;
+
+    if (multiples.includes(3)) return HandType.Three;
+
+    const pairCount = multiples.filter(m => m === 2).length;
+    if (pairCount === 2) return HandType.TwoPair;
+
+    if (pairCount === 1) return HandType.Pair;
+
+    return HandType.HighCard;
 }
+
 
 function checkMultiples(hand: IPlayingCard[]) {
     let streaks = [] as number[];
@@ -38,8 +63,7 @@ function checkMultiples(hand: IPlayingCard[]) {
     if (currStreak > 1) {
         streaks.push(currStreak);
     }
-    console.log(streaks)
-    return streaks;
+    return streaks.length > 0 ? streaks : [1];
 }
 
 function checkFlush(hand: IPlayingCard[]): boolean {
