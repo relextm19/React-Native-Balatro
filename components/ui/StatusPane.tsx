@@ -12,9 +12,10 @@ type statusPaneProps = {
     handName?: string,
     chips?: RefObject<number>,
     mult?: RefObject<number>,
+    roundScore?: RefObject<number>,
 }
 
-export default function StatusPane({ setWidth, handName, chips, mult }: statusPaneProps): ReactElement {
+export default function StatusPane({ setWidth, handName, chips, mult, roundScore }: statusPaneProps): ReactElement {
     const store = useAppStore();
     const stakeSpriteSheet = useImage(require("../../assets/chips/stake_chips.png"));
     const stakeSpriteRect = useSpriteRects(stakeSliceData).value[store.currentStake.index] ?? null;
@@ -37,7 +38,7 @@ export default function StatusPane({ setWidth, handName, chips, mult }: statusPa
             <View className="flex-row justify-between items-center bg-darkBg p-2 rounded-lg w-full">
                 <Text className="w-2/5 text-gray-300 text-wrap">Round score</Text>
                 <View className="flex-row-reverse flex-1 justify-center items-center bg-darkGrey rounded-lg">
-                    <Text className="text-white text-3xl">{store.roundScore}</Text>
+                    <Text className="text-white text-3xl">{roundScore?.current ?? 0}</Text>
                     <Canvas
                         style={{
                             width: stakeSpriteRect.width,
@@ -68,11 +69,11 @@ export default function StatusPane({ setWidth, handName, chips, mult }: statusPa
                 </View>
                 <View className="flex-row justify-between items-center">
                     <View className="flex-1 justify-center items-end bg-customRed rounded-md">
-                        <Text className="font-bold text-white text-xl">{chips?.current}</Text>
+                        <Text className="font-bold text-white text-xl">{chips?.current ?? 0}</Text>
                     </View>
                     <Text className="font-bold text-white text-xl">x</Text>
                     <View className="flex-1 justify-center items-start bg-blue-700 rounded-md">
-                        <Text className="font-bold text-white text-xl">{mult?.current}</Text>
+                        <Text className="font-bold text-white text-xl">{mult?.current ?? 0}</Text>
                     </View>
                 </View>
             </View>

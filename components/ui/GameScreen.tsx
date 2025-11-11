@@ -72,6 +72,7 @@ export default function GameScreen(): ReactElement | null {
     //if i use refs for that i have to force a rerender but its fine
     const chips = useRef(getChipsForHandType(handType));
     const mult = useRef(getMultForHandType(handType));
+    const roundScore = useRef(0);
     const [, forceRender] = useState(0);
 
     useEffect(() => {
@@ -209,6 +210,7 @@ export default function GameScreen(): ReactElement | null {
             setTimeout(() => {
                 setShakingIndex(-1)
                 setPlayedHand([]);
+                roundScore.current = chips.current * mult.current;
                 chips.current = 0;
             }, removed.length * shakeDuration + shakeDuration);
 
@@ -223,7 +225,7 @@ export default function GameScreen(): ReactElement | null {
 
     return (
         <View className="flex-row flex-1 justify-center items-end">
-            <StatusPane setWidth={setStatusPaneWidth} handName={handType} chips={chips} mult={mult} />
+            <StatusPane setWidth={setStatusPaneWidth} handName={handType} chips={chips} mult={mult} roundScore={roundScore} />
             <View className="relative flex-1 justify-end items-center">
                 <View
                     className="flex-row justify-evenly items-end w-full h-full"

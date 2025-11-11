@@ -28,8 +28,6 @@ type AppState = {
     currentAnte: number;
     currentRound: number;
 
-    roundScore: number;
-
     money: number;
     hands: number;
     discards: number;
@@ -47,7 +45,6 @@ type AppState = {
     setMoney: (money: number) => void;
     setHands: (hands: number) => void;
     setDiscards: (discards: number) => void;
-    setRoundScore: (score: number) => void;
 };
 
 export const useAppStore = create<AppState>((set) => ({
@@ -59,8 +56,6 @@ export const useAppStore = create<AppState>((set) => ({
     currentAnteScore: 300,
     currentAnte: 1,
     currentRound: 1,
-
-    roundScore: 0,
 
     money: 5,
     hands: 4,
@@ -87,5 +82,4 @@ export const useAppStore = create<AppState>((set) => ({
     setMoney: (money: number) => set({ money }),
     setHands: (hands: number) => set({ hands }),
     setDiscards: (discards: number) => set({ discards }),
-    setRoundScore: (score: number) => set({ roundScore: score }),
 }));
