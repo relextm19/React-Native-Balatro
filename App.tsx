@@ -17,6 +17,7 @@ import DeckView from './components/ui/DeckView';
 import GameScreen from './components/ui/GameScreen';
 import Store from './components/ui/Store';
 import RoundSummary from './components/ui/RoundSummary';
+import DefeatScreen from './components/ui/DefeatScreen';
 
 export default function App() {
     useEffect(() => {
@@ -48,6 +49,8 @@ export default function App() {
                 return <Store />
             case Views.RoundSummary:
                 return <RoundSummary />
+            case Views.DefeatScreen:
+                return <DefeatScreen />
         }
     }
 

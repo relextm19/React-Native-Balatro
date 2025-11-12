@@ -183,6 +183,7 @@ export default function GameScreen(): ReactElement | null {
     const shakeDuration = 700;
     function playHand(): void {
         if (selectedCards.length === 0) return;
+        const tmp = store.hands - 1//setHands is async so for comapring inside the func i will just use a tmp
         store.setHands((prev) => prev - 1);
         setHand(prevHand => {
             const { kept, removed } = prevHand.reduce<{
@@ -215,6 +216,8 @@ export default function GameScreen(): ReactElement | null {
                 chips.current = 0;
                 if (roundScore.current > store.currentAnteScore) {
                     store.setCurrentView(Views.RoundSummary)
+                } else if (tmp <= 0) {
+                    store.setCurrentView(Views.DefeatScreen);
                 }
             }, removed.length * shakeDuration + shakeDuration);
 

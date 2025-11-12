@@ -15,7 +15,8 @@ export enum Views {
     DeckView,
     GameScreen,
     Store,
-    RoundSummary
+    RoundSummary,
+    DefeatScreen
 }
 
 export let deckSize = 0;
