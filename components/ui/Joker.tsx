@@ -10,7 +10,8 @@ type jokerProps = {
 }
 export function Joker({ image, scale, sprite }: jokerProps): ReactElement | null {
     const sliceData = jokersSliceData;
-    if (!image) return null;
+
+    if (!image || !sprite) return null;
     return (
         <Canvas
             style={{

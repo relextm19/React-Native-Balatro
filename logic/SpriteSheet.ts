@@ -10,16 +10,19 @@ export type SpriteSheetSliceData = {
   spriteHeight: number
 }
 
-export function useSpriteRects(
-  sliceData: SpriteSheetSliceData
-): Mutable<SkHostRect[]> {
+export function useSpriteRects(sliceData: SpriteSheetSliceData): Mutable<SkHostRect[]> {
   const size = sliceData.cols * sliceData.rows;
 
   return useRectBuffer(size, (rect, i) => {
     "worklet";
+
     const col = i % sliceData.cols;
     const row = Math.floor(i / sliceData.cols);
-
+    // console.log(col * (sliceData.spriteWidth + sliceData.offsetX),
+    //   row * (sliceData.spriteHeight + sliceData.offsetY),
+    //   sliceData.spriteWidth,
+    //   sliceData.spriteHeight
+    // )
     rect.setXYWH(
       col * (sliceData.spriteWidth + sliceData.offsetX),
       row * (sliceData.spriteHeight + sliceData.offsetY),
@@ -27,4 +30,19 @@ export function useSpriteRects(
       sliceData.spriteHeight
     );
   });
+}
+
+export function computeSpriteRects(sliceData: SpriteSheetSliceData) {
+  const rects = [];
+  for (let i = 0; i < sliceData.cols * sliceData.rows; i++) {
+    const col = i % sliceData.cols;
+    const row = Math.floor(i / sliceData.cols);
+    rects.push({
+      x: col * (sliceData.spriteWidth + sliceData.offsetX),
+      y: row * (sliceData.spriteHeight + sliceData.offsetY),
+      width: sliceData.spriteWidth,
+      height: sliceData.spriteHeight,
+    });
+  }
+  return rects;
 }
