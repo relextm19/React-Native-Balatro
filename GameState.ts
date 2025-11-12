@@ -7,6 +7,7 @@ import { Blind, blindsArray } from "./assets/chips/Blinds";
 export const defaultHandSize = 8;
 export const handsToPlay = 4;
 export const handsToDiscard = 3;
+export const JokersInShop = 2;
 
 export enum Views {
     Menu,
@@ -14,7 +15,7 @@ export enum Views {
     AnteSelect,
     DeckView,
     GameScreen,
-    Store,
+    Shop,
     RoundSummary,
     DefeatScreen
 }
@@ -48,14 +49,13 @@ type AppState = {
     setCurrentAnteScore: (score: number) => void;
     setCurrentAnte: (ante: number) => void;
     setCurrentRound: (round: number) => void;
-    setMoney: (money: number) => void;
+    setMoney: (update: number | ((prev: number) => number)) => void;
     setDiscards: (update: number | ((prev: number) => number)) => void;
     setHands: (update: number | ((prev: number) => number)) => void;
-
 };
 
 export const useAppStore = create<AppState>((set) => ({
-    currentView: Views.Menu,
+    currentView: Views.Shop,
     lastView: Views.Menu,
     currentStake: {} as Stake,
     currentDeck: {} as Deck,
@@ -87,7 +87,10 @@ export const useAppStore = create<AppState>((set) => ({
     setCurrentAnteScore: (score: number) => set({ currentAnteScore: score }),
     setCurrentAnte: (ante: number) => set({ currentAnte: ante }),
     setCurrentRound: (round: number) => set({ currentRound: round }),
-    setMoney: (money: number) => set({ money }),
+    setMoney: (update: number | ((prev: number) => number)) =>
+        set((state) => ({
+            money: typeof update === "function" ? update(state.money) : update,
+        })),
     setHands: (update: number | ((prev: number) => number)) =>
         set((state) => ({
             hands: typeof update === "function" ? update(state.hands) : update,

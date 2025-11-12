@@ -45,9 +45,11 @@ export default function GameScreen(): ReactElement | null {
         const deckState = store.currentDeck.state;
         if (!cardsBySuits || !deckState) { return };
 
-        //reset the deck state at the begining of ante
+        //reset the state at the begining of ante
         deckState.avaliable = 52;
         makeAllCardsAvaliable(cardsBySuits);
+        store.hands = handsToPlay;
+        store.discards = handsToDiscard;
 
         const startingHand = getNRandomCards(store.handSize)?.sort((a, b) => b.rank - a.rank) || [];
         setHand(sortHand(startingHand))

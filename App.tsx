@@ -15,7 +15,7 @@ import { Views } from "./GameState";
 import { useAppStore } from "./GameState";
 import DeckView from './components/ui/DeckView';
 import GameScreen from './components/ui/GameScreen';
-import Store from './components/ui/Store';
+import Shop from './components/ui/Shop';
 import RoundSummary from './components/ui/RoundSummary';
 import DefeatScreen from './components/ui/DefeatScreen';
 
@@ -45,8 +45,8 @@ export default function App() {
                 return <DeckView />
             case Views.GameScreen:
                 return <GameScreen />
-            case Views.Store:
-                return <Store />
+            case Views.Shop:
+                return <Shop />
             case Views.RoundSummary:
                 return <RoundSummary />
             case Views.DefeatScreen:

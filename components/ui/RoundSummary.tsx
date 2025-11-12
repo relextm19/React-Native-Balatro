@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import { View, Text } from "react-native";
 import { Skia, Canvas, Atlas, useImage } from "@shopify/react-native-skia";
-import { handsToPlay, useAppStore } from "../../GameState";
+import { handsToPlay, useAppStore, Views } from "../../GameState";
 
 import MenuButton from "./MenuButton";
 import StatusPane from "./StatusPane";
@@ -27,6 +27,11 @@ export default function RoundSummary(): ReactElement | null {
     const remainingHands = store.hands;
 
     const totalReward = 3 + remainingHands;
+
+    function cashOut() {
+        store.setMoney((prev) => prev + totalReward);
+        store.setCurrentView(Views.Shop);
+    }
     if (!stakeSourceRect || !blindSourceRect || !stakeSpriteSheet || !blindsSpriteSheet) return null;
     return (
         <View className="flex-row flex-1 justify-between items-end">
@@ -98,7 +103,7 @@ export default function RoundSummary(): ReactElement | null {
                             </Text>
                         </View>
                         <View className="items-center">
-                            <MenuButton sliceData={buttonSliceData} imageAsset={cashOutButtonImageAsset} onClick={() => { }} scale={0.5} />
+                            <MenuButton sliceData={buttonSliceData} imageAsset={cashOutButtonImageAsset} onClick={cashOut} scale={0.5} />
                         </View>
                     </View>
                 </View>

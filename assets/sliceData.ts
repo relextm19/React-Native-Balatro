@@ -52,3 +52,12 @@ export const cardModifierSliceData: SpriteSheetSliceData = {
     spriteWidth: 69,
     spriteHeight: 93,
 }
+
+export const jokersSliceData: SpriteSheetSliceData = {
+    offsetX: 2,
+    offsetY: 2,
+    rows: 19,
+    cols: 10,
+    spriteWidth: 69,
+    spriteHeight: 93,
+}

@@ -1,20 +1,40 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
-const DefeatScreen = () => {
+import MenuButton from './MenuButton';
+
+import { buttonSliceData } from '../../assets/sliceData';
+import { useAppStore } from '../../GameState';
+import { Views } from '../../GameState';
+
+export default function DefeatScreen() {
+    const homeButtonImageAsset = require("../../assets/ui/home_button.png");
+    const store = useAppStore();
+
+    function returnToMenu(): void {
+        store.setCurrentView(Views.Menu)
+    }
     return (
-        <View className="flex-1 justify-center items-center bg-[#c01e1eff]">
-            <Text className="absolute opacity-50 font-extrabold text-[80px] text-black uppercase -translate-x-2 -translate-y-2">
-                DEFEAT
-            </Text>
-            <Text className="font-extrabold text-[80px] text-white uppercase tracking-widest">
-                DEFEAT
-            </Text>
-            <Text className="absolute opacity-70 font-extrabold text-[#ff4f4f] text-[80px] uppercase translate-x-1 translate-y-1">
-                DEFEAT
-            </Text>
+        <View className="flex-1 justify-evenly items-center bg-black">
+            <View>
+                <Text className="absolute opacity-50 font-extrabold text-[80px] text-slate-700 uppercase -translate-x-1 -translate-y-1">
+                    DEFEAT
+                </Text>
+                <Text className="font-extrabold text-[80px] text-white uppercase">
+                    DEFEAT
+                </Text>
+                <Text className="absolute opacity-70 font-extrabold text-[#ff4f4f] text-[80px] uppercase translate-x-1 translate-y-1">
+                    DEFEAT
+                </Text>
+            </View>
+            <MenuButton
+                scale={0.5}
+                imageAsset={homeButtonImageAsset}
+                sliceData={buttonSliceData}
+                onClick={returnToMenu}
+            />
         </View>
     );
 };
 
-export default DefeatScreen;
+
