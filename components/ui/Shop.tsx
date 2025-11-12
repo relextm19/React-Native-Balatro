@@ -1,12 +1,12 @@
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement, useEffect, useRef, useState } from "react";
 import { View } from "react-native";
 import MenuButton from "./MenuButton";
 import { buttonSliceData, cardModifierSliceData, cardSliceData, jokersSliceData } from "../../assets/sliceData";
 import { useSpriteRects } from "../../logic/SpriteSheet";
-import { JokersInShop, useAppStore, Views } from "../../GameState";
+import { CardsInShop, JokersInShop, useAppStore, Views } from "../../GameState";
 import { getRandomInt } from "../../logic/Random";
 import { Joker } from "./Joker";
-import { useImage, Canvas, Atlas, Skia, SkRect, } from "@shopify/react-native-skia";
+import { useImage, Canvas, Atlas, Skia, SkRect } from "@shopify/react-native-skia";
 
 export default function Shop(): ReactElement | null {
     const nextButtonImageAsset = require("../../assets/ui/next_button.png");
@@ -26,6 +26,20 @@ export default function Shop(): ReactElement | null {
     const [cardRandomIndexes, setCardRandomIndexes] = useState<number[]>([]);
     const [modifierRandomIndexes, setModifierRandomIndexes] = useState<number[]>([]);
 
+    const avaliableHeight = useRef(0);
+    const cardGap = 60;
+    const [cardScale, setCardScale] = useState(1);
+
+    useEffect(() => {
+        if (avaliableHeight.current > 0) {
+            const scale = Math.min(
+                1.5,
+                ((avaliableHeight.current - cardGap) / 2)
+            );
+            setCardScale(scale);
+        }
+    }, [avaliableHeight.current]);
+
     useEffect(() => {
         rerollShop();
     }, []);
@@ -33,7 +47,6 @@ export default function Shop(): ReactElement | null {
     if (!jokerRects || !cardsSpriteSheet || !cardRects || !modifierSpriteSheet || !modifiersRects || !jokersSpriteSheet) return null;
 
     function rerollShop() {
-        // Jokers
         const newJokerRandomIndexes: number[] = [];
         while (newJokerRandomIndexes.length < JokersInShop) {
             const randIndex = getRandomInt(0, jokerRects.value.length);
@@ -41,15 +54,13 @@ export default function Shop(): ReactElement | null {
         }
         setJokerRandomIndexes(newJokerRandomIndexes);
 
-        // Cards + modifiers
         const newCardRandomIndexes: number[] = [];
         const newModifierRandomIndexes: number[] = [];
-        while (newCardRandomIndexes.length < JokersInShop) {
+        while (newCardRandomIndexes.length < CardsInShop) {
             const cardIndex = getRandomInt(0, cardRects.value.length - 1);
             if (!newCardRandomIndexes.includes(cardIndex)) {
                 newCardRandomIndexes.push(cardIndex);
                 const modIndex = getRandomInt(0, modifiersRects.value.length - 1);
-                console.log(modIndex)
                 newModifierRandomIndexes.push(modIndex);
             }
         }
@@ -62,34 +73,36 @@ export default function Shop(): ReactElement | null {
         store.setCurrentView(Views.AnteSelect);
     }
 
-    // Render jokers (unchanged)
     const jokerViews = jokerRandomIndexes.map((index) => (
-        <Joker image={jokersSpriteSheet} sprite={jokerRects.value[index]} scale={1.5} key={index} />
+        <Joker
+            image={jokersSpriteSheet}
+            sprite={jokerRects.value[index]}
+            scale={cardScale}
+            key={index}
+        />
     ));
 
-    // Render cards as Canvas + Atlas with absolute modifier
     const cardViews = cardRandomIndexes.map((cardIndex, i) => {
         const cardRect: SkRect = cardRects.value[cardIndex];
         const modifierRect: SkRect = modifiersRects.value[modifierRandomIndexes[i]];
-        const scale = 1.5;
 
         return (
             <View key={cardIndex} className="relative">
                 <Canvas
                     style={{
-                        width: cardRect.width * scale,
-                        height: cardRect.height * scale,
+                        width: cardRect.width * cardScale,
+                        height: cardRect.height * cardScale,
                     }}
                 >
                     <Atlas
                         image={modifierSpriteSheet!}
                         sprites={[modifierRect]}
-                        transforms={[Skia.RSXform(scale, 0, 0, 0)]}
+                        transforms={[Skia.RSXform(cardScale, 0, 0, 0)]}
                     />
                     <Atlas
                         image={cardsSpriteSheet!}
                         sprites={[cardRect]}
-                        transforms={[Skia.RSXform(scale, 0, 0, 0)]}
+                        transforms={[Skia.RSXform(cardScale, 0, 0, 0)]}
                     />
                 </Canvas>
             </View>
@@ -98,10 +111,10 @@ export default function Shop(): ReactElement | null {
 
     return (
         <View className="flex-1 justify-end items-center">
-            <View className="bg-darkGrey p-2 rounded-md w-3/5">
+            <View className="bg-darkGrey p-2 rounded-md w-4/5 h-4/5">
                 <View className="bg-darkBg p-2 rounded-md">
-                    <View className="flex-row justify-center items-center">
-                        <View className="justify-evenly w-min h-full">
+                    <View className="flex-row justify-evenly items-center">
+                        <View className="justify-evenly items-center self-start w-1/4 h-1/2">
                             <MenuButton
                                 imageAsset={nextButtonImageAsset}
                                 sliceData={buttonSliceData}
@@ -115,13 +128,20 @@ export default function Shop(): ReactElement | null {
                                 onClick={rerollShop}
                             />
                         </View>
-                        <View className="flex-row flex-1 justify-evenly items-center gap-2 bg-darkGrey p-2 rounded-md">
-                            {jokerViews}
+                        <View
+                            className="justify-evenly items-center gap-2 w-3/4"
+                            onLayout={(e) => avaliableHeight.current = e.nativeEvent.layout.height}
+                        >
+                            <View
+                                className="flex-row justify-evenly items-center gap-2 bg-darkGrey p-2 rounded-md w-full"
+                            >
+                                {jokerViews}
+                            </View>
+                            <View className="flex-row justify-evenly items-center gap-2 bg-darkGrey p-2 rounded-md w-full">
+                                {cardViews}
+                            </View>
                         </View>
                     </View>
-                </View>
-                <View className="flex-row flex-1 justify-evenly items-center gap-2 bg-darkGrey p-2 rounded-md">
-                    {cardViews}
                 </View>
             </View>
         </View>

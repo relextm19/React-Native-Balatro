@@ -8,6 +8,7 @@ export const defaultHandSize = 8;
 export const handsToPlay = 4;
 export const handsToDiscard = 3;
 export const JokersInShop = 2;
+export const CardsInShop = 3;
 
 export enum Views {
     Menu,
