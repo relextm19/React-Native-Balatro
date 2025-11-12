@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import { View, Text } from "react-native";
 import { Skia, Canvas, Atlas, useImage } from "@shopify/react-native-skia";
-import { useAppStore } from "../../GameState";
+import { handsToPlay, useAppStore } from "../../GameState";
 
 import MenuButton from "./MenuButton";
 import StatusPane from "./StatusPane";
@@ -10,11 +10,8 @@ import { useSpriteRects } from "../../logic/SpriteSheet";
 
 import { buttonSliceData, stakeSliceData, blindSliceData } from "../../assets/sliceData";
 
-type roundSummaryProps = {
-    remainingHands: number,
-}
 
-export default function RoundSummary({ remainingHands }: roundSummaryProps): ReactElement | null {
+export default function RoundSummary(): ReactElement | null {
     const store = useAppStore();
 
     const stakeSpriteSheet = useImage(require("../../assets/chips/stake_chips.png"));
@@ -26,6 +23,8 @@ export default function RoundSummary({ remainingHands }: roundSummaryProps): Rea
 
     const blindScale = 2;
     const stakeScale = 1;
+
+    const remainingHands = store.hands;
 
     const totalReward = 3 + remainingHands;
     if (!stakeSourceRect || !blindSourceRect || !stakeSpriteSheet || !blindsSpriteSheet) return null;

@@ -47,7 +47,7 @@ export default function App() {
             case Views.Store:
                 return <Store />
             case Views.RoundSummary:
-                return <RoundSummary remainingHands={2} />
+                return <RoundSummary />
         }
     }
 

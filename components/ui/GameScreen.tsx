@@ -1,7 +1,7 @@
 import { ReactElement, useEffect, useRef, useState } from "react";
 import { View, Text } from "react-native";
 import { Skia, useImage, rect, Canvas, Atlas } from "@shopify/react-native-skia";
-import { useAppStore, Views } from "../../GameState";
+import { handsToDiscard, handsToPlay, useAppStore, Views } from "../../GameState";
 import { Pressable } from "react-native";
 
 import StatusPane from "./StatusPane";
@@ -15,7 +15,6 @@ import { defaultHandSize } from "../../GameState";
 import Card from "./Card";
 import MenuButton from "./MenuButton";
 import { checkHandType, getChipsForHandType, getMultForHandType, HandType } from "../../logic/CheckHandType";
-import { prepareUIRegistry } from "react-native-reanimated/lib/typescript/frameCallback/FrameCallbackRegistryUI";
 
 
 export default function GameScreen(): ReactElement | null {
@@ -164,7 +163,8 @@ export default function GameScreen(): ReactElement | null {
     }
 
     function discard(): void {
-        if (selectedCards.length === 0) return;
+        if (selectedCards.length === 0 || store.discards <= 0) return;
+        store.setDiscards((prev) => prev - 1)
 
         setHand(prevHand => {
             const newHand = prevHand.filter(
@@ -183,6 +183,7 @@ export default function GameScreen(): ReactElement | null {
     const shakeDuration = 700;
     function playHand(): void {
         if (selectedCards.length === 0) return;
+        store.setHands((prev) => prev - 1);
         setHand(prevHand => {
             const { kept, removed } = prevHand.reduce<{
                 kept: IPlayingCard[];
