@@ -216,7 +216,7 @@ export default function GameScreen(): ReactElement | null {
                 setPlayedHand([]);
                 roundScore.current += chips.current * mult.current;
                 chips.current = 0;
-                if (roundScore.current > store.currentAnteScore) {
+                if (roundScore.current >= store.currentAnteScore) {
                     store.setCurrentView(Views.RoundSummary)
                 } else if (tmp <= 0) {
                     store.setCurrentView(Views.DefeatScreen);

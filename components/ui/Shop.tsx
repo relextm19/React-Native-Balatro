@@ -7,6 +7,7 @@ import { CardsInShop, JokersInShop, useAppStore, Views } from "../../GameState";
 import { getRandomInt } from "../../logic/Random";
 import { Joker } from "./Joker";
 import { useImage, Canvas, Atlas, Skia, SkRect } from "@shopify/react-native-skia";
+import StatusPane from "./StatusPane";
 
 export default function Shop(): ReactElement | null {
     const nextButtonImageAsset = require("../../assets/ui/next_button.png");
@@ -110,8 +111,9 @@ export default function Shop(): ReactElement | null {
     });
 
     return (
-        <View className="flex-1 justify-end items-center">
-            <View className="bg-darkGrey p-2 rounded-md w-4/5 h-4/5">
+        <View className="flex-row flex-1 justify-center items-end gap-2">
+            <StatusPane />
+            <View className="flex-1 bg-darkGrey p-2 rounded-md h-4/5">
                 <View className="bg-darkBg p-2 rounded-md">
                     <View className="flex-row justify-evenly items-center">
                         <View className="justify-evenly items-center self-start w-1/4 h-1/2">
