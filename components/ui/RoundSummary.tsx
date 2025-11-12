@@ -32,6 +32,7 @@ export default function RoundSummary(): ReactElement | null {
         store.setMoney((prev) => prev + totalReward);
         store.setCurrentView(Views.Shop);
     }
+
     if (!stakeSourceRect || !blindSourceRect || !stakeSpriteSheet || !blindsSpriteSheet) return null;
     return (
         <View className="flex-row flex-1 justify-between items-end">
