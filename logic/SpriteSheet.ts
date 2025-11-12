@@ -1,4 +1,4 @@
-import { useRectBuffer, SkHostRect } from "@shopify/react-native-skia";
+import { Skia, useRectBuffer, SkHostRect } from "@shopify/react-native-skia";
 import type { Mutable } from "react-native-reanimated/lib/typescript/commonTypes";
 
 export type SpriteSheetSliceData = {
@@ -30,19 +30,4 @@ export function useSpriteRects(sliceData: SpriteSheetSliceData): Mutable<SkHostR
       sliceData.spriteHeight
     );
   });
-}
-
-export function computeSpriteRects(sliceData: SpriteSheetSliceData) {
-  const rects = [];
-  for (let i = 0; i < sliceData.cols * sliceData.rows; i++) {
-    const col = i % sliceData.cols;
-    const row = Math.floor(i / sliceData.cols);
-    rects.push({
-      x: col * (sliceData.spriteWidth + sliceData.offsetX),
-      y: row * (sliceData.spriteHeight + sliceData.offsetY),
-      width: sliceData.spriteWidth,
-      height: sliceData.spriteHeight,
-    });
-  }
-  return rects;
 }

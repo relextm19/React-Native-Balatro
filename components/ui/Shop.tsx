@@ -1,4 +1,4 @@
-import { ReactElement, useEffect } from "react";
+import { ReactElement } from "react";
 import { View } from "react-native";
 import MenuButton from "./MenuButton";
 import { buttonSliceData, jokersSliceData } from "../../assets/sliceData";
@@ -6,25 +6,26 @@ import { computeSpriteRects, useSpriteRects } from "../../logic/SpriteSheet";
 import { JokersInShop } from "../../GameState";
 import { getRandomInt } from "../../logic/Random";
 import { Joker } from "./Joker";
+import { useImage } from "@shopify/react-native-skia";
 
 export default function Shop(): ReactElement | null {
     const nextButtonImageAsset = require("../../assets/ui/next_button.png");
     const rerollButtonImageAsset = require("../../assets/ui/reroll_button.png");
-    const jokersSpriteSheet = require("../../assets/jokers/jokers.png");
+    const jokersSpriteSheet = useImage(require("../../assets/jokers/jokers.png"));
 
-    const jokerRects = computeSpriteRects(jokersSliceData);
+    const jokerRects = useSpriteRects(jokersSliceData);
+    console.log(jokerRects)
     if (!jokerRects || !nextButtonImageAsset || !rerollButtonImageAsset || !jokersSpriteSheet) return null;
 
-    console.log(jokerRects)
-    // const tmp = [];
-    // for (let i = 0; i < JokersInShop; i++) {
-    //     const randIndex = getRandomInt(0, jokersSliceData.cols * jokersSliceData.rows);
-    //     console.log(jokerRects.value[randIndex], randIndex)
-    //     tmp.push(jokerRects.value[randIndex]);
-    // }i
-    // const jokerViews = tmp.map((sprite, i) => (
-    //     <Joker image={jokersSpriteSheet} sprite={sprite} scale={1} key={i} />
-    // ))
+    const tmp = [];
+    for (let i = 0; i < JokersInShop; i++) {
+        const randIndex = getRandomInt(0, jokerRects.value.length);
+        tmp.push(jokerRects.value[randIndex]);
+    }
+
+    const jokerViews = tmp.map((sprite, i) => (
+        <Joker image={jokersSpriteSheet} sprite={sprite} scale={1} key={i} />
+    ));
 
     return (
         <View className="flex-1 justify-end items-center">
@@ -36,11 +37,11 @@ export default function Shop(): ReactElement | null {
                             <MenuButton imageAsset={rerollButtonImageAsset} sliceData={buttonSliceData} scale={0.5} onClick={() => { }} />
                         </View>
                         <View>
-                            {/* {jokerViews} */}
+                            {jokerViews}
                         </View>
                     </View>
                 </View>
             </View>
         </View>
-    )
+    );
 }
