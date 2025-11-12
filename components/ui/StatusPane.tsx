@@ -8,6 +8,8 @@ import { stakeSliceData } from "../../assets/sliceData";
 import { useAppStore } from "../../GameState";
 
 type statusPaneProps = {
+    headerText?: string,
+    toScore?: number,
     setWidth?: React.Dispatch<React.SetStateAction<number>>
     handName?: string,
     chips?: RefObject<number>,
@@ -15,7 +17,7 @@ type statusPaneProps = {
     roundScore?: RefObject<number>,
 }
 
-export default function StatusPane({ setWidth, handName, chips, mult, roundScore }: statusPaneProps): ReactElement {
+export default function StatusPane({ headerText, toScore, setWidth, handName, chips, mult, roundScore }: statusPaneProps): ReactElement {
     const store = useAppStore();
     const stakeSpriteSheet = useImage(require("../../assets/chips/stake_chips.png"));
     const stakeSpriteRect = useSpriteRects(stakeSliceData).value[store.currentStake.index] ?? null;
@@ -29,10 +31,34 @@ export default function StatusPane({ setWidth, handName, chips, mult, roundScore
                 }
             }}
         >
-            <View className="items-center w-full">
+            <View className="items-center bg-darkBg rounded-lg w-full">
                 <Text className="w-full font-semibold text-white text-lg text-center text-wrap">
-                    Choose your next Blind
+                    {headerText}
                 </Text>
+                <View className="flex-row flex-wrap">
+                    <Text className="w-full text-white text-xl text-center">
+                        Score at least
+                    </Text>
+                    <View className="flex-row justify-center items-center w-full">
+                        <Canvas
+                            style={{
+                                width: stakeSpriteRect.width,
+                                height: stakeSpriteRect.width,
+                            }}
+                        >
+                            {stakeSpriteSheet && (
+                                <Atlas
+                                    image={stakeSpriteSheet}
+                                    sprites={[stakeSpriteRect]}
+                                    transforms={[Skia.RSXform(1, 0, 0, 0)]}
+                                />
+                            )}
+                        </Canvas>
+                        <Text className="text-customRed text-2xl">
+                            {toScore}
+                        </Text>
+                    </View>
+                </View>
             </View>
 
             <View className="flex-row justify-between items-center bg-darkBg p-2 rounded-lg w-full">
@@ -81,13 +107,13 @@ export default function StatusPane({ setWidth, handName, chips, mult, roundScore
             <View className="flex-row justify-between w-full">
                 <View className="items-center bg-darkBg p-2 rounded-lg w-[49%]">
                     <Text className="text-gray-400 text-xs">Hands</Text>
-                    <View className="justify-center items-center bg-darkGrey p-2 rounded-lg w-full">
+                    <View className="justify-center items-center bg-darkGrey p-1 rounded-lg w-full">
                         <Text className="font-bold text-blue-700 text-lg">{store.hands}</Text>
                     </View>
                 </View>
                 <View className="items-center bg-darkBg p-2 rounded-lg w-[49%]">
                     <Text className="text-gray-400 text-xs">Discards</Text>
-                    <View className="justify-center items-center bg-darkGrey p-2 rounded-lg w-full">
+                    <View className="justify-center items-center bg-darkGrey p-1 rounded-lg w-full">
                         <Text className="font-bold text-customRed text-lg">{store.discards}</Text>
                     </View>
                 </View>
@@ -100,16 +126,16 @@ export default function StatusPane({ setWidth, handName, chips, mult, roundScore
             </View>
 
             <View className="flex-row justify-between w-full">
-                <View className="items-center bg-darkBg p-2 rounded-lg w-[49%]">
+                <View className="items-center bg-darkBg p-1 rounded-lg w-[49%]">
                     <Text className="text-gray-400 text-xs">Ante</Text>
-                    <View className="flex-row justify-center items-center bg-darkGrey p-2 rounded-lg w-full">
+                    <View className="flex-row justify-center items-center bg-darkGrey p-1 rounded-lg w-full">
                         <Text className="font-bold text-accentGold text-lg">{store.currentAnte}</Text>
                         <Text className="font-bold text-white text-lg">/8</Text>
                     </View>
                 </View>
-                <View className="items-center bg-darkBg p-2 rounded-lg w-[49%]">
+                <View className="items-center bg-darkBg p-1 rounded-lg w-[49%]">
                     <Text className="text-gray-400 text-xs">Round</Text>
-                    <View className="justify-center items-center bg-darkGrey p-2 rounded-lg w-full">
+                    <View className="justify-center items-center bg-darkGrey p-1 rounded-lg w-full">
                         <Text className="font-bold text-accentGold text-lg">{store.currentRound}</Text>
                     </View>
                 </View>

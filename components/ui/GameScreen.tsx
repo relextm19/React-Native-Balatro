@@ -225,7 +225,15 @@ export default function GameScreen(): ReactElement | null {
 
     return (
         <View className="flex-row flex-1 justify-center items-end">
-            <StatusPane setWidth={setStatusPaneWidth} handName={handType} chips={chips} mult={mult} roundScore={roundScore} />
+            <StatusPane
+                setWidth={setStatusPaneWidth}
+                handName={handType}
+                chips={chips}
+                mult={mult}
+                roundScore={roundScore}
+                headerText={store.currentBlind.name}
+                toScore={store.currentAnteScore}
+            />
             <View className="relative flex-1 justify-end items-center">
                 <View
                     className="flex-row justify-evenly items-end w-full h-full"

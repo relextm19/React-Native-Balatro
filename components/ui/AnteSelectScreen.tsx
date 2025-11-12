@@ -30,7 +30,7 @@ export default function AnteSelectScreen(): ReactElement | null {
     let panes: ReactElement[] = [];
     for (let i = 0; i < 3; i++) {
         const blindIndex = i < 2 ? i : bossBlindIndex;
-        const blindState = i < store.currentBlind ? BlindState.defeated : store.currentBlind % 3 == i ? BlindState.selected : BlindState.upcoming; //Hows he done that then
+        const blindState = i < store.currentBlind.index ? BlindState.defeated : store.currentBlind.index % 3 == i ? BlindState.selected : BlindState.upcoming; //Hows he done that then
         panes.push(
             <AnteSelectPane
                 stakeSpriteSheet={stakeSpriteSheet}

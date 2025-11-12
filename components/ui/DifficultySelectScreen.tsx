@@ -48,7 +48,7 @@ export default function DifficultySelectScreen() {
         const deck = generateDeck();
         if (!deck) { return }
         state.setCurrentDeckCards(deck);
-        state.setCurrentView(Views.RoundSummary)
+        state.setCurrentView(Views.AnteSelect)
     }
     function returnToMenu(): void {
         state.setCurrentView(Views.Menu)
