@@ -1,0 +1,109 @@
+import { ReactElement } from "react";
+import { View, Text } from "react-native";
+import { Skia, Canvas, Atlas, useImage } from "@shopify/react-native-skia";
+import { useAppStore } from "../../GameState";
+
+import MenuButton from "./MenuButton";
+import StatusPane from "./StatusPane";
+
+import { useSpriteRects } from "../../logic/SpriteSheet";
+
+import { buttonSliceData, stakeSliceData, blindSliceData } from "../../assets/sliceData";
+
+type roundSummaryProps = {
+    remainingHands: number,
+}
+
+export default function RoundSummary({ remainingHands }: roundSummaryProps): ReactElement | null {
+    const store = useAppStore();
+
+    const stakeSpriteSheet = useImage(require("../../assets/chips/stake_chips.png"));
+    const blindsSpriteSheet = useImage(require("../../assets/chips/blind_chips.png"));
+    const cashOutButtonImageAsset = require("../../assets/ui/cash_out_button.png");
+
+    const stakeSourceRect = useSpriteRects(stakeSliceData).value[store.currentStake.index] ?? undefined;
+    const blindSourceRect = useSpriteRects(blindSliceData).value[store.currentBlind.index] ?? undefined;
+
+    const blindScale = 2;
+    const stakeScale = 1;
+
+    const totalReward = 3 + remainingHands;
+    if (!stakeSourceRect || !blindSourceRect || !stakeSpriteSheet || !blindsSpriteSheet) return null;
+    return (
+        <View className="flex-row flex-1 justify-between items-end">
+            <StatusPane />
+            <View className="flex-1 items-center">
+                <View className="bg-darkGrey p-2 rounded-md w-3/5 h-3/4">
+                    <View className="bg-darkBg p-2 rounded-md">
+                        <View className="flex-row justify-start items-center gap-4">
+                            <View className="">
+                                <Canvas
+                                    style={{
+                                        width: blindSourceRect.width * blindScale,
+                                        height: blindSourceRect.width * blindScale,
+                                    }}
+                                >
+                                    <Atlas
+                                        image={blindsSpriteSheet}
+                                        sprites={[blindSourceRect]}
+                                        transforms={[Skia.RSXform(blindScale, 0, 0, 0)]}
+                                    />
+                                </Canvas>
+                            </View>
+                            <View>
+                                <Text className="text-white text-2xl">
+                                    Score at least
+                                </Text>
+                                <View className="flex-row">
+                                    <View className="justify-center items-center">
+                                        <Canvas
+                                            style={{
+                                                width: stakeSourceRect.width * stakeScale,
+                                                height: stakeSourceRect.width * stakeScale,
+                                            }}
+                                        >
+                                            <Atlas
+                                                image={stakeSpriteSheet}
+                                                sprites={[stakeSourceRect]}
+                                                transforms={[Skia.RSXform(stakeScale, 0, 0, 0)]}
+                                            />
+                                        </Canvas>
+                                    </View>
+                                    <View className="justify-center items-center">
+                                        <Text className="text-customRed text-3xl">{store.currentAnteScore}</Text>
+                                    </View>
+                                </View>
+                            </View>
+                            <View className="ml-auto">
+                                <Text className="text-accentGold text-3xl">
+                                    {`${"$".repeat(3)}`}
+                                </Text>
+                            </View>
+                        </View>
+                        <View className="my-4 border-white border-t-2 border-dotted"></View>
+                        {remainingHands > 0 && (
+                            <View className="flex-row justify-start items-center">
+                                <Text className="text-blue-600 text-3xl">{remainingHands} </Text>
+                                <Text className="text-white text-2xl">Remaining Hands [1$ each]</Text>
+                                <View className="ml-auto">
+                                    <Text className="text-accentGold text-3xl">
+                                        {`${"$".repeat(remainingHands)}`}
+                                    </Text>
+                                </View>
+                            </View>
+                        )}
+                        <View className="flex-row">
+                            <Text className="text-white text-2xl">Total reward: </Text>
+                            <Text className="text-accentGold text-2xl">
+                                {totalReward}$
+                            </Text>
+                        </View>
+                        <View className="items-center">
+                            <MenuButton sliceData={buttonSliceData} imageAsset={cashOutButtonImageAsset} onClick={() => { }} scale={0.5} />
+                        </View>
+                    </View>
+                </View>
+            </View>
+        </View>
+    )
+}

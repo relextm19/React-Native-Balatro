@@ -15,6 +15,8 @@ import { Views } from "./GameState";
 import { useAppStore } from "./GameState";
 import DeckView from './components/ui/DeckView';
 import GameScreen from './components/ui/GameScreen';
+import Store from './components/ui/Store';
+import RoundSummary from './components/ui/RoundSummary';
 
 export default function App() {
     useEffect(() => {
@@ -42,6 +44,10 @@ export default function App() {
                 return <DeckView />
             case Views.GameScreen:
                 return <GameScreen />
+            case Views.Store:
+                return <Store />
+            case Views.RoundSummary:
+                return <RoundSummary remainingHands={2} />
         }
     }
 

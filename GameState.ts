@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { Stake } from "./assets/chips/StakeArray";
 import { Deck } from "./assets/cards/deckArray";
 import { IPlayingCard, Suits } from "./interfaces/Card";
+import { Blind, blindsArray } from "./assets/chips/Blinds";
 
 export const defaultHandSize = 8;
 
@@ -11,6 +12,8 @@ export enum Views {
     AnteSelect,
     DeckView,
     GameScreen,
+    Store,
+    RoundSummary
 }
 
 export let deckSize = 0;
@@ -24,7 +27,7 @@ type AppState = {
     currentStake: Stake;
     currentDeck: Deck;
     currentAnteScore: number;
-    currentBlind: number;
+    currentBlind: Blind;
     currentAnte: number;
     currentRound: number;
 
@@ -38,7 +41,7 @@ type AppState = {
     setCurrentDeck: (deck: Deck) => void;
     setCurrentDeckCards: (cards: Map<Suits, Map<number, IPlayingCard>>) => void;
     setCurrentStake: (stake: Stake) => void;
-    setCurrentBlind: (blind: number) => void;
+    setCurrentBlind: (blind: Blind) => void;
     setCurrentAnteScore: (score: number) => void;
     setCurrentAnte: (ante: number) => void;
     setCurrentRound: (round: number) => void;
@@ -48,11 +51,11 @@ type AppState = {
 };
 
 export const useAppStore = create<AppState>((set) => ({
-    currentView: Views.Menu,
+    currentView: Views.DifficultySelect,
     lastView: Views.Menu,
     currentStake: {} as Stake,
     currentDeck: {} as Deck,
-    currentBlind: 0,
+    currentBlind: blindsArray[0],
     currentAnteScore: 300,
     currentAnte: 1,
     currentRound: 1,
@@ -75,7 +78,7 @@ export const useAppStore = create<AppState>((set) => ({
                 cardsBySuits,
             },
         })),
-    setCurrentBlind: (blind: number) => set({ currentBlind: blind }),
+    setCurrentBlind: (blind: Blind) => set({ currentBlind: blind }),
     setCurrentAnteScore: (score: number) => set({ currentAnteScore: score }),
     setCurrentAnte: (ante: number) => set({ currentAnte: ante }),
     setCurrentRound: (round: number) => set({ currentRound: round }),
