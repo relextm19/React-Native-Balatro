@@ -1,7 +1,7 @@
 import { ReactElement, useEffect, useRef, useState } from "react";
 import { View, Text } from "react-native";
 import { Skia, useImage, rect, Canvas, Atlas } from "@shopify/react-native-skia";
-import { useAppStore } from "../../GameState";
+import { useAppStore, Views } from "../../GameState";
 import { Pressable } from "react-native";
 
 import StatusPane from "./StatusPane";
@@ -210,8 +210,11 @@ export default function GameScreen(): ReactElement | null {
             setTimeout(() => {
                 setShakingIndex(-1)
                 setPlayedHand([]);
-                roundScore.current = chips.current * mult.current;
+                roundScore.current += chips.current * mult.current;
                 chips.current = 0;
+                if (roundScore.current > store.currentAnteScore) {
+                    store.setCurrentView(Views.RoundSummary)
+                }
             }, removed.length * shakeDuration + shakeDuration);
 
             const cardsToDraw = store.handSize - kept.length;

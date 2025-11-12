@@ -32,33 +32,39 @@ export default function StatusPane({ headerText, toScore, setWidth, handName, ch
             }}
         >
             <View className="items-center bg-darkBg rounded-lg w-full">
-                <Text className="w-full font-semibold text-white text-lg text-center text-wrap">
-                    {headerText}
-                </Text>
-                <View className="flex-row flex-wrap">
-                    <Text className="w-full text-white text-xl text-center">
-                        Score at least
-                    </Text>
-                    <View className="flex-row justify-center items-center w-full">
-                        <Canvas
-                            style={{
-                                width: stakeSpriteRect.width,
-                                height: stakeSpriteRect.width,
-                            }}
-                        >
-                            {stakeSpriteSheet && (
-                                <Atlas
-                                    image={stakeSpriteSheet}
-                                    sprites={[stakeSpriteRect]}
-                                    transforms={[Skia.RSXform(1, 0, 0, 0)]}
-                                />
-                            )}
-                        </Canvas>
-                        <Text className="text-customRed text-2xl">
-                            {toScore}
+                {headerText ? (
+                    <>
+                        <Text className="w-full font-semibold text-white text-lg text-center text-wrap">
+                            {headerText}
                         </Text>
-                    </View>
-                </View>
+                        {toScore && (
+                            <View className="flex-row flex-wrap">
+                                <Text className="w-full text-white text-xl text-center">
+                                    Score at least
+                                </Text>
+                                <View className="flex-row justify-center items-center w-full">
+                                    <Canvas
+                                        style={{
+                                            width: stakeSpriteRect.width,
+                                            height: stakeSpriteRect.width,
+                                        }}
+                                    >
+                                        {stakeSpriteSheet && (
+                                            <Atlas
+                                                image={stakeSpriteSheet}
+                                                sprites={[stakeSpriteRect]}
+                                                transforms={[Skia.RSXform(1, 0, 0, 0)]}
+                                            />
+                                        )}
+                                    </Canvas>
+                                    <Text className="text-customRed text-2xl">{toScore}</Text>
+                                </View>
+                            </View>
+                        )}
+                    </>
+                ) : (
+                    <View className="w-full h-20" />
+                )}
             </View>
 
             <View className="flex-row justify-between items-center bg-darkBg p-2 rounded-lg w-full">
