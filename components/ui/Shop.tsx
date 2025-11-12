@@ -1,8 +1,8 @@
-import { ReactElement } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { View } from "react-native";
 import MenuButton from "./MenuButton";
 import { buttonSliceData, jokersSliceData } from "../../assets/sliceData";
-import { computeSpriteRects, useSpriteRects } from "../../logic/SpriteSheet";
+import { useSpriteRects } from "../../logic/SpriteSheet";
 import { JokersInShop } from "../../GameState";
 import { getRandomInt } from "../../logic/Random";
 import { Joker } from "./Joker";
@@ -14,17 +14,25 @@ export default function Shop(): ReactElement | null {
     const jokersSpriteSheet = useImage(require("../../assets/jokers/jokers.png"));
 
     const jokerRects = useSpriteRects(jokersSliceData);
-    console.log(jokerRects)
+    const [randomIndexes, setRandomIndexes] = useState([] as number[]);
+    useEffect(() => {
+        //get new shop on render
+        rerollShop();
+    }, [])
     if (!jokerRects || !nextButtonImageAsset || !rerollButtonImageAsset || !jokersSpriteSheet) return null;
 
-    const tmp = [];
-    for (let i = 0; i < JokersInShop; i++) {
-        const randIndex = getRandomInt(0, jokerRects.value.length);
-        tmp.push(jokerRects.value[randIndex]);
+    function rerollShop() {
+        const newIndexes = [] as number[];
+        while (newIndexes.length < JokersInShop) {
+            const randIndex = getRandomInt(0, jokerRects.value.length);
+            if (newIndexes.includes(randIndex)) continue;
+            newIndexes.push(randIndex);
+        }
+        setRandomIndexes(newIndexes);
     }
 
-    const jokerViews = tmp.map((sprite, i) => (
-        <Joker image={jokersSpriteSheet} sprite={sprite} scale={1} key={i} />
+    const jokerViews = randomIndexes.map((randIndex) => (
+        <Joker image={jokersSpriteSheet} sprite={jokerRects.value[randIndex]} scale={1} key={randIndex} />
     ));
 
     return (
@@ -34,7 +42,7 @@ export default function Shop(): ReactElement | null {
                     <View className="flex-row">
                         <View>
                             <MenuButton imageAsset={nextButtonImageAsset} sliceData={buttonSliceData} scale={0.5} onClick={() => { }} />
-                            <MenuButton imageAsset={rerollButtonImageAsset} sliceData={buttonSliceData} scale={0.5} onClick={() => { }} />
+                            <MenuButton imageAsset={rerollButtonImageAsset} sliceData={buttonSliceData} scale={0.5} onClick={rerollShop} />
                         </View>
                         <View>
                             {jokerViews}
