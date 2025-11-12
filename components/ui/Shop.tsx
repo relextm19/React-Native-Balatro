@@ -13,7 +13,7 @@ export default function Shop(): ReactElement | null {
     const jokersSpriteSheet = require("../../assets/jokers/jokers.png");
 
     const jokerRects = useSpriteRects(jokersSliceData);
-    if (!jokerRects) return null;
+    if (!jokerRects || !nextButtonImageAsset || !rerollButtonImageAsset || !jokersSpriteSheet) return null;
 
     const tmp = [];
     console.log(jokerRects)
