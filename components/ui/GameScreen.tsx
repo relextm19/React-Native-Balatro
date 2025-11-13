@@ -206,9 +206,10 @@ export default function GameScreen(): ReactElement | null {
             setPlayedHand(removed);
             //use the local variable so i dont have to wait for the async state to update to get the scoring card ids
             const [_, scoringCardIds] = checkHandType(removed);
+            console.log(scoringCardIds)
             const scoringIndexes = scoringCardIds.map((id) => removed.findIndex((card) => card.id === id));
 
-            scoringIndexes.forEach((_, i) => {
+            scoringIndexes.forEach((i, _) => {
                 setTimeout(() => {
                     setShakingIndex(i);
                     chips.current += rankValues[removed[i].rank]
