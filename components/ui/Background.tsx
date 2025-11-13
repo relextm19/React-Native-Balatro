@@ -11,19 +11,19 @@ import Animated, {
 import { useScreenDimensions } from "../../logic/ResponsiveDimensions";
 
 export default function MovingBackground() {
-    const { width: screenWidth, height: screenHeight } = useScreenDimensions();
+    const screenDims = useScreenDimensions();
     const translateX = useSharedValue(0);
     const image = useImage(require("../../assets/backgrounds/background1.png"));
 
     useEffect(() => {
         translateX.value = withRepeat(
-            withTiming(-screenWidth, {
+            withTiming(-screenDims.width, {
                 duration: 8000,
                 easing: Easing.linear,
             }),
             -1
         );
-    }, [screenWidth]);
+    }, [screenDims.width]);
 
     const animatedTransform = useDerivedValue(() => [
         { translateX: translateX.value },
@@ -36,16 +36,16 @@ export default function MovingBackground() {
                     image={image}
                     x={0}
                     y={0}
-                    width={screenWidth + 1}
-                    height={screenHeight}
+                    width={screenDims.width + 1}
+                    height={screenDims.height}
                     fit="fill"
                 />
                 <Image
                     image={image}
-                    x={screenWidth}
+                    x={screenDims.width}
                     y={0}
-                    width={screenWidth}
-                    height={screenHeight}
+                    width={screenDims.width}
+                    height={screenDims.height}
                     fit="fill"
                 />
             </Group>
