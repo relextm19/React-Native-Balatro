@@ -27,19 +27,19 @@ export default function Shop(): ReactElement | null {
     const [cardRandomIndexes, setCardRandomIndexes] = useState<number[]>([]);
     const [modifierRandomIndexes, setModifierRandomIndexes] = useState<number[]>([]);
 
-    const avaliableHeight = useRef(0);
+    const [avaliableHeight, setAvaliableHeight] = useState(0);
     const cardGap = 60;
     const [cardScale, setCardScale] = useState(1);
 
     useEffect(() => {
-        if (avaliableHeight.current > 0) {
+        if (avaliableHeight > 0) {
             const scale = Math.min(
                 1.5,
-                ((avaliableHeight.current - cardGap) / 2)
+                ((avaliableHeight - cardGap) / 2)
             );
             setCardScale(scale);
         }
-    }, [avaliableHeight.current]);
+    }, [avaliableHeight]);
 
     useEffect(() => {
         rerollShop();
@@ -112,7 +112,7 @@ export default function Shop(): ReactElement | null {
 
     return (
         <View className="flex-row flex-1 justify-center items-end gap-2">
-            <StatusPane />
+            {/* <StatusPane /> */}
             <View className="flex-1 bg-darkGrey p-2 rounded-md h-4/5">
                 <View className="bg-darkBg p-2 rounded-md">
                     <View className="flex-row justify-evenly items-center">
@@ -132,7 +132,7 @@ export default function Shop(): ReactElement | null {
                         </View>
                         <View
                             className="justify-evenly items-center gap-2 w-3/4"
-                            onLayout={(e) => avaliableHeight.current = e.nativeEvent.layout.height}
+                            onLayout={(e) => setAvaliableHeight(e.nativeEvent.layout.height)}
                         >
                             <View
                                 className="flex-row justify-evenly items-center gap-2 bg-darkGrey p-2 rounded-md w-full"
