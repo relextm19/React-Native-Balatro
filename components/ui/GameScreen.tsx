@@ -69,7 +69,7 @@ export default function GameScreen(): ReactElement | null {
     const [playedHand, setPlayedHand] = useState([] as IPlayingCard[]);
     const [shakingIndex, setShakingIndex] = useState(-1); //xd
 
-    const handType = checkHandType(selectedCards.length > 0 ? selectedCards : playedHand);
+    const handType = checkHandType(selectedCards.length > 0 ? selectedCards : playedHand)[0];
     //if i use refs for that i have to force a rerender but its fine
     const chips = useRef(getChipsForHandType(handType));
     const mult = useRef(getMultForHandType(handType));
@@ -204,8 +204,11 @@ export default function GameScreen(): ReactElement | null {
             );
 
             setPlayedHand(removed);
+            //use the local variable so i dont have to wait for the async state to update to get the scoring card ids
+            const [_, scoringCardIds] = checkHandType(removed);
+            const scoringIndexes = scoringCardIds.map((id) => removed.findIndex((card) => card.id === id));
 
-            removed.forEach((_, i) => {
+            scoringIndexes.forEach((_, i) => {
                 setTimeout(() => {
                     setShakingIndex(i);
                     chips.current += rankValues[removed[i].rank]

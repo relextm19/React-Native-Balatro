@@ -35,58 +35,69 @@ export function getMultForHandType(handType: HandType): number {
     return handTypeBaseValues[handType][1];
 }
 
-export function checkHandType(hand: IPlayingCard[]): HandType {
-    if (hand.length === 0) return HandType.None
+export function checkHandType(hand: IPlayingCard[]): [HandType, number[]] {
+    if (hand.length === 0) return [HandType.None, []];
+
     const sortedHand = [...hand].sort((a, b) => a.rank - b.rank);
 
     const isFlush = checkFlush(sortedHand);
     const isStraight = checkStraight(sortedHand);
-    const multiples = checkMultiples(sortedHand);
+    const [multiples, scoringCards] = checkMultiples(sortedHand);
 
     if (isStraight && isFlush) {
-        if (sortedHand[0].rank === 10) return HandType.RoyalFlush;
-        return HandType.StraightFlush;
+        if (sortedHand[0].rank === 10) return [HandType.RoyalFlush, sortedHand.map(c => c.id)];
+        return [HandType.StraightFlush, sortedHand.map(c => c.id)];
     }
 
-    if (multiples.includes(4)) return HandType.Four;
+    if (multiples.includes(4)) return [HandType.Four, scoringCards];
 
-    if (multiples.includes(3) && multiples.includes(2)) return HandType.FullHouse;
+    if (multiples.includes(3) && multiples.includes(2)) return [HandType.FullHouse, scoringCards];
 
-    if (isFlush) return HandType.Flush;
+    if (isFlush) return [HandType.Flush, sortedHand.map(c => c.id)];
 
-    if (isStraight) return HandType.Straight;
+    if (isStraight) return [HandType.Straight, sortedHand.map(c => c.id)];
 
-    if (multiples.includes(3)) return HandType.Three;
+    if (multiples.includes(3)) return [HandType.Three, scoringCards];
 
     const pairCount = multiples.filter(m => m === 2).length;
-    if (pairCount === 2) return HandType.TwoPair;
+    if (pairCount === 2) return [HandType.TwoPair, scoringCards];
 
-    if (pairCount === 1) return HandType.Pair;
+    if (pairCount === 1) return [HandType.Pair, scoringCards];
 
-    return HandType.HighCard;
+    return [HandType.HighCard, [sortedHand.at(-1)!.id]];// if its a high card return the last index cuz its the biggest
 }
 
 
-function checkMultiples(hand: IPlayingCard[]) {
-    let streaks = [] as number[];
+
+function checkMultiples(hand: IPlayingCard[]): [number[], number[]] {
+    const streaks: number[] = [];
+    const scoringCards: number[] = [];
+
     let currStreak = 1;
     let lastCard: IPlayingCard | undefined = undefined;
+    let currStreakCards: IPlayingCard[] = [];
 
     for (const card of hand) {
         if (lastCard && lastCard.rank === card.rank) {
             currStreak++;
+            currStreakCards.push(card);
         } else {
             if (currStreak > 1) {
                 streaks.push(currStreak);
+                scoringCards.push(...currStreakCards.map(c => c.id));
             }
             currStreak = 1;
+            currStreakCards = [card];
         }
         lastCard = card;
     }
+
     if (currStreak > 1) {
         streaks.push(currStreak);
+        scoringCards.push(...currStreakCards.map(c => c.id));
     }
-    return streaks.length > 0 ? streaks : [1];
+
+    return [streaks.length > 0 ? streaks : [1], scoringCards];
 }
 
 function checkFlush(hand: IPlayingCard[]): boolean {
