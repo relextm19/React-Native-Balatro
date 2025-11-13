@@ -5,7 +5,7 @@ import { buttonSliceData, cardModifierSliceData, cardSliceData, jokersSliceData 
 import { useSpriteRects } from "../../logic/SpriteSheet";
 import { CardsInShop, JokersInShop, useAppStore, Views } from "../../GameState";
 import { getRandomInt } from "../../logic/Random";
-import { Joker } from "./Joker";
+import { ShopItem } from "./ShopItem";
 import { useImage, Canvas, Atlas, Skia, SkRect } from "@shopify/react-native-skia";
 import StatusPane from "./StatusPane";
 import { useScreenDimensions } from "../../logic/ResponsiveDimensions";
@@ -76,47 +76,30 @@ export default function Shop(): ReactElement | null {
         store.setCurrentView(Views.AnteSelect);
     }
 
-    const jokerViews = jokerRandomIndexes.map((index) => (
-        <View
-            className="justify-center items-center"
-            key={index}
-        >
-            <View className="bg-black px-2 rounded-t-md">
-                <Text
-                    className="text-accentGold text-center"
-                    adjustsFontSizeToFit
-                    numberOfLines={1}
-                >
-                    5$
-                </Text>
-            </View>
-
-            <Joker
-                image={jokersSpriteSheet}
-                sprite={jokerRects.value[index]}
-                scale={cardScale}
-            />
-        </View>
-    ));
+    const jokerViews = jokerRandomIndexes.map((index) => {
+        const jokerRect: SkRect = jokerRects.value[index];
+        return <ShopItem price={5}>
+            <Canvas
+                style={{
+                    width: jokerRect.width * cardScale,
+                    height: jokerRect.height * cardScale,
+                }}
+            >
+                <Atlas
+                    image={jokersSpriteSheet}
+                    sprites={[jokerRect]}
+                    transforms={[Skia.RSXform(cardScale, 0, 0, 0)]}
+                />
+            </Canvas>
+        </ShopItem>
+    });
 
     const cardViews = cardRandomIndexes.map((cardIndex, i) => {
         const cardRect: SkRect = cardRects.value[cardIndex];
         const modifierRect: SkRect = modifiersRects.value[modifierRandomIndexes[i]];
 
         return (
-            <View
-                className="justify-center items-center"
-                key={cardIndex}
-            >
-                <View className="bg-black px-2 rounded-t-md">
-                    <Text
-                        className="text-accentGold text-center"
-                        adjustsFontSizeToFit
-                        numberOfLines={1}
-                    >
-                        3$
-                    </Text>
-                </View>
+            <ShopItem price={3}>
                 <Canvas
                     style={{
                         width: cardRect.width * cardScale,
@@ -134,7 +117,7 @@ export default function Shop(): ReactElement | null {
                         transforms={[Skia.RSXform(cardScale, 0, 0, 0)]}
                     />
                 </Canvas>
-            </View>
+            </ShopItem>
         );
     });
 
