@@ -32,6 +32,7 @@ export default function Shop(): ReactElement | null {
     const avaliableHeight = (screenDims.height) * 0.8;
     const cardGap = 60;
     const [cardScale, setCardScale] = useState(1);
+    const animationHeight = 15;
 
     useEffect(() => {
         if (avaliableHeight > 0) {
@@ -78,7 +79,7 @@ export default function Shop(): ReactElement | null {
 
     const jokerViews = jokerRandomIndexes.map((index) => {
         const jokerRect: SkRect = jokerRects.value[index];
-        return <ShopItem price={5}>
+        return <ShopItem price={5} animationHeight={animationHeight}>
             <Canvas
                 style={{
                     width: jokerRect.width * cardScale,
@@ -99,7 +100,7 @@ export default function Shop(): ReactElement | null {
         const modifierRect: SkRect = modifiersRects.value[modifierRandomIndexes[i]];
 
         return (
-            <ShopItem price={3}>
+            <ShopItem price={3} animationHeight={animationHeight}>
                 <Canvas
                     style={{
                         width: cardRect.width * cardScale,
