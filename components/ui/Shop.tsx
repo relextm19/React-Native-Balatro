@@ -1,5 +1,5 @@
 import { ReactElement, useEffect, useRef, useState } from "react";
-import { View } from "react-native";
+import { View, Text } from "react-native";
 import MenuButton from "./MenuButton";
 import { buttonSliceData, cardModifierSliceData, cardSliceData, jokersSliceData } from "../../assets/sliceData";
 import { useSpriteRects } from "../../logic/SpriteSheet";
@@ -8,6 +8,7 @@ import { getRandomInt } from "../../logic/Random";
 import { Joker } from "./Joker";
 import { useImage, Canvas, Atlas, Skia, SkRect } from "@shopify/react-native-skia";
 import StatusPane from "./StatusPane";
+import { useScreenDimensions } from "../../logic/ResponsiveDimensions";
 
 export default function Shop(): ReactElement | null {
     const nextButtonImageAsset = require("../../assets/ui/next_button.png");
@@ -27,7 +28,8 @@ export default function Shop(): ReactElement | null {
     const [cardRandomIndexes, setCardRandomIndexes] = useState<number[]>([]);
     const [modifierRandomIndexes, setModifierRandomIndexes] = useState<number[]>([]);
 
-    const [avaliableHeight, setAvaliableHeight] = useState(0);
+    const screenDims = useScreenDimensions();
+    const avaliableHeight = (screenDims.height) * 0.8;
     const cardGap = 60;
     const [cardScale, setCardScale] = useState(1);
 
@@ -35,7 +37,7 @@ export default function Shop(): ReactElement | null {
         if (avaliableHeight > 0) {
             const scale = Math.min(
                 1.5,
-                ((avaliableHeight - cardGap) / 2)
+                ((avaliableHeight - cardGap) / 2.5) / cardSliceData.spriteHeight
             );
             setCardScale(scale);
         }
@@ -75,12 +77,26 @@ export default function Shop(): ReactElement | null {
     }
 
     const jokerViews = jokerRandomIndexes.map((index) => (
-        <Joker
-            image={jokersSpriteSheet}
-            sprite={jokerRects.value[index]}
-            scale={cardScale}
+        <View
+            className="justify-center items-center"
             key={index}
-        />
+        >
+            <View className="bg-black px-2 rounded-t-md">
+                <Text
+                    className="text-accentGold text-center"
+                    adjustsFontSizeToFit
+                    numberOfLines={1}
+                >
+                    5$
+                </Text>
+            </View>
+
+            <Joker
+                image={jokersSpriteSheet}
+                sprite={jokerRects.value[index]}
+                scale={cardScale}
+            />
+        </View>
     ));
 
     const cardViews = cardRandomIndexes.map((cardIndex, i) => {
@@ -88,7 +104,19 @@ export default function Shop(): ReactElement | null {
         const modifierRect: SkRect = modifiersRects.value[modifierRandomIndexes[i]];
 
         return (
-            <View key={cardIndex} className="relative">
+            <View
+                className="justify-center items-center"
+                key={cardIndex}
+            >
+                <View className="bg-black px-2 rounded-t-md">
+                    <Text
+                        className="text-accentGold text-center"
+                        adjustsFontSizeToFit
+                        numberOfLines={1}
+                    >
+                        3$
+                    </Text>
+                </View>
                 <Canvas
                     style={{
                         width: cardRect.width * cardScale,
@@ -112,9 +140,9 @@ export default function Shop(): ReactElement | null {
 
     return (
         <View className="flex-row flex-1 justify-center items-end gap-2">
-            {/* <StatusPane /> */}
+            <StatusPane />
             <View className="flex-1 bg-darkGrey p-2 rounded-md h-4/5">
-                <View className="bg-darkBg p-2 rounded-md">
+                <View className="items-start bg-darkBg p-2 rounded-md">
                     <View className="flex-row justify-evenly items-center">
                         <View className="justify-evenly items-center self-start w-1/4 h-1/2">
                             <MenuButton
@@ -132,7 +160,6 @@ export default function Shop(): ReactElement | null {
                         </View>
                         <View
                             className="justify-evenly items-center gap-2 w-3/4"
-                            onLayout={(e) => setAvaliableHeight(e.nativeEvent.layout.height)}
                         >
                             <View
                                 className="flex-row justify-evenly items-center gap-2 bg-darkGrey p-2 rounded-md w-full"

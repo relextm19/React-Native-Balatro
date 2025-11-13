@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import { Stake } from "./assets/chips/StakeArray";
-import { Deck } from "./assets/cards/deckArray";
+import { Stake, stakeArray } from "./assets/chips/StakeArray";
+import { Deck, deckArray } from "./assets/cards/deckArray";
 import { IPlayingCard, Suits } from "./interfaces/Card";
 import { Blind, blindsArray } from "./assets/chips/Blinds";
 
@@ -58,8 +58,8 @@ type AppState = {
 export const useAppStore = create<AppState>((set) => ({
     currentView: Views.Shop,
     lastView: Views.Menu,
-    currentStake: {} as Stake,
-    currentDeck: {} as Deck,
+    currentStake: stakeArray[0],
+    currentDeck: deckArray[0],
     currentBlind: blindsArray[0],
     currentAnteScore: 300,
     currentAnte: 1,
