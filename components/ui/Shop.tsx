@@ -13,6 +13,7 @@ import { useScreenDimensions } from "../../logic/ResponsiveDimensions";
 export default function Shop(): ReactElement | null {
     const nextButtonImageAsset = require("../../assets/ui/next_button.png");
     const rerollButtonImageAsset = require("../../assets/ui/reroll_button.png");
+    const buyButtonImageAsset = require("../../assets/ui/buy_button.png");
 
     const jokersSpriteSheet = useImage(require("../../assets/jokers/jokers.png"));
     const cardsSpriteSheet = useImage(require("../../assets/cards/playing_cards.png"));
@@ -128,19 +129,30 @@ export default function Shop(): ReactElement | null {
             <View className="flex-1 bg-darkGrey p-2 rounded-md h-4/5">
                 <View className="items-start bg-darkBg p-2 rounded-md">
                     <View className="flex-row justify-evenly items-center">
-                        <View className="justify-evenly items-center self-start w-1/4 h-1/2">
-                            <MenuButton
-                                imageAsset={nextButtonImageAsset}
-                                sliceData={buttonSliceData}
-                                scale={0.5}
-                                onClick={goNextRound}
-                            />
-                            <MenuButton
-                                imageAsset={rerollButtonImageAsset}
-                                sliceData={buttonSliceData}
-                                scale={0.5}
-                                onClick={rerollShop}
-                            />
+                        <View className="justify-between items-center w-1/4 h-full">
+                            <View className="justify-between items-center h-1/2">
+                                <MenuButton
+                                    imageAsset={nextButtonImageAsset}
+                                    sliceData={buttonSliceData}
+                                    scale={0.5}
+                                    onClick={goNextRound}
+                                />
+                                <MenuButton
+                                    imageAsset={rerollButtonImageAsset}
+                                    sliceData={buttonSliceData}
+                                    scale={0.5}
+                                    onClick={rerollShop}
+                                />
+                            </View>
+
+                            <View className="items-center">
+                                <MenuButton
+                                    imageAsset={buyButtonImageAsset}
+                                    sliceData={buttonSliceData}
+                                    scale={0.5}
+                                    onClick={rerollShop}
+                                />
+                            </View>
                         </View>
                         <View
                             className="justify-evenly items-center gap-2 w-3/4"
