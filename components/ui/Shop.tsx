@@ -1,14 +1,25 @@
 import { ReactElement, useEffect, useRef, useState } from "react";
-import { View, Text } from "react-native";
+import { useImage, Canvas, Atlas, Skia, SkRect } from "@shopify/react-native-skia";
+import { View, Text, Pressable } from "react-native";
+
+import StatusPane from "./StatusPane";
 import MenuButton from "./MenuButton";
+import { ShopItem } from "./ShopItem";
+
 import { buttonSliceData, cardModifierSliceData, cardSliceData, jokersSliceData } from "../../assets/sliceData";
 import { useSpriteRects } from "../../logic/SpriteSheet";
-import { CardsInShop, JokersInShop, useAppStore, Views } from "../../GameState";
 import { getRandomInt } from "../../logic/Random";
-import { ShopItem } from "./ShopItem";
-import { useImage, Canvas, Atlas, Skia, SkRect } from "@shopify/react-native-skia";
-import StatusPane from "./StatusPane";
+import { CardsInShop, JokersInShop, useAppStore, Views } from "../../GameState";
 import { useScreenDimensions } from "../../logic/ResponsiveDimensions";
+
+enum SelectedItemType {
+    Joker,
+    Card
+}
+interface SelectedItem {
+    type: SelectedItemType,
+    index: number,
+}
 
 export default function Shop(): ReactElement | null {
     const nextButtonImageAsset = require("../../assets/ui/next_button.png");
@@ -33,7 +44,12 @@ export default function Shop(): ReactElement | null {
     const avaliableHeight = (screenDims.height) * 0.8;
     const cardGap = 60;
     const [cardScale, setCardScale] = useState(1);
+
     const animationHeight = 15;
+    const [selectedItem, setSelectedItem] = useState<SelectedItem>();//first one is joker/card second one is index
+
+    const jokerPrice = 5;
+    const cardPrice = 3;
 
     useEffect(() => {
         if (avaliableHeight > 0) {
@@ -78,22 +94,35 @@ export default function Shop(): ReactElement | null {
         store.setCurrentView(Views.AnteSelect);
     }
 
+    function buyItem() {
+        const priceToSubstract = selectedItem?.type === SelectedItemType.Card ? cardPrice : jokerPrice;
+        const arrayToDeleteFrom = selectedItem?.type === SelectedItemType.Card ? cardRandomIndexes : jokerRandomIndexes;
+        arrayToDeleteFrom.filter((randIndex) => randIndex === selectedItem?.index);
+        // if (store.money < priceToSubstract) return;
+        store.setMoney((prev) => prev - priceToSubstract);
+    }
+
     const jokerViews = jokerRandomIndexes.map((index) => {
         const jokerRect: SkRect = jokerRects.value[index];
-        return <ShopItem price={5} animationHeight={animationHeight}>
-            <Canvas
-                style={{
-                    width: jokerRect.width * cardScale,
-                    height: jokerRect.height * cardScale,
-                }}
-            >
-                <Atlas
-                    image={jokersSpriteSheet}
-                    sprites={[jokerRect]}
-                    transforms={[Skia.RSXform(cardScale, 0, 0, 0)]}
-                />
-            </Canvas>
-        </ShopItem>
+
+        return (
+            <Pressable onPress={() => setSelectedItem({ type: SelectedItemType.Joker, index: index })}>
+                <ShopItem price={jokerPrice} animationHeight={animationHeight}>
+                    <Canvas
+                        style={{
+                            width: jokerRect.width * cardScale,
+                            height: jokerRect.height * cardScale,
+                        }}
+                    >
+                        <Atlas
+                            image={jokersSpriteSheet}
+                            sprites={[jokerRect]}
+                            transforms={[Skia.RSXform(cardScale, 0, 0, 0)]}
+                        />
+                    </Canvas>
+                </ShopItem>
+            </Pressable>
+        )
     });
 
     const cardViews = cardRandomIndexes.map((cardIndex, i) => {
@@ -101,25 +130,27 @@ export default function Shop(): ReactElement | null {
         const modifierRect: SkRect = modifiersRects.value[modifierRandomIndexes[i]];
 
         return (
-            <ShopItem price={3} animationHeight={animationHeight}>
-                <Canvas
-                    style={{
-                        width: cardRect.width * cardScale,
-                        height: cardRect.height * cardScale,
-                    }}
-                >
-                    <Atlas
-                        image={modifierSpriteSheet!}
-                        sprites={[modifierRect]}
-                        transforms={[Skia.RSXform(cardScale, 0, 0, 0)]}
-                    />
-                    <Atlas
-                        image={cardsSpriteSheet!}
-                        sprites={[cardRect]}
-                        transforms={[Skia.RSXform(cardScale, 0, 0, 0)]}
-                    />
-                </Canvas>
-            </ShopItem>
+            <Pressable onPress={() => setSelectedItem({ type: SelectedItemType.Card, index: cardIndex })}>
+                <ShopItem price={cardPrice} animationHeight={animationHeight}>
+                    <Canvas
+                        style={{
+                            width: cardRect.width * cardScale,
+                            height: cardRect.height * cardScale,
+                        }}
+                    >
+                        <Atlas
+                            image={modifierSpriteSheet!}
+                            sprites={[modifierRect]}
+                            transforms={[Skia.RSXform(cardScale, 0, 0, 0)]}
+                        />
+                        <Atlas
+                            image={cardsSpriteSheet!}
+                            sprites={[cardRect]}
+                            transforms={[Skia.RSXform(cardScale, 0, 0, 0)]}
+                        />
+                    </Canvas>
+                </ShopItem>
+            </Pressable>
         );
     });
 
@@ -150,7 +181,7 @@ export default function Shop(): ReactElement | null {
                                     imageAsset={buyButtonImageAsset}
                                     sliceData={buttonSliceData}
                                     scale={0.5}
-                                    onClick={rerollShop}
+                                    onClick={buyItem}
                                 />
                             </View>
                         </View>
