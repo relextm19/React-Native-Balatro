@@ -52,7 +52,7 @@ export default function Shop(): ReactElement | null {
     function rerollShop() {
         const newJokerRandomIndexes: number[] = [];
         while (newJokerRandomIndexes.length < JokersInShop) {
-            const randIndex = getRandomInt(0, jokerRects.value.length);
+            const randIndex = getRandomInt(0, jokerRects.value.length - 1);
             if (!newJokerRandomIndexes.includes(randIndex)) newJokerRandomIndexes.push(randIndex);
         }
         setJokerRandomIndexes(newJokerRandomIndexes);
