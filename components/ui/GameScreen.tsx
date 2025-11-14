@@ -74,7 +74,7 @@ export default function GameScreen(): ReactElement | null {
     //if i use refs for that i have to force a rerender but its fine
     const chips = useRef(getChipsForHandType(handType));
     const mult = useRef(getMultForHandType(handType));
-    const [cardBonus, setCardBonus] = useState<[number, number]>()
+    const [cardBonus, setCardBonus] = useState<[number, number, number]>()
     const roundScore = useRef(0);
     const [, forceRender] = useState(0);
 
@@ -147,7 +147,6 @@ export default function GameScreen(): ReactElement | null {
                     selectedCards={selectedCards}
                     setSelectedCards={setSelectedCards}
                     cardObject={card}
-                    cardBonus={cardBonus}
                 />
             </View>
         );
@@ -203,9 +202,11 @@ export default function GameScreen(): ReactElement | null {
                 setTimeout(() => {
                     setShakingIndex(i);
                     chips.current += rankValues[removed[i].rank]
-                    const [chipBonus, multBonus] = getBonusForCard(removed[i].modifier, mult.current, removed[i].rank, removed[i].suit)
+                    const [chipBonus, multBonus, money] = getBonusForCard(removed[i].modifier, mult.current, removed[i].rank, removed[i].suit)
+                    setCardBonus([chipBonus + rankValues[removed[i].rank], multBonus, money]);
                     mult.current += multBonus;
                     chips.current += chipBonus;
+                    store.setMoney((prev) => prev + money);
                 }, i * shakeDuration + shakeDuration)
             })
             setTimeout(() => {
@@ -258,6 +259,7 @@ export default function GameScreen(): ReactElement | null {
                             key={`${i}${card.id}`}
                             shake={i === shakingIndex}
                             shakeDuration={shakeDuration}
+                            cardBonus={cardBonus}
                         />
                     }
                     )}

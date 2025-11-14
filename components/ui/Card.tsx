@@ -20,7 +20,7 @@ type cardProps = {
     cardObject?: IPlayingCard,
     shake?: boolean,
     shakeDuration?: number,
-    cardBonus?: [number, number];
+    cardBonus?: [number, number, number];
 }
 
 export default function Card({
@@ -50,24 +50,12 @@ export default function Card({
 
     function liftUp() {
         if (!animationHeight || !selectedCards || !setSelectedCards || !cardObject) return;
-        console.log(selectedCards.length)
         if (y.value === -animationHeight) {
             y.value = withTiming(0, { duration: 200 });
+            setSelectedCards(prev => prev.filter(sel => sel.id !== cardObject.id));
         } else if (y.value === 0) {
             if (selectedCards.length >= 5) return; // max 5 cards
-            setSelectedCards(prev => {
-                const alreadySelected = prev.some(sel => sel.id === cardObject.id);
-
-                if (alreadySelected) {
-                    return prev.filter(sel => sel.id !== cardObject.id);
-                }
-
-                if (prev.length < 5) {
-                    return [...prev, cardObject];
-                }
-
-                return prev;
-            });
+            setSelectedCards(prev => [...prev, cardObject]);
             y.value = withTiming(-animationHeight, { duration: 200 });
         }
     };
@@ -87,10 +75,11 @@ export default function Card({
 
     return (
         <Pressable onPress={liftUp}>
-            {cardBonus && (
+            {(cardBonus && shake) && (
                 <>
                     <Text className="text-blue-600">{cardBonus[0]}</Text>
                     <Text className="text-customRed">{cardBonus[1]}</Text>
+                    <Text className="text-accentGold">{cardBonus[2]}</Text>
                 </>
             )}
             <Animated.View
