@@ -103,10 +103,14 @@ export default function Shop(): ReactElement | null {
     }
 
     function buyItem() {
-        const priceToSubstract = selectedItem?.type === SelectedItemType.Card ? cardPrice : jokerPrice;
-        const arrayToDeleteFrom = selectedItem?.type === SelectedItemType.Card ? cardRandomIndexes : jokerRandomIndexes;
-        arrayToDeleteFrom.filter((randIndex) => randIndex === selectedItem?.index);
-        // if (store.money < priceToSubstract) return;
+        if (!selectedItem) return;
+        const priceToSubstract = selectedItem.type === SelectedItemType.Card ? cardPrice : jokerPrice;
+        if (selectedItem.type === SelectedItemType.Joker) {
+            setJokerRandomIndexes(prev => prev.filter((index) => index !== selectedItem.index));
+        } else {
+            setCardRandomIndexes(prev => prev.filter((index) => index !== selectedItem.index));
+        }
+        if (store.money < priceToSubstract) return
         store.setMoney((prev) => prev - priceToSubstract);
     }
 
