@@ -1,5 +1,5 @@
 import { ReactElement, useEffect, useRef, useState } from "react";
-import { useImage, Canvas, Atlas, Skia, SkRect } from "@shopify/react-native-skia";
+import { useImage, Canvas, Atlas, Skia, SkRect, scale } from "@shopify/react-native-skia";
 import { View, Text, Pressable } from "react-native";
 
 import StatusPane from "./StatusPane";
@@ -9,8 +9,9 @@ import { ShopItem } from "./ShopItem";
 import { buttonSliceData, cardModifierSliceData, cardSliceData, jokersSliceData } from "../../assets/sliceData";
 import { useSpriteRects } from "../../logic/SpriteSheet";
 import { getRandomInt } from "../../logic/Random";
-import { CardsInShop, JokersInShop, useAppStore, Views } from "../../GameState";
+import { addCardToDeck, CardsInShop, JokersInShop, useAppStore, Views } from "../../GameState";
 import { useScreenDimensions } from "../../logic/ResponsiveDimensions";
+import { createCard, Modifier, ModifierArray, Ranks, RanksArray, Suits, SuitsArray } from "../../interfaces/Card";
 
 enum SelectedItemType {
     Joker,
@@ -19,6 +20,7 @@ enum SelectedItemType {
 interface SelectedItem {
     type: SelectedItemType,
     index: number,
+    indexInShop: number,
 }
 
 export default function Shop(): ReactElement | null {
@@ -105,21 +107,29 @@ export default function Shop(): ReactElement | null {
     function buyItem() {
         if (!selectedItem) return;
         const priceToSubstract = selectedItem.type === SelectedItemType.Card ? cardPrice : jokerPrice;
+        // if (store.money < priceToSubstract) return
+
         if (selectedItem.type === SelectedItemType.Joker) {
             setJokerRandomIndexes(prev => prev.filter((index) => index !== selectedItem.index));
         } else {
+            const rank = RanksArray[(selectedItem.index % cardSliceData.cols)]; //the enum for ranks starts from 2 so we have to add 2
+            const suit = SuitsArray[Math.floor(selectedItem.index / cardSliceData.cols)];
+            const modifier = ModifierArray[modifierRandomIndexes[selectedItem.indexInShop]];
+            const card = createCard(suit, rank, modifier)
+            console.log(rank, suit, modifier)
+            store.currentDeck.state!.total++;
+            store.setCurrentDeck(addCardToDeck(store.currentDeck, card));
             setCardRandomIndexes(prev => prev.filter((index) => index !== selectedItem.index));
         }
-        if (store.money < priceToSubstract) return
         store.setMoney((prev) => prev - priceToSubstract);
     }
 
-    const jokerViews = jokerRandomIndexes.map((index) => {
-        const jokerRect: SkRect = jokerRects.value[index];
+    const jokerViews = jokerRandomIndexes.map((jokerIndex, i) => {
+        const jokerRect: SkRect = jokerRects.value[jokerIndex];
 
         return (
-            <Pressable onPress={() => changeSelectedItem({ type: SelectedItemType.Joker, index: index })} key={index}>
-                <ShopItem price={jokerPrice} animationHeight={animationHeight} isLifted={selectedItem?.type === SelectedItemType.Joker && selectedItem.index === index}>
+            <Pressable onPress={() => changeSelectedItem({ type: SelectedItemType.Joker, index: jokerIndex, indexInShop: i })} key={jokerIndex}>
+                <ShopItem price={jokerPrice} animationHeight={animationHeight} isLifted={selectedItem?.type === SelectedItemType.Joker && selectedItem.index === jokerIndex}>
                     <Canvas
                         style={{
                             width: jokerRect.width * cardScale,
@@ -142,7 +152,7 @@ export default function Shop(): ReactElement | null {
         const modifierRect: SkRect = modifiersRects.value[modifierRandomIndexes[i]];
 
         return (
-            <Pressable onPress={() => changeSelectedItem({ type: SelectedItemType.Card, index: cardIndex })} key={cardIndex}>
+            <Pressable onPress={() => changeSelectedItem({ type: SelectedItemType.Card, index: cardIndex, indexInShop: i })} key={cardIndex}>
                 <ShopItem price={cardPrice} animationHeight={animationHeight} isLifted={selectedItem?.type === SelectedItemType.Card && selectedItem.index === cardIndex}>
                     <Canvas
                         style={{
@@ -202,10 +212,14 @@ export default function Shop(): ReactElement | null {
                         >
                             <View
                                 className="flex-row justify-evenly items-center gap-2 bg-darkGrey p-2 rounded-md w-full"
+                                style={{ minHeight: cardSliceData.spriteHeight * cardScale }}
                             >
                                 {jokerViews}
                             </View>
-                            <View className="flex-row justify-evenly items-center gap-2 bg-darkGrey p-2 rounded-md w-full">
+                            <View
+                                className="flex-row justify-evenly items-center gap-2 bg-darkGrey p-2 rounded-md w-full"
+                                style={{ minHeight: cardSliceData.spriteHeight * cardScale }}
+                            >
                                 {cardViews}
                             </View>
                         </View>

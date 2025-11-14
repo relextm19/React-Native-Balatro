@@ -18,11 +18,6 @@ export function useSpriteRects(sliceData: SpriteSheetSliceData): Mutable<SkHostR
 
     const col = i % sliceData.cols;
     const row = Math.floor(i / sliceData.cols);
-    // console.log(col * (sliceData.spriteWidth + sliceData.offsetX),
-    //   row * (sliceData.spriteHeight + sliceData.offsetY),
-    //   sliceData.spriteWidth,
-    //   sliceData.spriteHeight
-    // )
     rect.setXYWH(
       col * (sliceData.spriteWidth + sliceData.offsetX),
       row * (sliceData.spriteHeight + sliceData.offsetY),

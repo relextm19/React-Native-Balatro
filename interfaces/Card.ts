@@ -12,6 +12,13 @@ export enum Suits {
     Clubs = 'clubs',
 }
 
+export const SuitsArray = [
+    Suits.Hearts,
+    Suits.Spades,
+    Suits.Diamonds,
+    Suits.Clubs
+] as const;
+
 export enum Ranks {
     Two = 2,
     Three,
@@ -44,7 +51,21 @@ export const rankValues: Record<Ranks, number> = {
     [Ranks.Ace]: 11,
 };
 
-
+export const RanksArray: Ranks[] = [
+    Ranks.Two,
+    Ranks.Three,
+    Ranks.Four,
+    Ranks.Five,
+    Ranks.Six,
+    Ranks.Seven,
+    Ranks.Eight,
+    Ranks.Nine,
+    Ranks.Ten,
+    Ranks.Jack,
+    Ranks.Queen,
+    Ranks.King,
+    Ranks.Ace,
+] as const;
 
 export enum Modifier {
     Normal,
@@ -54,6 +75,14 @@ export enum Modifier {
     Lucky,
     Glass
 }
+export const ModifierArray: Modifier[] = [
+    Modifier.Normal,
+    Modifier.Bonus,
+    Modifier.Mult,
+    Modifier.Wild,
+    Modifier.Lucky,
+    Modifier.Glass,
+];
 
 export interface IPlayingCard {
     id: number,
@@ -71,11 +100,11 @@ export interface IPlayingCard {
 export function createCard(suit: Suits, rank: Ranks, modifier: Modifier): IPlayingCard {
     const isFaceCard = [Ranks.Jack, Ranks.Queen, Ranks.King].includes(rank);
     const id = deckSize + 1;
-    const rankValues = Object.values(Ranks).filter(v => typeof v === 'number');
-    const suitValues = Object.values(Suits);
+    // const rankValues = Object.values(Ranks).filter(v => typeof v === 'number');
+    // const suitValues = Object.values(Suits);
 
-    const x = (cardSliceData.spriteWidth + cardSliceData.offsetX) * rankValues.findIndex(r => r === rank);
-    const y = (cardSliceData.spriteHeight + cardSliceData.offsetY) * suitValues.findIndex(s => s === suit);
+    const x = (cardSliceData.spriteWidth + cardSliceData.offsetX) * RanksArray.findIndex(r => r === rank);
+    const y = (cardSliceData.spriteHeight + cardSliceData.offsetY) * SuitsArray.findIndex(s => s === suit);
 
     setDeckSize(deckSize + 1);
 
@@ -97,13 +126,13 @@ export function createCard(suit: Suits, rank: Ranks, modifier: Modifier): IPlayi
 export function generateDeck(): Map<Suits, Map<Ranks, IPlayingCard>> {
     const deck = new Map<Suits, Map<Ranks, IPlayingCard>>();
 
-    for (const suit of Object.values(Suits)) {
+    for (const suit of SuitsArray) {
         if (!deck.has(suit)) {
             deck.set(suit, new Map<Ranks, IPlayingCard>());
         }
         const suitMap = deck.get(suit)!;
 
-        for (const rank of Object.values(Ranks).filter(r => typeof r === 'number')) {//typesciprt returns both the number and the string so it must be filtered to just nums
+        for (const rank of RanksArray) {//typesciprt returns both the number and the string so it must be filtered to just nums
             const card = createCard(suit, rank, Modifier.Lucky);
             suitMap.set(card.rank, card);
         }
