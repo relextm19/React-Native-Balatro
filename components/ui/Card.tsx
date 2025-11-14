@@ -6,7 +6,7 @@ import { useSharedValue, withTiming, useAnimatedStyle, withSequence, Easing } fr
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
 import { cardSliceData } from "../../assets/sliceData";
-import { IPlayingCard } from "../../interfaces/Card";
+import { IPlayingCard, Modifier } from "../../interfaces/Card";
 
 type cardProps = {
     scale: number,
@@ -100,7 +100,7 @@ export default function Card({
                     )}
 
                     {cardBonus[1] !== 0 && shake && (
-                        <Text className="text-customRed text-xl">+{cardBonus[1]}</Text>
+                        <Text className="text-customRed text-xl">{cardObject?.modifier !== Modifier.Glass ? `+${cardBonus[1]}` : 'x2'}</Text>
                     )}
 
                     {cardBonus[2] !== 0 && shake && (

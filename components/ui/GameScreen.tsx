@@ -260,6 +260,7 @@ export default function GameScreen(): ReactElement | null {
                             shake={i === shakingIndex}
                             shakeDuration={shakeDuration}
                             cardBonus={cardBonus}
+                            cardObject={card}
                         />
                     }
                     )}
