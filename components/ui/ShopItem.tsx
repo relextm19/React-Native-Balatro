@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode } from "react";
+import { ReactElement, ReactNode, useEffect } from "react";
 import { View, Text, Pressable } from "react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 
@@ -6,8 +6,9 @@ type jokerProps = {
     children: ReactNode,
     price: number,
     animationHeight: number,
+    isLifted: boolean,
 }
-export function ShopItem({ children, price, animationHeight }: jokerProps): ReactElement | null {
+export function ShopItem({ children, price, animationHeight, isLifted }: jokerProps): ReactElement | null {
     const y = useSharedValue(0);
     const animatedStyle = useAnimatedStyle(() => ({
         transform: [
@@ -17,29 +18,28 @@ export function ShopItem({ children, price, animationHeight }: jokerProps): Reac
     function liftUp() {
         if (y.value === -animationHeight) {
             y.value = withTiming(0, { duration: 200 });
-        } else if (y.value === 0) {
+        } else if (y.value === 0 && isLifted) {
             y.value = withTiming(-animationHeight, { duration: 200 });
         }
     }
+    useEffect(() => {
+        liftUp()
+    }, [isLifted])
     return (
-        <Pressable
-            onPress={liftUp}
+        <Animated.View
+            className="justify-center items-center"
+            style={animatedStyle}
         >
-            <Animated.View
-                className="justify-center items-center"
-                style={animatedStyle}
-            >
-                <View className="bg-black px-2 rounded-t-md">
-                    <Text
-                        className="text-accentGold text-center"
-                        adjustsFontSizeToFit
-                        numberOfLines={1}
-                    >
-                        {price}$
-                    </Text>
-                </View>
-                {children}
-            </Animated.View>
-        </Pressable>
+            <View className="bg-black px-2 rounded-t-md">
+                <Text
+                    className="text-accentGold text-center"
+                    adjustsFontSizeToFit
+                    numberOfLines={1}
+                >
+                    {price}$
+                </Text>
+            </View>
+            {children}
+        </Animated.View>
     )
 }

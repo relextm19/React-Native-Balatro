@@ -56,7 +56,7 @@ type AppState = {
 };
 
 export const useAppStore = create<AppState>((set) => ({
-    currentView: Views.Menu,
+    currentView: Views.Shop,
     lastView: Views.Menu,
     currentStake: stakeArray[0],
     currentDeck: deckArray[0],

@@ -46,7 +46,7 @@ export default function Shop(): ReactElement | null {
     const [cardScale, setCardScale] = useState(1);
 
     const animationHeight = 15;
-    const [selectedItem, setSelectedItem] = useState<SelectedItem>();//first one is joker/card second one is index
+    const [selectedItem, setSelectedItem] = useState<SelectedItem | undefined>(undefined);
 
     const jokerPrice = 5;
     const cardPrice = 3;
@@ -64,6 +64,14 @@ export default function Shop(): ReactElement | null {
     useEffect(() => {
         rerollShop();
     }, []);
+
+    function changeSelectedItem(newItem: SelectedItem) {
+        if (selectedItem?.type === newItem.type && selectedItem?.index === newItem.index) {
+            setSelectedItem(undefined);
+        } else {
+            setSelectedItem(newItem);
+        }
+    }
 
     if (!jokerRects || !cardsSpriteSheet || !cardRects || !modifierSpriteSheet || !modifiersRects || !jokersSpriteSheet) return null;
 
@@ -106,8 +114,8 @@ export default function Shop(): ReactElement | null {
         const jokerRect: SkRect = jokerRects.value[index];
 
         return (
-            <Pressable onPress={() => setSelectedItem({ type: SelectedItemType.Joker, index: index })}>
-                <ShopItem price={jokerPrice} animationHeight={animationHeight}>
+            <Pressable onPress={() => changeSelectedItem({ type: SelectedItemType.Joker, index: index })} key={index}>
+                <ShopItem price={jokerPrice} animationHeight={animationHeight} isLifted={selectedItem?.type === SelectedItemType.Joker && selectedItem.index === index}>
                     <Canvas
                         style={{
                             width: jokerRect.width * cardScale,
@@ -130,8 +138,8 @@ export default function Shop(): ReactElement | null {
         const modifierRect: SkRect = modifiersRects.value[modifierRandomIndexes[i]];
 
         return (
-            <Pressable onPress={() => setSelectedItem({ type: SelectedItemType.Card, index: cardIndex })}>
-                <ShopItem price={cardPrice} animationHeight={animationHeight}>
+            <Pressable onPress={() => changeSelectedItem({ type: SelectedItemType.Card, index: cardIndex })} key={cardIndex}>
+                <ShopItem price={cardPrice} animationHeight={animationHeight} isLifted={selectedItem?.type === SelectedItemType.Card && selectedItem.index === cardIndex}>
                     <Canvas
                         style={{
                             width: cardRect.width * cardScale,
