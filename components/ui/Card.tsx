@@ -1,6 +1,6 @@
 import { Skia, Atlas, useImage, SkImage, SkRect, Canvas } from "@shopify/react-native-skia";
 import { ReactElement, useEffect } from "react";
-import { View } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import Animated, { runOnJS } from "react-native-reanimated";
 import { useSharedValue, withTiming, useAnimatedStyle, withSequence, Easing } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
@@ -16,8 +16,11 @@ type cardProps = {
     cardsSpriteSheet: SkImage,
     modifierSpriteSheet: SkImage,
     selectedCards?: IPlayingCard[],
+    setSelectedCards?: React.Dispatch<React.SetStateAction<IPlayingCard[]>>,
+    cardObject?: IPlayingCard,
     shake?: boolean,
     shakeDuration?: number,
+    cardBonus?: [number, number];
 }
 
 export default function Card({
@@ -28,8 +31,11 @@ export default function Card({
     cardsSpriteSheet,
     modifierSpriteSheet,
     selectedCards,
+    setSelectedCards,
+    cardObject,
     shake,
-    shakeDuration
+    shakeDuration,
+    cardBonus
 }: cardProps): ReactElement {
     const transform = [Skia.RSXform(scale, 0, 0, 0)];
     const y = useSharedValue(0);
@@ -42,16 +48,29 @@ export default function Card({
         ]
     }));
 
-    const gesture = Gesture.Tap().onEnd(() => {
-        if (!animationHeight || !selectedCards) return;
-
+    function liftUp() {
+        if (!animationHeight || !selectedCards || !setSelectedCards || !cardObject) return;
+        console.log(selectedCards.length)
         if (y.value === -animationHeight) {
             y.value = withTiming(0, { duration: 200 });
         } else if (y.value === 0) {
             if (selectedCards.length >= 5) return; // max 5 cards
+            setSelectedCards(prev => {
+                const alreadySelected = prev.some(sel => sel.id === cardObject.id);
+
+                if (alreadySelected) {
+                    return prev.filter(sel => sel.id !== cardObject.id);
+                }
+
+                if (prev.length < 5) {
+                    return [...prev, cardObject];
+                }
+
+                return prev;
+            });
             y.value = withTiming(-animationHeight, { duration: 200 });
         }
-    });
+    };
 
     useEffect(() => {
         if (shake && shakeDuration) {
@@ -67,7 +86,13 @@ export default function Card({
     }, [shake]);
 
     return (
-        <GestureDetector gesture={gesture}>
+        <Pressable onPress={liftUp}>
+            {cardBonus && (
+                <>
+                    <Text className="text-blue-600">{cardBonus[0]}</Text>
+                    <Text className="text-customRed">{cardBonus[1]}</Text>
+                </>
+            )}
             <Animated.View
                 style={[
                     {
@@ -87,6 +112,6 @@ export default function Card({
                     <Atlas image={cardsSpriteSheet} sprites={[sprite]} transforms={transform} />
                 </Canvas>
             </Animated.View>
-        </GestureDetector>
+        </Pressable>
     );
 }

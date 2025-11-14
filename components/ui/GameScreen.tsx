@@ -74,6 +74,7 @@ export default function GameScreen(): ReactElement | null {
     //if i use refs for that i have to force a rerender but its fine
     const chips = useRef(getChipsForHandType(handType));
     const mult = useRef(getMultForHandType(handType));
+    const [cardBonus, setCardBonus] = useState<[number, number]>()
     const roundScore = useRef(0);
     const [, forceRender] = useState(0);
 
@@ -126,23 +127,8 @@ export default function GameScreen(): ReactElement | null {
 
         const drawX = startX + i * (cardWidth * scale + drawOffsetX);
         cardViews.push(
-            <Pressable
+            <View
                 key={`${i}${card.id}`}
-                onPress={() => {
-                    setSelectedCards(prev => {
-                        const alreadySelected = prev.some(sel => sel.id === card.id);
-
-                        if (alreadySelected) {
-                            return prev.filter(sel => sel.id !== card.id);
-                        }
-
-                        if (prev.length < 5) {
-                            return [...prev, card];
-                        }
-
-                        return prev;
-                    });
-                }}
                 style={{
                     position: "absolute",
                     left: drawX,
@@ -159,8 +145,11 @@ export default function GameScreen(): ReactElement | null {
                     cardsSpriteSheet={cardsSpriteSheet}
                     modifierSpriteSheet={modifierSpriteSheet}
                     selectedCards={selectedCards}
+                    setSelectedCards={setSelectedCards}
+                    cardObject={card}
+                    cardBonus={cardBonus}
                 />
-            </Pressable>
+            </View>
         );
 
     }
