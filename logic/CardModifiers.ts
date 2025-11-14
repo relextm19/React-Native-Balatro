@@ -35,6 +35,5 @@ function getBonusForLucky(): [number, number, number] {
     const multBonus = multChance === 4 ? 20 : 0;
     const moneyBonus = moneyChance === 14 ? 20 : 0;
 
-
     return [0, multBonus, moneyBonus];
 }

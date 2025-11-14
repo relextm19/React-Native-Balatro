@@ -40,13 +40,21 @@ export default function Card({
     const transform = [Skia.RSXform(scale, 0, 0, 0)];
     const y = useSharedValue(0);
     const rotation = useSharedValue(0);
+    const popupScale = useSharedValue(0);
+    const popupOpacity = useSharedValue(0);
 
-    const animatedStyle = useAnimatedStyle(() => ({
+    const cardAnimatedStyle = useAnimatedStyle(() => ({
         transform: [
             { translateY: y.value ?? 0 },
             { rotateZ: `${rotation.value}deg` },
         ]
     }));
+
+    const popupAnimatedStyle = useAnimatedStyle(() => ({
+        opacity: popupOpacity.value,
+        transform: [{ scale: popupScale.value }]
+    }));
+
 
     function liftUp() {
         if (!animationHeight || !selectedCards || !setSelectedCards || !cardObject) return;
@@ -61,7 +69,7 @@ export default function Card({
     };
 
     useEffect(() => {
-        if (shake && shakeDuration) {
+        if (shake && shakeDuration && cardBonus) {
             rotation.value = withSequence(
                 withTiming(10, { duration: shakeDuration / 6, easing: Easing.inOut(Easing.ease) }),
                 withTiming(-8, { duration: shakeDuration / 6, easing: Easing.inOut(Easing.ease) }),
@@ -70,25 +78,44 @@ export default function Card({
                 withTiming(2, { duration: shakeDuration / 6, easing: Easing.inOut(Easing.ease) }),
                 withTiming(0, { duration: shakeDuration / 6, easing: Easing.inOut(Easing.ease) }),
             );
+
+            popupScale.value = withSequence(
+                withTiming(1.2, { duration: 120 }),
+                withTiming(1, { duration: 80 })
+            );
+
+            popupOpacity.value = withTiming(1, { duration: 200 });
         }
     }, [shake]);
 
     return (
         <Pressable onPress={liftUp}>
-            {(cardBonus && shake) && (
-                <>
-                    <Text className="text-blue-600">{cardBonus[0]}</Text>
-                    <Text className="text-customRed">{cardBonus[1]}</Text>
-                    <Text className="text-accentGold">{cardBonus[2]}</Text>
-                </>
+            {cardBonus && (
+                <Animated.View
+                    style={popupAnimatedStyle}
+                    className={"justify-between items-center flex-row"}
+                >
+                    {cardBonus[0] !== 0 && shake && (
+                        <Text className="text-blue-600 text-xl">+{cardBonus[0]}</Text>
+                    )}
+
+                    {cardBonus[1] !== 0 && shake && (
+                        <Text className="text-customRed text-xl">+{cardBonus[1]}</Text>
+                    )}
+
+                    {cardBonus[2] !== 0 && shake && (
+                        <Text className="text-accentGold text-xl">+{cardBonus[2]}$</Text>
+                    )}
+                </Animated.View>
             )}
+
             <Animated.View
                 style={[
                     {
                         width: cardSliceData.spriteWidth * scale,
                         height: cardSliceData.spriteHeight * scale,
                     },
-                    animatedStyle
+                    cardAnimatedStyle
                 ]}
             >
                 <Canvas
