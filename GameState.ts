@@ -101,18 +101,3 @@ export const useAppStore = create<AppState>((set) => ({
             discards: typeof update === "function" ? update(state.discards) : update,
         })),
 }));
-
-export function addCardToDeck(deck: Deck, card: IPlayingCard): Deck {
-    const newCardsBySuits = new Map(deck.cardsBySuits);
-
-    const suitMap = new Map(newCardsBySuits.get(card.suit));
-
-    suitMap.set(card.id, card);
-
-    newCardsBySuits.set(card.suit, suitMap);
-
-    return {
-        ...deck,
-        cardsBySuits: newCardsBySuits,
-    };
-}

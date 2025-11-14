@@ -15,6 +15,7 @@ import { defaultHandSize } from "../../GameState";
 import Card from "./Card";
 import MenuButton from "./MenuButton";
 import { checkHandType, getChipsForHandType, getMultForHandType, HandType } from "../../logic/CheckHandType";
+import { getBonusForCard } from "../../logic/CardModifiers";
 
 
 export default function GameScreen(): ReactElement | null {
@@ -55,7 +56,7 @@ export default function GameScreen(): ReactElement | null {
         setHand(sortHand(startingHand))
     }, [])
 
-    const { width: screenWidth, height: screenHeight } = useScreenDimensions();
+    const { width: screenWidth, height: _ } = useScreenDimensions();
 
     const [deckIconWidth, setDeckIconWidth] = useState(0);
     const [statusPaneWidth, setStatusPaneWidth] = useState(0);
@@ -213,6 +214,9 @@ export default function GameScreen(): ReactElement | null {
                 setTimeout(() => {
                     setShakingIndex(i);
                     chips.current += rankValues[removed[i].rank]
+                    const [chipBonus, multBonus] = getBonusForCard(removed[i].modifier, mult.current, removed[i].rank, removed[i].suit)
+                    mult.current += multBonus;
+                    chips.current += chipBonus;
                 }, i * shakeDuration + shakeDuration)
             })
             setTimeout(() => {

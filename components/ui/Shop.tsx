@@ -9,9 +9,9 @@ import { ShopItem } from "./ShopItem";
 import { buttonSliceData, cardModifierSliceData, cardSliceData, jokersSliceData } from "../../assets/sliceData";
 import { useSpriteRects } from "../../logic/SpriteSheet";
 import { getRandomInt } from "../../logic/Random";
-import { addCardToDeck, CardsInShop, JokersInShop, useAppStore, Views } from "../../GameState";
+import { CardsInShop, JokersInShop, useAppStore, Views } from "../../GameState";
 import { useScreenDimensions } from "../../logic/ResponsiveDimensions";
-import { createCard, Modifier, ModifierArray, Ranks, RanksArray, Suits, SuitsArray } from "../../interfaces/Card";
+import { createCard, addCardToDeck, ModifierArray, Ranks, RanksArray, Suits, SuitsArray } from "../../interfaces/Card";
 
 enum SelectedItemType {
     Joker,
@@ -108,20 +108,20 @@ export default function Shop(): ReactElement | null {
         if (!selectedItem) return;
         const priceToSubstract = selectedItem.type === SelectedItemType.Card ? cardPrice : jokerPrice;
         // if (store.money < priceToSubstract) return
+        store.setMoney((prev) => prev - priceToSubstract);
 
         if (selectedItem.type === SelectedItemType.Joker) {
             setJokerRandomIndexes(prev => prev.filter((index) => index !== selectedItem.index));
         } else {
-            const rank = RanksArray[(selectedItem.index % cardSliceData.cols)]; //the enum for ranks starts from 2 so we have to add 2
+            const rank = RanksArray[(selectedItem.index % cardSliceData.cols)];
             const suit = SuitsArray[Math.floor(selectedItem.index / cardSliceData.cols)];
             const modifier = ModifierArray[modifierRandomIndexes[selectedItem.indexInShop]];
             const card = createCard(suit, rank, modifier)
-            console.log(rank, suit, modifier)
+
             store.currentDeck.state!.total++;
             store.setCurrentDeck(addCardToDeck(store.currentDeck, card));
             setCardRandomIndexes(prev => prev.filter((index) => index !== selectedItem.index));
         }
-        store.setMoney((prev) => prev - priceToSubstract);
     }
 
     const jokerViews = jokerRandomIndexes.map((jokerIndex, i) => {

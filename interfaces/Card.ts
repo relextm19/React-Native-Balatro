@@ -4,6 +4,7 @@ import { deckSize, setDeckSize, useAppStore } from "../GameState";
 import { cardSliceData } from "../assets/sliceData";
 
 import { getRandomInt } from "../logic/Random";
+import { Deck } from "../assets/cards/deckArray";
 
 export enum Suits {
     Hearts = 'hearts',
@@ -71,7 +72,6 @@ export enum Modifier {
     Normal,
     Bonus,
     Mult,
-    Wild,
     Lucky,
     Glass
 }
@@ -79,7 +79,6 @@ export const ModifierArray: Modifier[] = [
     Modifier.Normal,
     Modifier.Bonus,
     Modifier.Mult,
-    Modifier.Wild,
     Modifier.Lucky,
     Modifier.Glass,
 ];
@@ -100,8 +99,6 @@ export interface IPlayingCard {
 export function createCard(suit: Suits, rank: Ranks, modifier: Modifier): IPlayingCard {
     const isFaceCard = [Ranks.Jack, Ranks.Queen, Ranks.King].includes(rank);
     const id = deckSize + 1;
-    // const rankValues = Object.values(Ranks).filter(v => typeof v === 'number');
-    // const suitValues = Object.values(Suits);
 
     const x = (cardSliceData.spriteWidth + cardSliceData.offsetX) * RanksArray.findIndex(r => r === rank);
     const y = (cardSliceData.spriteHeight + cardSliceData.offsetY) * SuitsArray.findIndex(s => s === suit);
@@ -132,7 +129,7 @@ export function generateDeck(): Map<Suits, Map<Ranks, IPlayingCard>> {
         }
         const suitMap = deck.get(suit)!;
 
-        for (const rank of RanksArray) {//typesciprt returns both the number and the string so it must be filtered to just nums
+        for (const rank of RanksArray) {
             const card = createCard(suit, rank, Modifier.Lucky);
             suitMap.set(card.rank, card);
         }
@@ -168,4 +165,30 @@ export function setCardAvaliablity(card: IPlayingCard, cardsBySuits: Map<Suits, 
     const cardReference = cardsBySuits.get(card.suit)?.get(card.rank);
     if (!cardReference) return;
     cardReference.avaliable = avaliability;
+}
+
+export function addCardToDeck(deck: Deck, card: IPlayingCard): Deck {
+    const newCardsBySuits = new Map(deck.cardsBySuits);
+
+    const suitMap = new Map(newCardsBySuits.get(card.suit));
+    suitMap.set(card.id, card);
+    newCardsBySuits.set(card.suit, suitMap);
+
+    return {
+        ...deck,
+        cardsBySuits: newCardsBySuits,
+    };
+}
+
+export function removeCardFromDeck(suit: Suits, rank: Ranks, deck: Deck): Deck {
+    const oldMap = deck.cardsBySuits!;
+
+    const newMap = new Map(oldMap);
+    const suitMap = new Map(newMap.get(suit)!);
+
+    suitMap.delete(rank);
+    newMap.set(suit, suitMap);
+    deck.state!.total--;
+
+    return { ...deck, cardsBySuits: newMap }
 }
