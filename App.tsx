@@ -6,18 +6,18 @@ import * as NavigationBar from "expo-navigation-bar";
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-import MovingBackground from "./components/Background";
-import Menu from "./components/Menu";
-import AnteSelectScreen from "./components/AnteSelectScreen";
-import DifficultySelectScreen from "./components/DifficultySelectScreen";
+import MovingBackground from "./components/ui/Background";
+import Menu from "./components/ui/Menu";
+import AnteSelectScreen from "./components/ui/AnteSelectScreen";
+import DifficultySelectScreen from "./components/ui/DifficultySelectScreen";
 
 import { Views } from "./GameState";
 import { useAppStore } from "./GameState";
-import DeckView from './components/DeckView';
-import GameScreen from './components/GameScreen';
-import Shop from './components/Shop';
-import RoundSummary from './components/RoundSummary';
-import DefeatScreen from './components/DefeatScreen';
+import DeckView from './components/ui/DeckView';
+import GameScreen from './components/ui/GameScreen';
+import Shop from './components/ui/Shop';
+import RoundSummary from './components/ui/RoundSummary';
+import DefeatScreen from './components/ui/DefeatScreen';
 
 export default function App() {
     useEffect(() => {

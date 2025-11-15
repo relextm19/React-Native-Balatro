@@ -3,9 +3,9 @@ import { View, Text } from 'react-native';
 
 import MenuButton from './MenuButton';
 
-import { buttonSliceData } from '../assets/sliceData';
-import { useAppStore } from '../GameState';
-import { Views } from '../GameState';
+import { buttonSliceData } from '../../assets/sliceData';
+import { useAppStore } from '../../GameState';
+import { Views } from '../../GameState';
 
 export default function DefeatScreen() {
     const homeButtonImageAsset = require("../../assets/ui/home_button.png");

@@ -2,10 +2,10 @@ import React, { ReactElement, RefObject } from "react";
 import { View, Text, LayoutChangeEvent } from "react-native";
 import { Skia, useImage, Canvas, Atlas } from "@shopify/react-native-skia";
 
-import { useSpriteRects } from "../logic/SpriteSheet";
+import { useSpriteRects } from "../../logic/SpriteSheet";
 
-import { stakeSliceData } from "../assets/sliceData";
-import { useAppStore } from "../GameState";
+import { stakeSliceData } from "../../assets/sliceData";
+import { useAppStore } from "../../GameState";
 
 type statusPaneProps = {
     headerText?: string,

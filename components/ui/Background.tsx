@@ -8,7 +8,7 @@ import Animated, {
     Easing,
     useDerivedValue
 } from "react-native-reanimated";
-import { useScreenDimensions } from "../logic/ResponsiveDimensions";
+import { useScreenDimensions } from "../../logic/ResponsiveDimensions";
 
 export default function MovingBackground() {
     const screenDims = useScreenDimensions();

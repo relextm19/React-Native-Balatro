@@ -4,9 +4,9 @@ import { View, Text, Pressable } from "react-native";
 import Animated from "react-native-reanimated";
 import { useSharedValue, withTiming, useAnimatedStyle, withSequence, Easing } from "react-native-reanimated";
 
-import { cardSliceData } from "../assets/sliceData";
-import { IPlayingCard, Modifier } from "../interfaces/Card";
-import { modifierDescs } from "../assets/cards/ModifierArray";
+import { cardSliceData } from "../../assets/sliceData";
+import { IPlayingCard, Modifier } from "../../interfaces/Card";
+import { modifierDescs } from "../../assets/cards/ModifierArray";
 
 type cardProps = {
     scale: number,

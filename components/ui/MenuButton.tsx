@@ -1,10 +1,10 @@
 import React, { ReactElement } from "react";
 import { Skia, Canvas, Atlas, useImageAsTexture, rotate } from "@shopify/react-native-skia";
-import { useSpriteRects } from "../logic/SpriteSheet";
+import { useSpriteRects } from "../../logic/SpriteSheet";
 import { useSharedValue, useDerivedValue, withTiming, Easing } from "react-native-reanimated";
 import { Pressable } from "react-native";
 
-import type { SpriteSheetSliceData } from "../logic/SpriteSheet";
+import type { SpriteSheetSliceData } from "../../logic/SpriteSheet";
 
 type MenuButtonProps = {
     imageAsset: number, //the type of require calls is number due to how metro handles stuff

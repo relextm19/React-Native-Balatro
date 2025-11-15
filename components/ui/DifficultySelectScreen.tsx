@@ -4,13 +4,13 @@ import { Skia, Atlas, Canvas, useImage } from "@shopify/react-native-skia";
 
 import MenuButton from "./MenuButton";
 
-import { deckArray } from "../assets/cards/deckArray";
-import { stakeArray } from "../assets/chips/StakeArray";
-import { useAppStore, Views } from "../GameState";
-import { useSpriteRects } from "../logic/SpriteSheet";
+import { deckArray } from "../../assets/cards/deckArray";
+import { stakeArray } from "../../assets/chips/StakeArray";
+import { useAppStore, Views } from "../../GameState";
+import { useSpriteRects } from "../../logic/SpriteSheet";
 
-import { deckSliceData, buttonSliceData, stakeSliceData } from "../assets/sliceData";
-import { generateDeck } from "../interfaces/Card";
+import { deckSliceData, buttonSliceData, stakeSliceData } from "../../assets/sliceData";
+import { generateDeck } from "../../interfaces/Card";
 
 export default function DifficultySelectScreen() {
     const decksSpriteSheet = useImage(require("../../assets/cards/decks.png"));

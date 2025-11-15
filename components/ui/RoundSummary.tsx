@@ -1,14 +1,14 @@
 import { ReactElement } from "react";
 import { View, Text } from "react-native";
 import { Skia, Canvas, Atlas, useImage } from "@shopify/react-native-skia";
-import { handsToPlay, useAppStore, Views } from "../GameState";
+import { handsToPlay, useAppStore, Views } from "../../GameState";
 
 import MenuButton from "./MenuButton";
 import StatusPane from "./StatusPane";
 
-import { useSpriteRects } from "../logic/SpriteSheet";
+import { useSpriteRects } from "../../logic/SpriteSheet";
 
-import { buttonSliceData, stakeSliceData, blindSliceData } from "../assets/sliceData";
+import { buttonSliceData, stakeSliceData, blindSliceData } from "../../assets/sliceData";
 
 
 export default function RoundSummary(): ReactElement | null {
