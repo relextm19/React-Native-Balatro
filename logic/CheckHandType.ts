@@ -1,17 +1,17 @@
 import { IPlayingCard } from "../interfaces/Card";
 
+//the order has to match the order in the Planets.ts planetsArray
 export enum HandType {
-    None = "",
-    HighCard = "High Card",
     Pair = "Pair",
-    TwoPair = "Two Pair",
     Three = "Three Of a Kind",
-    Straight = "Straight",
-    Flush = "Flush",
     FullHouse = "Full House",
     Four = "Four Of a Kind",
+    Flush = "Flush",
+    Straight = "Straight",
+    TwoPair = "Two Pair",
     StraightFlush = "Straight Flush",
-    RoyalFlush = "Royal Flush"
+    HighCard = "High Card",
+    None = "",
 }
 
 const handTypeBaseValues: Record<HandType, [number, number]> = {
@@ -25,14 +25,26 @@ const handTypeBaseValues: Record<HandType, [number, number]> = {
     [HandType.FullHouse]: [40, 4],
     [HandType.Four]: [60, 7],
     [HandType.StraightFlush]: [100, 8],
-    [HandType.RoyalFlush]: [100, 8],
 };
+
+export function getHandTypeForIndex(index: number): HandType {
+    return Object.values(HandType)[index];
+}
 
 export function getChipsForHandType(handType: HandType): number {
     return handTypeBaseValues[handType][0];
 }
 export function getMultForHandType(handType: HandType): number {
     return handTypeBaseValues[handType][1];
+}
+
+export function addMultForHandType(handType: HandType, toAdd: number) {
+    console.log("adding mult for ", handType, toAdd)
+    handTypeBaseValues[handType][1] += toAdd;
+}
+
+export function addChipsForHandType(handType: HandType, toAdd: number) {
+    handTypeBaseValues[handType][0] += toAdd;
 }
 
 export function checkHandType(hand: IPlayingCard[]): [HandType, number[]] {
@@ -45,7 +57,6 @@ export function checkHandType(hand: IPlayingCard[]): [HandType, number[]] {
     const [multiples, scoringCards] = checkMultiples(sortedHand);
 
     if (isStraight && isFlush) {
-        if (sortedHand[0].rank === 10) return [HandType.RoyalFlush, sortedHand.map(c => c.id)];
         return [HandType.StraightFlush, sortedHand.map(c => c.id)];
     }
 

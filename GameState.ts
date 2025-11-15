@@ -41,7 +41,6 @@ type AppState = {
     discards: number;
     handSize: number;
 
-    // Setters
     setCurrentView: (view: Views) => void;
     setCurrentDeck: (deck: Deck) => void;
     setCurrentDeckCards: (cards: Map<Suits, Map<number, IPlayingCard>>) => void;
@@ -56,7 +55,7 @@ type AppState = {
 };
 
 export const useAppStore = create<AppState>((set) => ({
-    currentView: Views.Shop,
+    currentView: Views.Menu,
     lastView: Views.Menu,
     currentStake: stakeArray[0],
     currentDeck: deckArray[0],

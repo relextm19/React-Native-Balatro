@@ -15,6 +15,7 @@ import { createCard, addCardToDeck, ModifierArray, RanksArray, SuitsArray } from
 import { modifierDescs } from "../../assets/cards/ModifierDescs";
 import { planetsArray } from "../../assets/planets/Planets";
 import { voucherArray } from "../../assets/vouchers/VoucherArray";
+import { addChipsForHandType, addMultForHandType, getHandTypeForIndex } from "../../logic/CheckHandType";
 
 enum SelectedItemType {
     PlanetCard,
@@ -125,11 +126,17 @@ export default function Shop(): ReactElement | null {
         if (!selectedItem) return;
         const priceToSubtract = selectedItem.type === SelectedItemType.Card ? cardPrice : planetCardPrice;
         store.setMoney((prev) => prev - priceToSubtract);
-
+        //if we buy its no longer there so reset
+        setSelectedItem(undefined)
+        setIsHoveredIndex(-1);
         if (selectedItem.type === SelectedItemType.PlanetCard) {
+            const absolutIndex = selectedItem.indexInShop - planetShopIndexOffset;
             setPlanetCardRandomIndexes(prev =>
-                prev.filter((_, idx) => idx !== selectedItem.indexInShop - planetShopIndexOffset)
+                prev.filter((_, idx) => idx !== absolutIndex)
             );
+            const handType = getHandTypeForIndex(selectedItem.index)
+            addMultForHandType(handType, planetsArray[selectedItem.index].multToAdd);
+            addChipsForHandType(handType, planetsArray[selectedItem.index].chipsToAdd);
         } else if (selectedItem.type === SelectedItemType.Card) {
             const rank = RanksArray[(selectedItem.index % cardSliceData.cols)];
             const suit = SuitsArray[Math.floor(selectedItem.index / cardSliceData.cols)];
@@ -160,7 +167,7 @@ export default function Shop(): ReactElement | null {
                 onPress={() => changeSelectedItem({ type: SelectedItemType.PlanetCard, index: planetIndex, indexInShop: i + planetShopIndexOffset })}
                 onLongPress={() => {
                     setItemDescription(planetsArray[planetIndex].desc)
-                    setIsHoveredIndex(planetShopIndexOffset)
+                    setIsHoveredIndex(i + planetShopIndexOffset)
                 }}
                 onPressOut={() => {
                     setItemDescription(undefined)
