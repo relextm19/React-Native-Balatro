@@ -130,7 +130,7 @@ export function generateDeck(): Map<Suits, Map<Ranks, IPlayingCard>> {
         const suitMap = deck.get(suit)!;
 
         for (const rank of RanksArray) {
-            const card = createCard(suit, rank, Modifier.Glass);
+            const card = createCard(suit, rank, Modifier.Bonus);
             suitMap.set(card.rank, card);
         }
     }

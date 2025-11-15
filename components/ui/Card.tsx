@@ -7,6 +7,7 @@ import { useSharedValue, withTiming, useAnimatedStyle, withSequence, Easing } fr
 import { cardSliceData } from "../../assets/sliceData";
 import { IPlayingCard, Modifier } from "../../interfaces/Card";
 import { modifierDescs } from "../../assets/cards/ModifierArray";
+import ItemDescription from "./ItemDescription";
 
 type cardProps = {
     scale: number,
@@ -57,7 +58,7 @@ export default function Card({
 
 
     function liftUp() {
-        if (!animationHeight || !selectedCards || !setSelectedCards || !cardObject || timeoutRef.current) return;
+        if (!animationHeight || !selectedCards || !setSelectedCards || !cardObject) return;
         if (y.value === -animationHeight) {
             y.value = withTiming(0, { duration: 200 });
             setSelectedCards(prev => prev.filter(sel => sel.id !== cardObject.id));
@@ -90,51 +91,13 @@ export default function Card({
         }
     }, [shake]);
 
-    const timeoutRef = useRef<number | null>(null);
-
-    function getHighlitedText(text: string, keywords: string[], colors: string[], wordsAfterKeyword: number[]) {
-        const parts = text.split(" ");
-        const output: React.ReactNode[] = [];
-        let i = 0;
-
-        while (i < parts.length) {
-            const matchedIndex = keywords.findIndex(k => parts[i].startsWith(k));
-            if (matchedIndex !== -1) {
-                const wordsForward = wordsAfterKeyword[matchedIndex];
-                let color = "text-accentGold";
-                if (parts[i + 1] === "Mult") {
-                    color = "text-customRed";
-                } else if (parts[i + 1] === "Chips") {
-                    color = "text-blue-600";
-                }
-                const group = parts.slice(i, i + wordsForward).join(" ");
-                output.push(
-                    <Text key={i} className={`${color} font-bold`}>
-                        {group + " "}
-                    </Text>
-                );
-                i += wordsForward;
-            } else {
-                output.push(parts[i] + " ");
-                i++;
-            }
-        }
-
-        return <Text>{output}</Text>;
-    }
-
     return (
         <Pressable
-            onPress={liftUp}
-            onPressIn={() => {
-                timeoutRef.current = setTimeout(() => {
-                    setCardModifierText(modifierDescs[cardObject!.modifier]);
-                }, 300);
-            }}
+            onLongPress={() => setCardModifierText(modifierDescs[cardObject!.modifier])}
             onPressOut={() => {
-                if (timeoutRef.current) clearTimeout(timeoutRef.current);
                 setCardModifierText(undefined);
             }}
+            onPress={liftUp}
         >
             {cardBonus && (
                 <Animated.View
@@ -155,14 +118,7 @@ export default function Card({
                 </Animated.View>
             )}
             {cardModifierText && (
-                <View className="bottom-full z-50 absolute bg-white p-2 rounded-md h-full">
-                    <Text
-                        className=""
-                        adjustsFontSizeToFit
-                    >
-                        {getHighlitedText(cardModifierText, ["+", "x", "$"], ["blue", "red", "#e0ae07"], [2, 2, 1])}
-                    </Text>
-                </View>
+                <ItemDescription text={cardModifierText} />
             )}
             <Animated.View
                 style={[

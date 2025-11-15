@@ -9,6 +9,6 @@ export const modifierDescs: Record<Modifier, string> = {
     [Modifier.Bonus]: "+30 Chips when scored",
     [Modifier.Mult]: "+4 Mult when scored",
     [Modifier.Glass]: "x2 Mult when scored\n1/4 Chance to shatter after scoring",
-    [Modifier.Lucky]: "1/5 Chance for +20 Mult when scored\n1/15 Chance to give $20 on scored",
+    [Modifier.Lucky]: "1/5 Chance for +20 Mult when scored\n1/15 Chance to give $20 when scored",
     [Modifier.Normal]: "No special changes",
 }

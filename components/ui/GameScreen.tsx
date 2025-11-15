@@ -4,8 +4,8 @@ import { Skia, useImage, rect, Canvas, Atlas } from "@shopify/react-native-skia"
 import { handsToDiscard, handsToPlay, useAppStore, Views } from "../../GameState";
 import { Pressable } from "react-native";
 
-import StatusPane from "./StatusPane";
 import DeckIcon from "./DeckIcon";
+import StatusPane from "./StatusPane";
 
 import { useSpriteRects } from "../../logic/SpriteSheet";
 import { useScreenDimensions } from "../../logic/ResponsiveDimensions";
