@@ -1,10 +1,10 @@
 import { Atlas, Canvas, useImage, rect, Skia, SkRSXform, useRectBuffer, SkRect } from "@shopify/react-native-skia";
-import { useAppStore, Views } from "../../GameState"
+import { useAppStore, Views } from "../GameState"
 import { ReactElement } from "react";
-import { buttonSliceData, cardModifierSliceData, cardSliceData } from "../../assets/sliceData";
-import { useSpriteRects } from "../../logic/SpriteSheet";
+import { buttonSliceData, cardModifierSliceData, cardSliceData } from "../assets/sliceData";
+import { useSpriteRects } from "../logic/SpriteSheet";
 import { View } from "react-native";
-import { useScreenDimensions } from "../../logic/ResponsiveDimensions";
+import { useScreenDimensions } from "../logic/ResponsiveDimensions";
 import MenuButton from "./MenuButton";
 
 

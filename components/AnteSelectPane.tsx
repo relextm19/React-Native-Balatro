@@ -1,8 +1,8 @@
 import React, { ReactElement } from "react";
 import { View, Text, Pressable } from "react-native";
 import { Skia, Canvas, Atlas, SkImage, SkRect } from "@shopify/react-native-skia";
-import { BlindState } from "../../assets/chips/Blinds";
-import { useAppStore, Views } from "../../GameState";
+import { BlindState } from "../assets/chips/Blinds";
+import { useAppStore, Views } from "../GameState";
 
 type AnteSelectPaneProps = {
     stakeSpriteSheet: SkImage;

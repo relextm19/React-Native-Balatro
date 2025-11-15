@@ -6,12 +6,12 @@ import StatusPane from "./StatusPane";
 import MenuButton from "./MenuButton";
 import { ShopItem } from "./ShopItem";
 
-import { buttonSliceData, cardModifierSliceData, cardSliceData, planetCardSliceData, voucherSliceData } from "../../assets/sliceData";
-import { useSpriteRects } from "../../logic/SpriteSheet";
-import { getRandomInt } from "../../logic/Random";
-import { cardsInShop, planetCardsInShop, useAppStore, Views } from "../../GameState";
-import { useScreenDimensions } from "../../logic/ResponsiveDimensions";
-import { createCard, addCardToDeck, ModifierArray, RanksArray, SuitsArray } from "../../interfaces/Card";
+import { buttonSliceData, cardModifierSliceData, cardSliceData, planetCardSliceData, voucherSliceData } from "../assets/sliceData";
+import { useSpriteRects } from "../logic/SpriteSheet";
+import { getRandomInt } from "../logic/Random";
+import { cardsInShop, planetCardsInShop, useAppStore, Views } from "../GameState";
+import { useScreenDimensions } from "../logic/ResponsiveDimensions";
+import { createCard, addCardToDeck, ModifierArray, RanksArray, SuitsArray } from "../interfaces/Card";
 
 enum SelectedItemType {
     PlanetCard,

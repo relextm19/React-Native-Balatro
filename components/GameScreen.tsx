@@ -1,21 +1,21 @@
 import { ReactElement, useEffect, useRef, useState } from "react";
 import { View, Text } from "react-native";
 import { Skia, useImage, rect, Canvas, Atlas } from "@shopify/react-native-skia";
-import { handsToDiscard, handsToPlay, useAppStore, Views } from "../../GameState";
+import { handsToDiscard, handsToPlay, useAppStore, Views } from "../GameState";
 import { Pressable } from "react-native";
 
 import StatusPane from "./StatusPane";
 import DeckIcon from "./DeckIcon";
 
-import { useSpriteRects } from "../../logic/SpriteSheet";
-import { useScreenDimensions } from "../../logic/ResponsiveDimensions";
-import { getRandomCard, IPlayingCard, makeAllCardsAvaliable, rankValues, setCardAvaliablity } from "../../interfaces/Card";
-import { buttonSliceData, cardModifierSliceData, cardSliceData } from "../../assets/sliceData";
-import { defaultHandSize } from "../../GameState";
+import { useSpriteRects } from "../logic/SpriteSheet";
+import { useScreenDimensions } from "../logic/ResponsiveDimensions";
+import { getRandomCard, IPlayingCard, makeAllCardsAvaliable, rankValues, setCardAvaliablity } from "../interfaces/Card";
+import { buttonSliceData, cardModifierSliceData, cardSliceData } from "../assets/sliceData";
+import { defaultHandSize } from "../GameState";
 import Card from "./Card";
 import MenuButton from "./MenuButton";
-import { checkHandType, getChipsForHandType, getMultForHandType, HandType } from "../../logic/CheckHandType";
-import { getBonusForCard } from "../../logic/CardModifiers";
+import { checkHandType, getChipsForHandType, getMultForHandType, HandType } from "../logic/CheckHandType";
+import { getBonusForCard } from "../logic/CardModifiers";
 
 
 export default function GameScreen(): ReactElement | null {
