@@ -72,10 +72,10 @@ export const planetCardSliceData: SpriteSheetSliceData = {
 }
 
 export const voucherSliceData: SpriteSheetSliceData = {
-    offsetX: 0,
+    offsetX: 1,
     offsetY: 0,
     rows: 1,
     cols: 4,
-    spriteWidth: 57,
+    spriteWidth: 59,
     spriteHeight: 93,
 }

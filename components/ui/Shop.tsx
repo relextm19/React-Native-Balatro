@@ -1,22 +1,24 @@
-import { ReactElement, useEffect, useRef, useState } from "react";
-import { useImage, Canvas, Atlas, Skia, SkRect, scale } from "@shopify/react-native-skia";
-import { View, Text, Pressable } from "react-native";
+import { ReactElement, useEffect, useState } from "react";
+import { useImage, Canvas, Atlas, Skia, SkRect } from "@shopify/react-native-skia";
+import { View, Pressable } from "react-native";
 
 import StatusPane from "./StatusPane";
 import MenuButton from "./MenuButton";
 import { ShopItem } from "./ShopItem";
 
-import { buttonSliceData, cardModifierSliceData, cardSliceData, jokersSliceData } from "../../assets/sliceData";
+import { buttonSliceData, cardModifierSliceData, cardSliceData, planetCardSliceData, voucherSliceData } from "../../assets/sliceData";
 import { useSpriteRects } from "../../logic/SpriteSheet";
 import { getRandomInt } from "../../logic/Random";
-import { CardsInShop, JokersInShop, useAppStore, Views } from "../../GameState";
+import { cardsInShop, planetCardsInShop, useAppStore, Views } from "../../GameState";
 import { useScreenDimensions } from "../../logic/ResponsiveDimensions";
-import { createCard, addCardToDeck, ModifierArray, Ranks, RanksArray, Suits, SuitsArray } from "../../interfaces/Card";
+import { createCard, addCardToDeck, ModifierArray, RanksArray, SuitsArray } from "../../interfaces/Card";
 
 enum SelectedItemType {
-    Joker,
-    Card
+    PlanetCard,
+    Card,
+    Voucher
 }
+
 interface SelectedItem {
     type: SelectedItemType,
     index: number,
@@ -28,19 +30,22 @@ export default function Shop(): ReactElement | null {
     const rerollButtonImageAsset = require("../../assets/ui/reroll_button.png");
     const buyButtonImageAsset = require("../../assets/ui/buy_button.png");
 
-    const jokersSpriteSheet = useImage(require("../../assets/jokers/jokers.png"));
+    const planetCardsSpriteSheet = useImage(require("../../assets/planets/planet_cards.png"));
     const cardsSpriteSheet = useImage(require("../../assets/cards/playing_cards.png"));
     const modifierSpriteSheet = useImage(require("../../assets/cards/modifiers.png"));
-
-    const store = useAppStore();
+    const vouchersSpriteSheet = useImage(require("../../assets/vouchers/vouchers.png"));
 
     const cardRects = useSpriteRects(cardSliceData);
     const modifiersRects = useSpriteRects(cardModifierSliceData);
-    const jokerRects = useSpriteRects(jokersSliceData);
+    const planetCardRects = useSpriteRects(planetCardSliceData);
+    const voucherRects = useSpriteRects(voucherSliceData);
 
-    const [jokerRandomIndexes, setJokerRandomIndexes] = useState<number[]>([]);
+    const store = useAppStore();
+
+    const [planetCardRandomIndexes, setPlanetCardRandomIndexes] = useState<number[]>([]);
     const [cardRandomIndexes, setCardRandomIndexes] = useState<number[]>([]);
     const [modifierRandomIndexes, setModifierRandomIndexes] = useState<number[]>([]);
+    const [voucherRandomIndex, setVoucherRandomIndex] = useState<number>();
 
     const screenDims = useScreenDimensions();
     const avaliableHeight = (screenDims.height) * 0.8;
@@ -50,7 +55,7 @@ export default function Shop(): ReactElement | null {
     const animationHeight = 15;
     const [selectedItem, setSelectedItem] = useState<SelectedItem | undefined>(undefined);
 
-    const jokerPrice = 5;
+    const planetCardPrice = 5;
     const cardPrice = 3;
 
     useEffect(() => {
@@ -75,19 +80,19 @@ export default function Shop(): ReactElement | null {
         }
     }
 
-    if (!jokerRects || !cardsSpriteSheet || !cardRects || !modifierSpriteSheet || !modifiersRects || !jokersSpriteSheet) return null;
+    if (!planetCardRects || !cardsSpriteSheet || !cardRects || !modifierSpriteSheet || !modifiersRects || !planetCardsSpriteSheet) return null;
 
     function rerollShop() {
-        const newJokerRandomIndexes: number[] = [];
-        while (newJokerRandomIndexes.length < JokersInShop) {
-            const randIndex = getRandomInt(0, jokerRects.value.length - 1);
-            if (!newJokerRandomIndexes.includes(randIndex)) newJokerRandomIndexes.push(randIndex);
+        const newPlanetCardRandomIndexes: number[] = [];
+        while (newPlanetCardRandomIndexes.length < planetCardsInShop) {
+            const randIndex = getRandomInt(0, planetCardRects.value.length - 1);
+            if (!newPlanetCardRandomIndexes.includes(randIndex)) newPlanetCardRandomIndexes.push(randIndex);
         }
-        setJokerRandomIndexes(newJokerRandomIndexes);
+        setPlanetCardRandomIndexes(newPlanetCardRandomIndexes);
 
         const newCardRandomIndexes: number[] = [];
         const newModifierRandomIndexes: number[] = [];
-        while (newCardRandomIndexes.length < CardsInShop) {
+        while (newCardRandomIndexes.length < cardsInShop) {
             const cardIndex = getRandomInt(0, cardRects.value.length - 1);
             if (!newCardRandomIndexes.includes(cardIndex)) {
                 newCardRandomIndexes.push(cardIndex);
@@ -95,6 +100,8 @@ export default function Shop(): ReactElement | null {
                 newModifierRandomIndexes.push(modIndex);
             }
         }
+
+        setVoucherRandomIndex(getRandomInt(0, voucherRects.value.length - 1));
         setCardRandomIndexes(newCardRandomIndexes);
         setModifierRandomIndexes(newModifierRandomIndexes);
     }
@@ -106,17 +113,16 @@ export default function Shop(): ReactElement | null {
 
     function buyItem() {
         if (!selectedItem) return;
-        const priceToSubstract = selectedItem.type === SelectedItemType.Card ? cardPrice : jokerPrice;
-        // if (store.money < priceToSubstract) return
-        store.setMoney((prev) => prev - priceToSubstract);
+        const priceToSubtract = selectedItem.type === SelectedItemType.Card ? cardPrice : planetCardPrice;
+        store.setMoney((prev) => prev - priceToSubtract);
 
-        if (selectedItem.type === SelectedItemType.Joker) {
-            setJokerRandomIndexes(prev => prev.filter((index) => index !== selectedItem.index));
+        if (selectedItem.type === SelectedItemType.PlanetCard) {
+            setPlanetCardRandomIndexes(prev => prev.filter((index) => index !== selectedItem.index));
         } else {
             const rank = RanksArray[(selectedItem.index % cardSliceData.cols)];
             const suit = SuitsArray[Math.floor(selectedItem.index / cardSliceData.cols)];
             const modifier = ModifierArray[modifierRandomIndexes[selectedItem.indexInShop]];
-            const card = createCard(suit, rank, modifier)
+            const card = createCard(suit, rank, modifier);
 
             store.currentDeck.state!.total++;
             store.setCurrentDeck(addCardToDeck(store.currentDeck, card));
@@ -124,27 +130,27 @@ export default function Shop(): ReactElement | null {
         }
     }
 
-    const jokerViews = jokerRandomIndexes.map((jokerIndex, i) => {
-        const jokerRect: SkRect = jokerRects.value[jokerIndex];
+    const planetCardViews = planetCardRandomIndexes.map((planetIndex, i) => {
+        const planetRect: SkRect = planetCardRects.value[planetIndex];
 
         return (
-            <Pressable onPress={() => changeSelectedItem({ type: SelectedItemType.Joker, index: jokerIndex, indexInShop: i })} key={jokerIndex}>
-                <ShopItem price={jokerPrice} animationHeight={animationHeight} isLifted={selectedItem?.type === SelectedItemType.Joker && selectedItem.index === jokerIndex}>
+            <Pressable key={planetIndex} onPress={() => changeSelectedItem({ type: SelectedItemType.PlanetCard, index: planetIndex, indexInShop: i })}>
+                <ShopItem price={planetCardPrice} animationHeight={animationHeight} isLifted={selectedItem?.type === SelectedItemType.PlanetCard && selectedItem.index === planetIndex}>
                     <Canvas
                         style={{
-                            width: jokerRect.width * cardScale,
-                            height: jokerRect.height * cardScale,
+                            width: planetRect.width * cardScale,
+                            height: planetRect.height * cardScale,
                         }}
                     >
                         <Atlas
-                            image={jokersSpriteSheet}
-                            sprites={[jokerRect]}
+                            image={planetCardsSpriteSheet}
+                            sprites={[planetRect]}
                             transforms={[Skia.RSXform(cardScale, 0, 0, 0)]}
                         />
                     </Canvas>
                 </ShopItem>
             </Pressable>
-        )
+        );
     });
 
     const cardViews = cardRandomIndexes.map((cardIndex, i) => {
@@ -152,7 +158,7 @@ export default function Shop(): ReactElement | null {
         const modifierRect: SkRect = modifiersRects.value[modifierRandomIndexes[i]];
 
         return (
-            <Pressable onPress={() => changeSelectedItem({ type: SelectedItemType.Card, index: cardIndex, indexInShop: i })} key={cardIndex}>
+            <Pressable key={cardIndex} onPress={() => changeSelectedItem({ type: SelectedItemType.Card, index: cardIndex, indexInShop: i })}>
                 <ShopItem price={cardPrice} animationHeight={animationHeight} isLifted={selectedItem?.type === SelectedItemType.Card && selectedItem.index === cardIndex}>
                     <Canvas
                         style={{
@@ -161,12 +167,12 @@ export default function Shop(): ReactElement | null {
                         }}
                     >
                         <Atlas
-                            image={modifierSpriteSheet!}
+                            image={modifierSpriteSheet}
                             sprites={[modifierRect]}
                             transforms={[Skia.RSXform(cardScale, 0, 0, 0)]}
                         />
                         <Atlas
-                            image={cardsSpriteSheet!}
+                            image={cardsSpriteSheet}
                             sprites={[cardRect]}
                             transforms={[Skia.RSXform(cardScale, 0, 0, 0)]}
                         />
@@ -207,25 +213,44 @@ export default function Shop(): ReactElement | null {
                                 />
                             </View>
                         </View>
-                        <View
-                            className="justify-evenly items-center gap-2 w-3/4"
-                        >
-                            <View
-                                className="flex-row justify-evenly items-center gap-2 bg-darkGrey p-2 rounded-md w-full"
-                                style={{ minHeight: cardSliceData.spriteHeight * cardScale }}
-                            >
-                                {jokerViews}
+                        <View className="justify-evenly items-center gap-2 w-3/4">
+                            <View className="flex-row justify-evenly items-center gap-2 rounded-md">
+                                <View
+                                    className="flex-row flex-1 justify-center items-center bg-darkGrey rounded-md"
+                                    style={{ minHeight: cardSliceData.spriteHeight * cardScale }}
+                                >
+                                    <Pressable onPress={() => changeSelectedItem({ type: SelectedItemType.Voucher, index: 0, indexInShop: 0 })}>
+                                        <ShopItem price={10} animationHeight={animationHeight} isLifted={selectedItem?.type === SelectedItemType.Voucher}>
+                                            <Canvas
+                                                style={{
+                                                    width: voucherSliceData.spriteWidth * cardScale,
+                                                    height: voucherSliceData.spriteHeight * cardScale,
+                                                }}
+                                            >
+                                                <Atlas
+                                                    image={vouchersSpriteSheet}
+                                                    sprites={[voucherRects.value[voucherRandomIndex!]]}
+                                                    transforms={[Skia.RSXform(cardScale, 0, 0, 0)]}
+                                                />
+                                            </Canvas>
+                                        </ShopItem>
+                                    </Pressable>
+                                </View>
+                                <View
+                                    className="flex-row flex-1 justify-evenly items-center gap-2 bg-darkGrey rounded-md"
+                                    style={{ minHeight: cardSliceData.spriteHeight * cardScale }}
+                                >
+                                    {planetCardViews}
+                                </View>
                             </View>
-                            <View
-                                className="flex-row justify-evenly items-center gap-2 bg-darkGrey p-2 rounded-md w-full"
-                                style={{ minHeight: cardSliceData.spriteHeight * cardScale }}
-                            >
+                            <View className="flex-row justify-evenly items-center gap-2 bg-darkGrey p-2 rounded-md w-full"
+                                style={{ minHeight: cardSliceData.spriteHeight * cardScale }}>
                                 {cardViews}
                             </View>
                         </View>
                     </View>
                 </View>
             </View>
-        </View>
+        </View >
     );
 }

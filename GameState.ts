@@ -7,8 +7,8 @@ import { Blind, blindsArray } from "./assets/chips/Blinds";
 export const defaultHandSize = 8;
 export const handsToPlay = 4;
 export const handsToDiscard = 3;
-export const JokersInShop = 2;
-export const CardsInShop = 3;
+export const planetCardsInShop = 2;
+export const cardsInShop = 3;
 
 export enum Views {
     Menu,
@@ -56,7 +56,7 @@ type AppState = {
 };
 
 export const useAppStore = create<AppState>((set) => ({
-    currentView: Views.Menu,
+    currentView: Views.Shop,
     lastView: Views.Menu,
     currentStake: stakeArray[0],
     currentDeck: deckArray[0],
