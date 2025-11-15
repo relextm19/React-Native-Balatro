@@ -1,12 +1,12 @@
 import { Skia, Atlas, useImage, SkImage, SkRect, Canvas } from "@shopify/react-native-skia";
-import { ReactElement, useEffect } from "react";
+import { ReactElement, useEffect, useState, useRef } from "react";
 import { View, Text, Pressable } from "react-native";
-import Animated, { runOnJS } from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 import { useSharedValue, withTiming, useAnimatedStyle, withSequence, Easing } from "react-native-reanimated";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
 import { cardSliceData } from "../../assets/sliceData";
 import { IPlayingCard, Modifier } from "../../interfaces/Card";
+import { modifierDescs } from "../../assets/cards/ModifierArray";
 
 type cardProps = {
     scale: number,
@@ -57,7 +57,7 @@ export default function Card({
 
 
     function liftUp() {
-        if (!animationHeight || !selectedCards || !setSelectedCards || !cardObject) return;
+        if (!animationHeight || !selectedCards || !setSelectedCards || !cardObject || timeoutRef.current) return;
         if (y.value === -animationHeight) {
             y.value = withTiming(0, { duration: 200 });
             setSelectedCards(prev => prev.filter(sel => sel.id !== cardObject.id));
@@ -67,6 +67,8 @@ export default function Card({
             y.value = withTiming(-animationHeight, { duration: 200 });
         }
     };
+
+    const [cardModifierText, setCardModifierText] = useState<string | undefined>(undefined);
 
     useEffect(() => {
         if (shake && shakeDuration && cardBonus) {
@@ -88,8 +90,52 @@ export default function Card({
         }
     }, [shake]);
 
+    const timeoutRef = useRef<number | null>(null);
+
+    function getHighlitedText(text: string, keywords: string[], colors: string[], wordsAfterKeyword: number[]) {
+        const parts = text.split(" ");
+        const output: React.ReactNode[] = [];
+        let i = 0;
+
+        while (i < parts.length) {
+            const matchedIndex = keywords.findIndex(k => parts[i].startsWith(k));
+            if (matchedIndex !== -1) {
+                const wordsForward = wordsAfterKeyword[matchedIndex];
+                let color = "text-accentGold";
+                if (parts[i + 1] === "Mult") {
+                    color = "text-customRed";
+                } else if (parts[i + 1] === "Chips") {
+                    color = "text-blue-600";
+                }
+                const group = parts.slice(i, i + wordsForward).join(" ");
+                output.push(
+                    <Text key={i} className={`${color} font-bold`}>
+                        {group + " "}
+                    </Text>
+                );
+                i += wordsForward;
+            } else {
+                output.push(parts[i] + " ");
+                i++;
+            }
+        }
+
+        return <Text>{output}</Text>;
+    }
+
     return (
-        <Pressable onPress={liftUp}>
+        <Pressable
+            onPress={liftUp}
+            onPressIn={() => {
+                timeoutRef.current = setTimeout(() => {
+                    setCardModifierText(modifierDescs[cardObject!.modifier]);
+                }, 300);
+            }}
+            onPressOut={() => {
+                if (timeoutRef.current) clearTimeout(timeoutRef.current);
+                setCardModifierText(undefined);
+            }}
+        >
             {cardBonus && (
                 <Animated.View
                     style={popupAnimatedStyle}
@@ -108,7 +154,16 @@ export default function Card({
                     )}
                 </Animated.View>
             )}
-
+            {cardModifierText && (
+                <View className="bottom-full z-50 absolute bg-white p-2 rounded-md h-full">
+                    <Text
+                        className=""
+                        adjustsFontSizeToFit
+                    >
+                        {getHighlitedText(cardModifierText, ["+", "x", "$"], ["blue", "red", "#e0ae07"], [2, 2, 1])}
+                    </Text>
+                </View>
+            )}
             <Animated.View
                 style={[
                     {
