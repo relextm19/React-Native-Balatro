@@ -19,6 +19,7 @@ function getHighlitedText(text: string, keywords: [string, string][], colors: st
 
             const group = parts.slice(i, i + wordsForward).join(" ");
 
+            console.log(colorClass)
             output.push(
                 <Text key={i} className={`${colorClass} font-bold`}>
                     {group + " "}
@@ -32,7 +33,7 @@ function getHighlitedText(text: string, keywords: [string, string][], colors: st
         }
     }
 
-    return <Text>{output}</Text>;
+    return <Text>{output}</Text>
 }
 
 
@@ -45,13 +46,12 @@ type itemDescriptionProps = {
 
 export default function ItemDescription({ text, keywords, colors, wordsAfterKeyword }: itemDescriptionProps) {
     return (
-        <View className="bottom-full z-50 absolute bg-white p-2 rounded-md h-full">
+        <View className="bottom-full z-50 absolute bg-white p-2 rounded-md">
             <Text
                 className=""
                 adjustsFontSizeToFit
             >
-                {getHighlitedText(text, keywords, colors, wordsAfterKeyword)};
-
+                {getHighlitedText(text, keywords, colors, wordsAfterKeyword)}
             </Text>
         </View>
     )

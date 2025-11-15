@@ -150,10 +150,11 @@ export default function Shop(): ReactElement | null {
         return (
             <Pressable
                 key={planetIndex}
-                onPress={() => changeSelectedItem({ type: SelectedItemType.PlanetCard, index: planetIndex, indexInShop: i })}
+                //add 200 to index so it wont get mixed up wth the card or voucher indexes
+                onPress={() => changeSelectedItem({ type: SelectedItemType.PlanetCard, index: planetIndex, indexInShop: i + 200 })}
                 onLongPress={() => {
                     setItemDescription(planetsArray[planetIndex].desc)
-                    setIsHoveredIndex(i)
+                    setIsHoveredIndex(i + 200)
                 }}
                 onPressOut={() => {
                     setItemDescription(undefined)
@@ -164,7 +165,7 @@ export default function Shop(): ReactElement | null {
                     price={planetCardPrice}
                     animationHeight={animationHeight}
                     isLifted={selectedItem?.type === SelectedItemType.PlanetCard && selectedItem.index === planetIndex}
-                    isHovered={hoveredIndex === i}
+                    isHovered={hoveredIndex === i + 200}
                     description={itemDescription}
                 >
                     <Canvas
@@ -267,10 +268,11 @@ export default function Shop(): ReactElement | null {
                                     style={{ minHeight: cardSliceData.spriteHeight * cardScale }}
                                 >
                                     <Pressable
-                                        onPress={() => changeSelectedItem({ type: SelectedItemType.Voucher, index: 0, indexInShop: 5 })}
+                                        //here also use a random indexin shop so it wont get mixed up
+                                        onPress={() => changeSelectedItem({ type: SelectedItemType.Voucher, index: 0, indexInShop: 18 })}
                                         onLongPress={() => {
                                             setItemDescription(voucherArray[voucherRandomIndex!].desc)
-                                            setIsHoveredIndex(5)
+                                            setIsHoveredIndex(18)
                                         }}
                                         onPressOut={() => {
                                             setItemDescription(undefined)
@@ -281,7 +283,7 @@ export default function Shop(): ReactElement | null {
                                             price={10}
                                             animationHeight={animationHeight} isLifted={selectedItem?.type === SelectedItemType.Voucher}
                                             description={itemDescription}
-                                            isHovered={hoveredIndex === 5}
+                                            isHovered={hoveredIndex === 18}
                                         >
                                             <Canvas
                                                 style={{
