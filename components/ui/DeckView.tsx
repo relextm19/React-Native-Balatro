@@ -23,30 +23,33 @@ export default function DeckView({ setShowDeck }: deckViewProps): ReactElement |
     const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
     const availableWidth = windowWidth - buttonSliceData.spriteWidth * 0.3;
 
-    const verticalGap = windowHeight * 0.02;
+    const displayWidth = availableWidth * 0.98;
 
+    const verticalGap = windowHeight * 0.02;
     const cardWidth = cardSliceData.spriteWidth;
     const cardHeight = cardSliceData.spriteHeight;
 
     const suitArray = Array.from(suits.values());
     const cards: ReactElement[] = [];
 
-    const maxCardsInRow = Math.max(
-        ...suitArray.map(suitCards => suitCards.size)
-    );
-
-    const scale = availableWidth / (maxCardsInRow * cardWidth);
+    const scale = displayWidth / (cardWidth * (13 - 1));
     const scaledCardHeight = cardHeight * scale;
 
     let rowIndex = 0;
-
     for (let j = 0; j < suitArray.length; j++) {
         const suitCards = suitArray[j];
         const cardsArray = Array.from(suitCards.values());
         if (cardsArray.length === 0) continue;
 
-        const totalRowWidth = cardsArray.length * cardWidth * scale;
-        const rowOffsetX = (availableWidth - totalRowWidth) / 2;
+        const numCardsInRow = cardsArray.length;
+
+        const totalRowWidth = (cardWidth * scale * numCardsInRow);
+
+        const drawOffsetX = numCardsInRow > 1
+            ? (displayWidth - totalRowWidth) / (numCardsInRow - 1)
+            : 0;
+
+        const rowOffsetX = (availableWidth - displayWidth) / 2;
 
         const drawY = rowIndex * (scaledCardHeight + verticalGap);
 
@@ -57,7 +60,7 @@ export default function DeckView({ setShowDeck }: deckViewProps): ReactElement |
                 ? modifiersRects.value[card.modifier]
                 : modifiersRects.value[0];
 
-            const drawX = rowOffsetX + i * cardWidth * scale;
+            const drawX = rowOffsetX + i * (cardWidth * scale + drawOffsetX);
 
             cards.push(
                 <Atlas

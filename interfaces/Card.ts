@@ -132,6 +132,11 @@ export function generateDeck(): Map<Suits, Map<number, IPlayingCard>> {
             suitMap.set(card.id, card);
         }
     }
+    for (let i = 0; i < 10; i++) {
+        const suitMap = deck.get(Suits.Clubs)!;
+        const card = createCard(Suits.Clubs, Ranks.Ace, Modifier.Glass);
+        suitMap.set(card.id, card);
+    }
 
     return deck;
 }
