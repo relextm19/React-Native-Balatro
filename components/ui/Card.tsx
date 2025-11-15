@@ -118,7 +118,17 @@ export default function Card({
                 </Animated.View>
             )}
             {cardModifierText && (
-                <ItemDescription text={cardModifierText} />
+                <ItemDescription
+                    text={cardModifierText}
+                    keywords={[
+                        ["+", "Chips"],
+                        ["+", "Mult"],
+                        ["x", "Mult"],
+                        ["$", ""]
+                    ]}
+                    colors={["blue-600", "customRed", "customRed", "accentGold"]}
+                    wordsAfterKeyword={[2, 2, 2, 1]}
+                />
             )}
             <Animated.View
                 style={[

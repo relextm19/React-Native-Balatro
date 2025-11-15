@@ -38,26 +38,19 @@ function getHighlitedText(text: string, keywords: [string, string][], colors: st
 
 type itemDescriptionProps = {
     text: string,
+    keywords: [string, string][],
+    colors: string[],
+    wordsAfterKeyword: number[],
 }
 
-export default function ItemDescription({ text }: itemDescriptionProps) {
+export default function ItemDescription({ text, keywords, colors, wordsAfterKeyword }: itemDescriptionProps) {
     return (
         <View className="bottom-full z-50 absolute bg-white p-2 rounded-md h-full">
             <Text
                 className=""
                 adjustsFontSizeToFit
             >
-                {getHighlitedText(
-                    text,
-                    [
-                        ["+", "Chips"],
-                        ["+", "Mult"],
-                        ["x", "Mult"],
-                        ["$", ""]
-                    ],
-                    ["blue-600", "customRed", "customRed", "accentGold"],
-                    [2, 2, 2, 1]
-                )}
+                {getHighlitedText(text, keywords, colors, wordsAfterKeyword)};
 
             </Text>
         </View>
