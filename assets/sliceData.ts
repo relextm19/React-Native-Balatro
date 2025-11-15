@@ -61,3 +61,21 @@ export const jokersSliceData: SpriteSheetSliceData = {
     spriteWidth: 69,
     spriteHeight: 93,
 }
+
+export const planetCardSliceData: SpriteSheetSliceData = {
+    offsetX: 8,
+    offsetY: 0,
+    rows: 1,
+    cols: 9,
+    spriteWidth: 63,
+    spriteHeight: 93,
+}
+
+export const voucherSliceData: SpriteSheetSliceData = {
+    offsetX: 0,
+    offsetY: 0,
+    rows: 1,
+    cols: 4,
+    spriteWidth: 57,
+    spriteHeight: 93,
+}
