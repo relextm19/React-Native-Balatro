@@ -6,7 +6,7 @@ import { useSharedValue, withTiming, useAnimatedStyle, withSequence, Easing } fr
 
 import { cardSliceData } from "../../assets/sliceData";
 import { IPlayingCard, Modifier } from "../../interfaces/Card";
-import { modifierDescs } from "../../assets/cards/ModifierArray";
+import { modifierDescs } from "../../assets/cards/ModifierDescs";
 import ItemDescription from "./ItemDescription";
 
 type cardProps = {

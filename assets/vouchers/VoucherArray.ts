@@ -4,7 +4,7 @@ export type Voucher = {
     desc: string;
 }
 
-export const vouchers: Voucher[] = [
+export const voucherArray: Voucher[] = [
     { index: 0, name: "Clearance Sale", desc: "All cards and packs in shop are 25% off" },
     { index: 1, name: "Wasteful", desc: "Permanently gain +1 discard each round" },
     { index: 2, name: "Grabber", desc: "Permanently gain +1 hand per round" },

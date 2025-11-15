@@ -12,6 +12,9 @@ import { getRandomInt } from "../../logic/Random";
 import { cardsInShop, planetCardsInShop, useAppStore, Views } from "../../GameState";
 import { useScreenDimensions } from "../../logic/ResponsiveDimensions";
 import { createCard, addCardToDeck, ModifierArray, RanksArray, SuitsArray } from "../../interfaces/Card";
+import { modifierDescs } from "../../assets/cards/ModifierDescs";
+import { planetsArray } from "../../assets/planets/Planets";
+import { voucherArray } from "../../assets/vouchers/VoucherArray";
 
 enum SelectedItemType {
     PlanetCard,
@@ -51,6 +54,9 @@ export default function Shop(): ReactElement | null {
     const avaliableHeight = (screenDims.height) * 0.8;
     const cardGap = 60;
     const [cardScale, setCardScale] = useState(1);
+
+    const [itemDescription, setItemDescription] = useState<string | undefined>(undefined);
+    const [hoveredIndex, setIsHoveredIndex] = useState(-1);
 
     const animationHeight = 15;
     const [selectedItem, setSelectedItem] = useState<SelectedItem | undefined>(undefined);
@@ -117,7 +123,9 @@ export default function Shop(): ReactElement | null {
         store.setMoney((prev) => prev - priceToSubtract);
 
         if (selectedItem.type === SelectedItemType.PlanetCard) {
-            setPlanetCardRandomIndexes(prev => prev.filter((index) => index !== selectedItem.index));
+            setPlanetCardRandomIndexes(prev =>
+                prev.filter((_, idx) => idx !== selectedItem.indexInShop)
+            );
         } else {
             const rank = RanksArray[(selectedItem.index % cardSliceData.cols)];
             const suit = SuitsArray[Math.floor(selectedItem.index / cardSliceData.cols)];
@@ -126,7 +134,13 @@ export default function Shop(): ReactElement | null {
 
             store.currentDeck.state!.total++;
             store.setCurrentDeck(addCardToDeck(store.currentDeck, card));
-            setCardRandomIndexes(prev => prev.filter((index) => index !== selectedItem.index));
+            setCardRandomIndexes(prev =>
+                prev.filter((_, idx) => idx !== selectedItem.indexInShop)
+            );
+
+            setModifierRandomIndexes(prev =>
+                prev.filter((_, idx) => idx !== selectedItem.indexInShop)
+            );
         }
     }
 
@@ -134,8 +148,25 @@ export default function Shop(): ReactElement | null {
         const planetRect: SkRect = planetCardRects.value[planetIndex];
 
         return (
-            <Pressable key={planetIndex} onPress={() => changeSelectedItem({ type: SelectedItemType.PlanetCard, index: planetIndex, indexInShop: i })}>
-                <ShopItem price={planetCardPrice} animationHeight={animationHeight} isLifted={selectedItem?.type === SelectedItemType.PlanetCard && selectedItem.index === planetIndex}>
+            <Pressable
+                key={planetIndex}
+                onPress={() => changeSelectedItem({ type: SelectedItemType.PlanetCard, index: planetIndex, indexInShop: i })}
+                onLongPress={() => {
+                    setItemDescription(planetsArray[planetIndex].desc)
+                    setIsHoveredIndex(i)
+                }}
+                onPressOut={() => {
+                    setItemDescription(undefined)
+                    setIsHoveredIndex(-1)
+                }}
+            >
+                <ShopItem
+                    price={planetCardPrice}
+                    animationHeight={animationHeight}
+                    isLifted={selectedItem?.type === SelectedItemType.PlanetCard && selectedItem.index === planetIndex}
+                    isHovered={hoveredIndex === i}
+                    description={itemDescription}
+                >
                     <Canvas
                         style={{
                             width: planetRect.width * cardScale,
@@ -158,8 +189,24 @@ export default function Shop(): ReactElement | null {
         const modifierRect: SkRect = modifiersRects.value[modifierRandomIndexes[i]];
 
         return (
-            <Pressable key={cardIndex} onPress={() => changeSelectedItem({ type: SelectedItemType.Card, index: cardIndex, indexInShop: i })}>
-                <ShopItem price={cardPrice} animationHeight={animationHeight} isLifted={selectedItem?.type === SelectedItemType.Card && selectedItem.index === cardIndex}>
+            <Pressable
+                key={cardIndex}
+                onPress={() => changeSelectedItem({ type: SelectedItemType.Card, index: cardIndex, indexInShop: i })}
+                onLongPress={() => {
+                    setItemDescription(modifierDescs[ModifierArray[modifierRandomIndexes[i]]])
+                    setIsHoveredIndex(cardIndex)
+                }}
+                onPressOut={() => {
+                    setItemDescription(undefined)
+                    setIsHoveredIndex(-1)
+                }}
+            >
+                <ShopItem price={cardPrice}
+                    animationHeight={animationHeight}
+                    isLifted={selectedItem?.type === SelectedItemType.Card && selectedItem.index === cardIndex}
+                    description={itemDescription}
+                    isHovered={hoveredIndex === cardIndex}
+                >
                     <Canvas
                         style={{
                             width: cardRect.width * cardScale,
@@ -219,8 +266,23 @@ export default function Shop(): ReactElement | null {
                                     className="flex-row flex-1 justify-center items-center bg-darkGrey rounded-md"
                                     style={{ minHeight: cardSliceData.spriteHeight * cardScale }}
                                 >
-                                    <Pressable onPress={() => changeSelectedItem({ type: SelectedItemType.Voucher, index: 0, indexInShop: 0 })}>
-                                        <ShopItem price={10} animationHeight={animationHeight} isLifted={selectedItem?.type === SelectedItemType.Voucher}>
+                                    <Pressable
+                                        onPress={() => changeSelectedItem({ type: SelectedItemType.Voucher, index: 0, indexInShop: 5 })}
+                                        onLongPress={() => {
+                                            setItemDescription(voucherArray[voucherRandomIndex!].desc)
+                                            setIsHoveredIndex(5)
+                                        }}
+                                        onPressOut={() => {
+                                            setItemDescription(undefined)
+                                            setIsHoveredIndex(-1)
+                                        }}
+                                    >
+                                        <ShopItem
+                                            price={10}
+                                            animationHeight={animationHeight} isLifted={selectedItem?.type === SelectedItemType.Voucher}
+                                            description={itemDescription}
+                                            isHovered={hoveredIndex === 5}
+                                        >
                                             <Canvas
                                                 style={{
                                                     width: voucherSliceData.spriteWidth * cardScale,
