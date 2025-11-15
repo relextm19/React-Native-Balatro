@@ -30,30 +30,6 @@ export function ShopItem({ children, price, animationHeight, isLifted, isHovered
     useEffect(() => {
         liftUp()
     }, [isLifted])
-    const itemDescriptionProps = {
-        text: description,
-        keywords: [
-            ["+", "Chips"],
-            ["+", "Mult"],
-            ["x", "Mult"],
-            ["$", ""],
-            ["25%", ""],
-            ["+1", "discard"],
-            ["+1", "hand"],
-            ["+1", "card"]
-        ] as [string, string][],
-        colors: [
-            "blue-600",
-            "customRed",
-            "customRed",
-            "accentGold",
-            "accentGold",
-            "customRed",
-            "blue-600",
-            "blue-600"
-        ],
-        wordsAfterKeyword: [2, 2, 2, 1, 1, 2, 2, 2]
-    };
 
     return (
         <View>
@@ -85,8 +61,6 @@ export function ShopItem({ children, price, animationHeight, isLifted, isHovered
                     />
                 )}
             </View>
-            );
-
             < Animated.View
                 className="justify-center items-center p-2"
                 style={animatedStyle}

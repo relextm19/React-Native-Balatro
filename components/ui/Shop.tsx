@@ -48,7 +48,7 @@ export default function Shop(): ReactElement | null {
     const [planetCardRandomIndexes, setPlanetCardRandomIndexes] = useState<number[]>([]);
     const [cardRandomIndexes, setCardRandomIndexes] = useState<number[]>([]);
     const [modifierRandomIndexes, setModifierRandomIndexes] = useState<number[]>([]);
-    const [voucherRandomIndex, setVoucherRandomIndex] = useState<number>();
+    const [voucherRandomIndex, setVoucherRandomIndex] = useState<number | undefined>();
 
     const screenDims = useScreenDimensions();
     const avaliableHeight = (screenDims.height) * 0.8;
@@ -63,6 +63,10 @@ export default function Shop(): ReactElement | null {
 
     const planetCardPrice = 5;
     const cardPrice = 3;
+
+    const planetShopIndexOffset = 50;
+
+    const [containterMinHeight, setContainerMinHeight] = useState(0);
 
     useEffect(() => {
         if (avaliableHeight > 0) {
@@ -124,9 +128,9 @@ export default function Shop(): ReactElement | null {
 
         if (selectedItem.type === SelectedItemType.PlanetCard) {
             setPlanetCardRandomIndexes(prev =>
-                prev.filter((_, idx) => idx !== selectedItem.indexInShop)
+                prev.filter((_, idx) => idx !== selectedItem.indexInShop - planetShopIndexOffset)
             );
-        } else {
+        } else if (selectedItem.type === SelectedItemType.Card) {
             const rank = RanksArray[(selectedItem.index % cardSliceData.cols)];
             const suit = SuitsArray[Math.floor(selectedItem.index / cardSliceData.cols)];
             const modifier = ModifierArray[modifierRandomIndexes[selectedItem.indexInShop]];
@@ -141,6 +145,8 @@ export default function Shop(): ReactElement | null {
             setModifierRandomIndexes(prev =>
                 prev.filter((_, idx) => idx !== selectedItem.indexInShop)
             );
+        } else {
+            setVoucherRandomIndex(undefined);
         }
     }
 
@@ -151,10 +157,10 @@ export default function Shop(): ReactElement | null {
             <Pressable
                 key={planetIndex}
                 //add 200 to index so it wont get mixed up wth the card or voucher indexes
-                onPress={() => changeSelectedItem({ type: SelectedItemType.PlanetCard, index: planetIndex, indexInShop: i + 200 })}
+                onPress={() => changeSelectedItem({ type: SelectedItemType.PlanetCard, index: planetIndex, indexInShop: i + planetShopIndexOffset })}
                 onLongPress={() => {
                     setItemDescription(planetsArray[planetIndex].desc)
-                    setIsHoveredIndex(i + 200)
+                    setIsHoveredIndex(planetShopIndexOffset)
                 }}
                 onPressOut={() => {
                     setItemDescription(undefined)
@@ -165,7 +171,7 @@ export default function Shop(): ReactElement | null {
                     price={planetCardPrice}
                     animationHeight={animationHeight}
                     isLifted={selectedItem?.type === SelectedItemType.PlanetCard && selectedItem.index === planetIndex}
-                    isHovered={hoveredIndex === i + 200}
+                    isHovered={hoveredIndex === i + planetShopIndexOffset}
                     description={itemDescription}
                 >
                     <Canvas
@@ -265,50 +271,55 @@ export default function Shop(): ReactElement | null {
                             <View className="flex-row justify-evenly items-center gap-2 rounded-md">
                                 <View
                                     className="flex-row flex-1 justify-center items-center bg-darkGrey rounded-md"
-                                    style={{ minHeight: cardSliceData.spriteHeight * cardScale }}
+                                    style={{ minHeight: containterMinHeight }}
+                                    onLayout={(e) => setContainerMinHeight(e.nativeEvent.layout.height)}
                                 >
-                                    <Pressable
-                                        //here also use a random indexin shop so it wont get mixed up
-                                        onPress={() => changeSelectedItem({ type: SelectedItemType.Voucher, index: 0, indexInShop: 18 })}
-                                        onLongPress={() => {
-                                            setItemDescription(voucherArray[voucherRandomIndex!].desc)
-                                            setIsHoveredIndex(18)
-                                        }}
-                                        onPressOut={() => {
-                                            setItemDescription(undefined)
-                                            setIsHoveredIndex(-1)
-                                        }}
-                                    >
-                                        <ShopItem
-                                            price={10}
-                                            animationHeight={animationHeight} isLifted={selectedItem?.type === SelectedItemType.Voucher}
-                                            description={itemDescription}
-                                            isHovered={hoveredIndex === 18}
+                                    {voucherRandomIndex !== undefined && (
+                                        <Pressable
+                                            onPress={() => changeSelectedItem({ type: SelectedItemType.Voucher, index: 0, indexInShop: 18 })}
+                                            onLongPress={() => {
+                                                setItemDescription(voucherArray[voucherRandomIndex].desc);
+                                                setIsHoveredIndex(18);
+                                            }}
+                                            onPressOut={() => {
+                                                setItemDescription(undefined);
+                                                setIsHoveredIndex(-1);
+                                            }}
                                         >
-                                            <Canvas
-                                                style={{
-                                                    width: voucherSliceData.spriteWidth * cardScale,
-                                                    height: voucherSliceData.spriteHeight * cardScale,
-                                                }}
+                                            <ShopItem
+                                                price={10}
+                                                animationHeight={animationHeight}
+                                                isLifted={selectedItem?.type === SelectedItemType.Voucher}
+                                                description={itemDescription}
+                                                isHovered={hoveredIndex === 18}
                                             >
-                                                <Atlas
-                                                    image={vouchersSpriteSheet}
-                                                    sprites={[voucherRects.value[voucherRandomIndex!]]}
-                                                    transforms={[Skia.RSXform(cardScale, 0, 0, 0)]}
-                                                />
-                                            </Canvas>
-                                        </ShopItem>
-                                    </Pressable>
+                                                <Canvas
+                                                    style={{
+                                                        width: voucherSliceData.spriteWidth * cardScale,
+                                                        height: voucherSliceData.spriteHeight * cardScale,
+                                                    }}
+                                                >
+                                                    <Atlas
+                                                        image={vouchersSpriteSheet}
+                                                        sprites={[voucherRects.value[voucherRandomIndex]]}
+                                                        transforms={[Skia.RSXform(cardScale, 0, 0, 0)]}
+                                                    />
+                                                </Canvas>
+                                            </ShopItem>
+                                        </Pressable>
+                                    )}
                                 </View>
                                 <View
                                     className="flex-row flex-1 justify-evenly items-center gap-2 bg-darkGrey rounded-md"
-                                    style={{ minHeight: cardSliceData.spriteHeight * cardScale }}
+                                    style={{ minHeight: containterMinHeight }}
                                 >
                                     {planetCardViews}
                                 </View>
                             </View>
-                            <View className="flex-row justify-evenly items-center gap-2 bg-darkGrey p-2 rounded-md w-full"
-                                style={{ minHeight: cardSliceData.spriteHeight * cardScale }}>
+                            <View
+                                className="flex-row justify-evenly items-center gap-2 bg-darkGrey p-2 rounded-md w-full"
+                                style={{ minHeight: containterMinHeight }}
+                            >
                                 {cardViews}
                             </View>
                         </View>

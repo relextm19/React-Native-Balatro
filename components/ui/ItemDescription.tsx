@@ -48,7 +48,7 @@ export default function ItemDescription({ text, keywords, colors, wordsAfterKeyw
     return (
         <View className="bottom-full z-50 absolute bg-white p-2 rounded-md">
             <Text
-                className=""
+                className="text-xs"
                 adjustsFontSizeToFit
             >
                 {getHighlitedText(text, keywords, colors, wordsAfterKeyword)}
