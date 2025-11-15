@@ -14,7 +14,6 @@ export enum Views {
     Menu,
     DifficultySelect,
     AnteSelect,
-    DeckView,
     GameScreen,
     Shop,
     RoundSummary,

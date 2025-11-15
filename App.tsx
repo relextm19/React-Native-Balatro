@@ -41,8 +41,6 @@ export default function App() {
                 return <DifficultySelectScreen />;
             case Views.AnteSelect:
                 return <AnteSelectScreen />;
-            case Views.DeckView:
-                return <DeckView />
             case Views.GameScreen:
                 return <GameScreen />
             case Views.Shop:

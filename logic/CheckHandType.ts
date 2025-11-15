@@ -27,6 +27,19 @@ const handTypeBaseValues: Record<HandType, [number, number]> = {
     [HandType.StraightFlush]: [100, 8],
 };
 
+// const handTypeLevels: Record<HandType, number> = {
+//     [HandType.None]: 1,
+//     [HandType.HighCard]: 1,
+//     [HandType.Pair]: 1,
+//     [HandType.TwoPair]: 1,
+//     [HandType.Three]: 1,
+//     [HandType.Straight]: 1,
+//     [HandType.Flush]: 1,
+//     [HandType.FullHouse]: 1,
+//     [HandType.Four]: 1,
+//     [HandType.StraightFlush]: 1,
+// };
+
 export function getHandTypeForIndex(index: number): HandType {
     return Object.values(HandType)[index];
 }

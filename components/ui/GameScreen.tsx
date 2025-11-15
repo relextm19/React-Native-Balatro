@@ -9,13 +9,15 @@ import StatusPane from "./StatusPane";
 
 import { useSpriteRects } from "../../logic/SpriteSheet";
 import { useScreenDimensions } from "../../logic/ResponsiveDimensions";
-import { getRandomCard, IPlayingCard, makeAllCardsAvaliable, rankValues, setCardAvaliablity } from "../../interfaces/Card";
+import { getRandomCard, IPlayingCard, makeAllCardsAvailable, rankValues, setCardAvailability } from "../../interfaces/Card";
 import { buttonSliceData, cardModifierSliceData, cardSliceData } from "../../assets/sliceData";
 import { defaultHandSize } from "../../GameState";
 import Card from "./Card";
 import MenuButton from "./MenuButton";
 import { checkHandType, getChipsForHandType, getMultForHandType, HandType } from "../../logic/CheckHandType";
 import { getBonusForCard } from "../../logic/CardModifiers";
+import DeckView from "./DeckView";
+import { BlurView } from "expo-blur";
 
 
 export default function GameScreen(): ReactElement | null {
@@ -35,7 +37,7 @@ export default function GameScreen(): ReactElement | null {
         while (newHand.length < n && deckState.avaliable > 0) {
             const card = getRandomCard(cardsBySuits);
             if (!card) { return }
-            card.avaliable = false;
+            card.available = false;
             deckState.avaliable -= 1;
             newHand.push(card)
         }
@@ -48,7 +50,7 @@ export default function GameScreen(): ReactElement | null {
 
         //reset the state at the begining of ante
         deckState.avaliable = 52;
-        makeAllCardsAvaliable(cardsBySuits);
+        makeAllCardsAvailable(cardsBySuits);
         store.hands = handsToPlay;
         store.discards = handsToDiscard;
 
@@ -65,9 +67,9 @@ export default function GameScreen(): ReactElement | null {
 
     const cardViews: ReactElement[] = [];
 
-    const [hand, setHand] = useState([] as IPlayingCard[]);
-    const [selectedCards, setSelectedCards] = useState([] as IPlayingCard[])
-    const [playedHand, setPlayedHand] = useState([] as IPlayingCard[]);
+    const [hand, setHand] = useState<IPlayingCard[]>([]);
+    const [selectedCards, setSelectedCards] = useState<IPlayingCard[]>([]);
+    const [playedHand, setPlayedHand] = useState<IPlayingCard[]>([]);
     const [shakingIndex, setShakingIndex] = useState(-1); //xd
 
     const handType = checkHandType(selectedCards.length > 0 ? selectedCards : playedHand)[0];
@@ -77,6 +79,8 @@ export default function GameScreen(): ReactElement | null {
     const [cardBonus, setCardBonus] = useState<[number, number, number]>()
     const roundScore = useRef(0);
     const [, forceRender] = useState(0);
+
+    const [showDeck, setShowDeck] = useState(false);
 
     useEffect(() => {
         mult.current = getMultForHandType(handType)
@@ -232,6 +236,9 @@ export default function GameScreen(): ReactElement | null {
 
     return (
         <View className="flex-row flex-1 justify-center items-end">
+            {showDeck && (
+                <DeckView setShowDeck={setShowDeck} />
+            )}
             <StatusPane
                 setWidth={setStatusPaneWidth}
                 handName={handType}
@@ -281,10 +288,13 @@ export default function GameScreen(): ReactElement | null {
                     </View>
                 </View>
             </View>
-            <View className="justify-end items-end"
-                style={{ height: cardHeight * scale, width: cardWidth * scale, }}>
+            <Pressable
+                className="justify-end items-end"
+                style={{ height: cardHeight * scale, width: cardWidth * scale, }}
+                onPress={() => { setShowDeck(prev => !prev) }}
+            >
                 <DeckIcon setWidth={setDeckIconWidth} />
-            </View>
+            </Pressable>
         </View>
     )
 }

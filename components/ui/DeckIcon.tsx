@@ -16,14 +16,10 @@ export default function DeckIcon({ setWidth }: deckIconProps): ReactElement | nu
     const store = useAppStore();
     const decksSpriteSheet = useImage(require("../../assets/cards/decks.png"));
     const deckSpriteRect = useSpriteRects(deckSliceData).value[store.currentDeck.index] ?? null;
-    function showDeckView() {
-        store.setCurrentView(Views.DeckView);
-    }
 
     return (
-        <Pressable
+        <View
             className="justify-end items-end"
-            onPress={showDeckView}
             onLayout={(event: LayoutChangeEvent) => {
                 if (setWidth) {
                     const { width } = event.nativeEvent.layout;
@@ -48,6 +44,6 @@ export default function DeckIcon({ setWidth }: deckIconProps): ReactElement | nu
                 className="text-white text-center">
                 {store.currentDeck.state?.avaliable}/{store.currentDeck.state?.total}
             </Text>
-        </Pressable>
+        </View>
     )
 }
