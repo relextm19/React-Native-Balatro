@@ -41,6 +41,9 @@ export default function AnteSelectScreen(): ReactElement | null {
                 title={blindsArray[blindIndex].name}
                 rewardAmount={rewardAmount[i]}
                 blindState={blindState}
+                isBossBlind={i === 2}
+                blindIndex={blindIndex}
+                description={i === 2 ? blindsArray[blindIndex].desc : undefined}
                 key={i}
             />
         )
@@ -50,7 +53,7 @@ export default function AnteSelectScreen(): ReactElement | null {
         <View className="flex-row flex-1 justify-center">
             <StatusPane />
             <View className="relative flex-1 justify-end items-center">
-                <View className="flex-row justify-center items-center gap-x-[5%] h-4/6">
+                <View className="flex-row justify-center items-center gap-x-[5%] h-[75%]">
                     {panes}
                 </View>
             </View>

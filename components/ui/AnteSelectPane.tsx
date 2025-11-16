@@ -4,6 +4,7 @@ import { Skia, Canvas, Atlas, SkImage, SkRect } from "@shopify/react-native-skia
 import { BlindState } from "../../assets/chips/Blinds";
 import { useAppStore, Views } from "../../GameState";
 import { playSound } from "../../logic/Sounds";
+import { applyBlindEffects } from "../../logic/ApplyBlindEffects";
 
 type AnteSelectPaneProps = {
     stakeSpriteSheet: SkImage;
@@ -14,9 +15,24 @@ type AnteSelectPaneProps = {
     title: String,
     rewardAmount: number,
     blindState: BlindState
+    isBossBlind: boolean,
+    blindIndex: number,
+    description: string | undefined,
 };
 
-export default function AnteSelectPane({ stakeSpriteSheet, blindSpriteSheet, stakeSourceRect, blindSourceRect, requiredScore, title, rewardAmount, blindState, }: AnteSelectPaneProps): ReactElement {
+export default function AnteSelectPane({
+    stakeSpriteSheet,
+    blindSpriteSheet,
+    stakeSourceRect,
+    blindSourceRect,
+    requiredScore,
+    title,
+    rewardAmount,
+    blindState,
+    isBossBlind,
+    blindIndex,
+    description
+}: AnteSelectPaneProps): ReactElement {
     const stakeTransforms = [Skia.RSXform(1, 0, 0, 0)];
     const blindImgScale = 1.5;
     const blindTransforms = [Skia.RSXform(blindImgScale, 0, 0, 0)];
@@ -25,6 +41,9 @@ export default function AnteSelectPane({ stakeSpriteSheet, blindSpriteSheet, sta
     const store = useAppStore();
     function setGameView(): void {
         if (blindState !== BlindState.selected) return
+        if (isBossBlind) {
+            applyBlindEffects(blindIndex);
+        }
         store.setCurrentView(Views.GameScreen)
     }
 
@@ -87,6 +106,12 @@ export default function AnteSelectPane({ stakeSpriteSheet, blindSpriteSheet, sta
                         <Text className="text-white text-center">Reward: </Text>
                         <Text className="text-accentGold">{"$".repeat(rewardAmount)}+</Text>
                     </View>
+                    {description && (
+                        <View className="bg-[#19201fff] mt-2 p-2 border-2 border-lightBorder rounded-main">
+                            <Text className="text-white text-sm text-center">{description}</Text>
+                        </View>
+                    )}
+
                 </View>
             </View>
         </Pressable>
