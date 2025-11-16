@@ -18,6 +18,7 @@
 </p>
 
 ### Gameplay
+https://github.com/user-attachments/assets/462c90ac-5dcd-4e7a-998e-9d0d82f61230
 
 ---
 
