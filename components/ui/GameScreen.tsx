@@ -25,6 +25,8 @@ export default function GameScreen(): ReactElement | null {
     const playButtonImageAsset = require("../../assets/ui/play_button.png");
     const discardButtomImageAsset = require("../../assets/ui/discard_button.png");
     const roundBeatSound = require("../../assets/sounds/round_beat.mp3");
+    const discardSound = require("../../assets/sounds/discard.mp3");
+
     const modifiersRects = useSpriteRects(cardModifierSliceData);
 
     const store = useAppStore();
@@ -173,6 +175,7 @@ export default function GameScreen(): ReactElement | null {
         });
 
         setSelectedCards([]);
+        playSound(discardSound);
     }
 
     const shakeDuration = 700;
