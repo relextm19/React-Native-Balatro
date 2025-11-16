@@ -106,7 +106,9 @@ export default function AnteSelectPane({
                     </View>
                     <View className="flex-row justify-center items-center">
                         <Text className="text-white text-center">Reward: </Text>
-                        <Text className="text-accentGold">{"$".repeat(rewardAmount)}+</Text>
+                        <Text className="text-accentGold">
+                            {rewardAmount > 0 ? "$".repeat(rewardAmount) + "+" : "NONE"}
+                        </Text>
                     </View>
                     {description && (
                         <View className="bg-[#19201fff] mt-2 p-2 border-2 border-lightBorder rounded-main">

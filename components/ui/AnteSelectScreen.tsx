@@ -38,6 +38,7 @@ export default function AnteSelectScreen(): ReactElement | null {
         const blindState = i < (store.currentRound - 1) % 3 ? BlindState.defeated : i === (store.currentRound - 1) % 3 ? BlindState.selected : BlindState.upcoming;
         //not the best way but no time so
         const requiredScore = blindIndex === 4 ? store.currentAnteScore * (i + 1) * 3 : store.currentAnteScore * (i + 1);
+        const anteWinReward = blindIndex === 3 ? 0 : winReward;
         panes.push(
             <AnteSelectPane
                 stakeSpriteSheet={stakeSpriteSheet}
@@ -46,7 +47,7 @@ export default function AnteSelectScreen(): ReactElement | null {
                 blindSourceRect={blindSpriteRects[blindIndex]}
                 requiredScore={requiredScore}
                 title={blindsArray[blindIndex].name}
-                rewardAmount={winReward}
+                rewardAmount={anteWinReward}
                 blindState={blindState}
                 isBossBlind={i === 2}
                 blindIndex={blindIndex}
