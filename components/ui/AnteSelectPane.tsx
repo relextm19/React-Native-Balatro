@@ -3,6 +3,7 @@ import { View, Text, Pressable } from "react-native";
 import { Skia, Canvas, Atlas, SkImage, SkRect } from "@shopify/react-native-skia";
 import { BlindState } from "../../assets/chips/Blinds";
 import { useAppStore, Views } from "../../GameState";
+import { playSound } from "../../logic/Sounds";
 
 type AnteSelectPaneProps = {
     stakeSpriteSheet: SkImage;
@@ -19,6 +20,7 @@ export default function AnteSelectPane({ stakeSpriteSheet, blindSpriteSheet, sta
     const stakeTransforms = [Skia.RSXform(1, 0, 0, 0)];
     const blindImgScale = 1.5;
     const blindTransforms = [Skia.RSXform(blindImgScale, 0, 0, 0)];
+    const soundAsset = require("../../assets/sounds/ante_select.mp3")
 
     const store = useAppStore();
     function setGameView(): void {
@@ -30,7 +32,10 @@ export default function AnteSelectPane({ stakeSpriteSheet, blindSpriteSheet, sta
         //TODO: Make the blindState text background the most common color from the image
         <Pressable
             className={`bg-darkBg w-1/4 h-full border-5 border-[#362602] rounded-main border-b-0 rounded-be-none rounded-bl-none p-2 ${blindState != BlindState.selected ? "opacity-50" : ""}`}
-            onPress={setGameView}
+            onPress={() => {
+                setGameView();
+                playSound(soundAsset);
+            }}
         >
             <View className="items-center gap-2 bg-main p-2 border-2 border-lightBorder rounded-main">
                 <View className="justify-center items-center bg-[#f48b04] shadow-lg rounded-main w-4/5 h-6">

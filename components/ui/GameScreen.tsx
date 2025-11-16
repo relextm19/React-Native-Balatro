@@ -17,14 +17,14 @@ import MenuButton from "./MenuButton";
 import { checkHandType, getChipsForHandType, getMultForHandType, HandType } from "../../logic/CheckHandType";
 import { getBonusForCard } from "../../logic/CardModifiers";
 import DeckView from "./DeckView";
-import { BlurView } from "expo-blur";
-
+import { playSound } from "../../logic/Sounds";
 
 export default function GameScreen(): ReactElement | null {
     const cardsSpriteSheet = useImage(require("../../assets/cards/playing_cards.png"));
     const modifierSpriteSheet = useImage(require("../../assets/cards/modifiers.png"));
     const playButtonImageAsset = require("../../assets/ui/play_button.png");
     const discardButtomImageAsset = require("../../assets/ui/discard_button.png");
+    const roundBeatSound = require("../../assets/sounds/round_beat.mp3");
     const modifiersRects = useSpriteRects(cardModifierSliceData);
 
     const store = useAppStore();
@@ -219,6 +219,7 @@ export default function GameScreen(): ReactElement | null {
                 roundScore.current += chips.current * mult.current;
                 chips.current = 0;
                 if (roundScore.current >= store.currentAnteScore) {
+                    playSound(roundBeatSound);
                     store.setCurrentView(Views.RoundSummary)
                 } else if (tmp <= 0) {
                     store.setCurrentView(Views.DefeatScreen);

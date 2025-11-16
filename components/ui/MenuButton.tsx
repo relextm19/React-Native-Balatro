@@ -5,6 +5,7 @@ import { useSharedValue, useDerivedValue, withTiming, Easing } from "react-nativ
 import { Pressable } from "react-native";
 
 import type { SpriteSheetSliceData } from "../../logic/SpriteSheet";
+import { playSound } from "../../logic/Sounds";
 
 type MenuButtonProps = {
     imageAsset: number, //the type of require calls is number due to how metro handles stuff
@@ -17,6 +18,7 @@ type MenuButtonProps = {
 export default function MenuButton({ imageAsset, sliceData, scale, onClick, rotation = 0 }: MenuButtonProps): ReactElement {
     const texture = useImageAsTexture(imageAsset);
     const spriteRects = useSpriteRects(sliceData);
+    const soundAsset = require("../../assets/sounds/button_click.mp3");
     const animationDuration = 70;
 
     const frame = useSharedValue(0);
@@ -33,6 +35,8 @@ export default function MenuButton({ imageAsset, sliceData, scale, onClick, rota
 
     const onPressIn = () => {
         frame.value = 0;
+
+        playSound(soundAsset);
         frame.value = withTiming(2, {
             duration: animationDuration,
             easing: Easing.linear,

@@ -16,6 +16,7 @@ import { modifierDescs } from "../../assets/cards/ModifierDescs";
 import { planetsArray } from "../../assets/planets/Planets";
 import { voucherArray } from "../../assets/vouchers/VoucherArray";
 import { addChipsForHandType, addMultForHandType, getHandTypeForIndex } from "../../logic/CheckHandType";
+import { playSound } from "../../logic/Sounds";
 
 enum SelectedItemType {
     PlanetCard,
@@ -33,11 +34,13 @@ export default function Shop(): ReactElement | null {
     const nextButtonImageAsset = require("../../assets/ui/next_button.png");
     const rerollButtonImageAsset = require("../../assets/ui/reroll_button.png");
     const buyButtonImageAsset = require("../../assets/ui/buy_button.png");
+    const buySound = require("../../assets/sounds/buy_sound.mp3");
 
     const planetCardsSpriteSheet = useImage(require("../../assets/planets/planet_cards.png"));
     const cardsSpriteSheet = useImage(require("../../assets/cards/playing_cards.png"));
     const modifierSpriteSheet = useImage(require("../../assets/cards/modifiers.png"));
     const vouchersSpriteSheet = useImage(require("../../assets/vouchers/vouchers.png"));
+
 
     const cardRects = useSpriteRects(cardSliceData);
     const modifiersRects = useSpriteRects(cardModifierSliceData);
@@ -155,6 +158,7 @@ export default function Shop(): ReactElement | null {
         } else {
             setVoucherRandomIndex(undefined);
         }
+        playSound(buySound);
     }
 
     const planetCardViews = planetCardRandomIndexes.map((planetIndex, i) => {

@@ -8,6 +8,7 @@ import { cardSliceData } from "../../assets/sliceData";
 import { IPlayingCard, Modifier } from "../../interfaces/Card";
 import { modifierDescs } from "../../assets/cards/ModifierDescs";
 import ItemDescription from "./ItemDescription";
+import { playSound } from "../../logic/Sounds";
 
 type cardProps = {
     scale: number,
@@ -38,6 +39,9 @@ export default function Card({
     shakeDuration,
     cardBonus
 }: cardProps): ReactElement {
+    const cardSelectSound = require("../../assets/sounds/card_select.mp3");
+    const cardScoreSound = require("../../assets/sounds/card_score.mp3");
+
     const transform = [Skia.RSXform(scale, 0, 0, 0)];
     const y = useSharedValue(0);
     const rotation = useSharedValue(0);
@@ -64,6 +68,7 @@ export default function Card({
             setSelectedCards(prev => prev.filter(sel => sel.id !== cardObject.id));
         } else if (y.value === 0) {
             if (selectedCards.length >= 5) return; // max 5 cards
+            playSound(cardSelectSound);
             setSelectedCards(prev => [...prev, cardObject]);
             y.value = withTiming(-animationHeight, { duration: 200 });
         }
@@ -73,6 +78,8 @@ export default function Card({
 
     useEffect(() => {
         if (shake && shakeDuration && cardBonus) {
+            playSound(cardScoreSound);
+
             rotation.value = withSequence(
                 withTiming(10, { duration: shakeDuration / 6, easing: Easing.inOut(Easing.ease) }),
                 withTiming(-8, { duration: shakeDuration / 6, easing: Easing.inOut(Easing.ease) }),
