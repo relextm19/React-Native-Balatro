@@ -13,6 +13,7 @@ export default function DefeatScreen() {
 
     function returnToMenu(): void {
         store.setCurrentView(Views.Menu)
+        store.resetGame();
     }
     return (
         <View className="flex-1 justify-evenly items-center bg-black">

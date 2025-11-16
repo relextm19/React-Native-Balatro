@@ -194,6 +194,7 @@ export const useAppStore = create<AppState>((set) => ({
             currentBossBlind: undefined,
             currentAnteScore: 300,
             currentRequiredScore: 300,
+            currentRoundScore: 0,
             currentAnte: 1,
             currentRound: 1,
 

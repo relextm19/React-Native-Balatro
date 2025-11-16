@@ -210,16 +210,16 @@ export default function GameScreen(): ReactElement | null {
             const [_, scoringCardIds] = checkHandType(removed);
             const scoringIndexes = scoringCardIds.map((id) => removed.findIndex((card) => card.id === id));
 
-            scoringIndexes.forEach((i, _) => {
+            scoringIndexes.forEach((scoringIndex, loopIndex) => {
                 setTimeout(() => {
-                    setShakingIndex(i);
-                    chips.current += rankValues[removed[i].rank]
-                    const [chipBonus, multBonus, money] = getBonusForCard(removed[i].modifier, mult.current, removed[i].rank, removed[i].suit)
-                    setCardBonus([chipBonus + rankValues[removed[i].rank], multBonus, money]);
+                    setShakingIndex(scoringIndex);
+                    chips.current += rankValues[removed[scoringIndex].rank]
+                    const [chipBonus, multBonus, money] = getBonusForCard(removed[scoringIndex].modifier, mult.current, removed[scoringIndex].rank, removed[scoringIndex].suit)
+                    setCardBonus([chipBonus + rankValues[removed[scoringIndex].rank], multBonus, money]);
                     mult.current += multBonus;
                     chips.current += chipBonus;
                     store.setMoney((prev) => prev + money);
-                }, i * shakeDuration + shakeDuration)
+                }, loopIndex * shakeDuration + shakeDuration)
             })
             setTimeout(() => {
                 setShakingIndex(-1)
@@ -233,7 +233,6 @@ export default function GameScreen(): ReactElement | null {
                     store.setCurrentView(Views.RoundSummary)
                 } else if (tmp <= 0) {
                     store.setCurrentView(Views.DefeatScreen);
-                    store.resetGame();
                 }
             }, scoringIndexes.length * shakeDuration + shakeDuration);
 
