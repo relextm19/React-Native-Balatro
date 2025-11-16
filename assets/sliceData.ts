@@ -12,7 +12,7 @@ export const stakeSliceData: SpriteSheetSliceData = {
 export const blindSliceData: SpriteSheetSliceData = {
     offsetX: 0,
     offsetY: 2,
-    rows: 30,
+    rows: 5,
     cols: 1,
     spriteWidth: 32,
     spriteHeight: 32,
