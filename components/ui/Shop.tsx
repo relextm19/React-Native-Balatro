@@ -67,6 +67,7 @@ export default function Shop(): ReactElement | null {
 
     const planetCardPrice = 5;
     const cardPrice = 3;
+    const voucherPrice = 10;
 
     const planetShopIndexOffset = 50;
 
@@ -127,7 +128,9 @@ export default function Shop(): ReactElement | null {
 
     function buyItem() {
         if (!selectedItem) return;
-        const priceToSubtract = selectedItem.type === SelectedItemType.Card ? cardPrice : planetCardPrice;
+        const priceToSubtract = selectedItem.type === SelectedItemType.Card ? cardPrice : selectedItem.type === SelectedItemType.PlanetCard ? planetCardPrice : voucherPrice;
+        if (priceToSubtract > store.money) return;
+
         store.setMoney((prev) => prev - priceToSubtract);
         //if we buy its no longer there so reset
         setSelectedItem(undefined)
@@ -167,7 +170,7 @@ export default function Shop(): ReactElement | null {
         return (
             <Pressable
                 key={planetIndex}
-                //add 200 to index so it wont get mixed up wth the card or voucher indexes
+                //add offset to index so it wont get mixed up wth the card or voucher indexes
                 onPress={() => changeSelectedItem({ type: SelectedItemType.PlanetCard, index: planetIndex, indexInShop: i + planetShopIndexOffset })}
                 onLongPress={() => {
                     setItemDescription(planetsArray[planetIndex].desc)

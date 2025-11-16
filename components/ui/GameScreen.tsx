@@ -74,7 +74,10 @@ export default function GameScreen(): ReactElement | null {
     const [playedHand, setPlayedHand] = useState<IPlayingCard[]>([]);
     const [shakingIndex, setShakingIndex] = useState(-1); //xd
 
+    const [scoringLock, setScoringLock] = useState(false);
+
     const handType = checkHandType(selectedCards.length > 0 ? selectedCards : playedHand)[0];
+    const [lastPlayedHandType, setLastPlayedHandType] = useState(HandType.None);
     //if i use refs for that i have to force a rerender but its fine
     const chips = useRef(getChipsForHandType(handType));
     const mult = useRef(getMultForHandType(handType));
@@ -85,6 +88,7 @@ export default function GameScreen(): ReactElement | null {
     const [showDeck, setShowDeck] = useState(false);
 
     useEffect(() => {
+        if (scoringLock) return;
         mult.current = getMultForHandType(handType)
         chips.current = getChipsForHandType(handType)
         forceRender(prev => prev + 1);
@@ -160,7 +164,7 @@ export default function GameScreen(): ReactElement | null {
     }
 
     function discard(): void {
-        if (selectedCards.length === 0 || store.discards <= 0) return;
+        if (selectedCards.length === 0 || store.discards <= 0 || scoringLock) return;
         store.setDiscards((prev) => prev - 1)
 
         setHand(prevHand => {
@@ -180,9 +184,11 @@ export default function GameScreen(): ReactElement | null {
 
     const shakeDuration = 700;
     function playHand(): void {
-        if (selectedCards.length === 0) return;
+        if (selectedCards.length === 0 || scoringLock) return;
         const tmp = store.hands - 1//setHands is async so for comapring inside the func i will just use a tmp
         store.setHands((prev) => prev - 1);
+        setScoringLock(true);
+        setLastPlayedHandType(handType)
         setHand(prevHand => {
             const { kept, removed } = prevHand.reduce<{
                 kept: IPlayingCard[];
@@ -221,6 +227,8 @@ export default function GameScreen(): ReactElement | null {
                 setPlayedHand([]);
                 roundScore.current += chips.current * mult.current;
                 chips.current = 0;
+                setScoringLock(false);
+                const handType = checkHandType(selectedCards.length > 0 ? selectedCards : playedHand)[0];
                 if (roundScore.current >= store.currentAnteScore) {
                     playSound(roundBeatSound);
                     store.setCurrentView(Views.RoundSummary)
@@ -234,7 +242,6 @@ export default function GameScreen(): ReactElement | null {
 
             return sortHand([...kept, ...newCards]);
         });
-
         setSelectedCards([]);
     }
 
@@ -245,7 +252,7 @@ export default function GameScreen(): ReactElement | null {
             )}
             <StatusPane
                 setWidth={setStatusPaneWidth}
-                handName={handType}
+                handName={scoringLock ? lastPlayedHandType : handType}
                 chips={chips}
                 mult={mult}
                 roundScore={roundScore}
