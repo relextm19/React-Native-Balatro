@@ -121,6 +121,7 @@ function checkFlush(hand: IPlayingCard[]): boolean {
 function checkStraight(hand: IPlayingCard[]): boolean {
     if (hand.length != 5) return false;
 
+    //in a special case the ace can count as 1
     const isWheel =
         hand[0].rank === Ranks.Ace &&
         hand[1].rank === Ranks.Five &&
