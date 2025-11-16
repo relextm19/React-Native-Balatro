@@ -18,82 +18,99 @@
 </p>
 
 ### Gameplay
+
 ---
 
-## 📖 Table of Contents
+## Table of Contents
 
 * [About the Game](#about-the-game)
 * [Key Features](#key-features)
 * [Tech Stack](#tech-stack)
 * [Usage](#usage)
-  * [Prerequisites](#prerequisites)
-  * [Running the Project](#running-the-project)
+  * [1. Recommended: Direct Download (Android)](#1-recommended-direct-download-android)
+  * [2. Manual Setup (For Developers)](#2-manual-setup-for-developers)
+
 ---
 
 ## About the Game
 
-This is a single-player roguelike game built for mobile, heavily inspired from Balatro. The core gameplay loop revolves around playing poker hands to score points, defeating Blinds, building your deck with specially modified cards and improving your scoring with planet cards.
+This is a single-player roguelike game built for mobile, heavily inspired by Balatro. The core gameplay loop revolves around playing poker hands to score points, defeating Blinds, building your deck with specially modified cards, and improving your scoring with planet cards.
 
 ---
 
 ## Key Features
 
-* **Roguelike Runs:** Each run is unique, the deck you draw, the blinds you face and the shops you encounter are all randomly generated.
-* **Synergies:** As you play you can discover ways to combine cards and upgrades to create stronger decks.
-* **Cross-Platform:** Developed with Expo, allowing it to run cross-platform.
+* Roguelike Runs: Each run is unique. The deck you draw, the blinds you face, and the shops you encounter are all randomly generated.
+* Powerful Synergies: As you play you learn ways combine cards and upgrades to create combinations that will allow you to reach higher scores.
+* Cross-Platform: Developed with Expo, allowing it to run on cross-platform.
 
 ---
 
 ## Tech Stack
 
-* **Core:** [React Native](https://reactnative.dev/)
-* **Framework:** [Expo (Go)](https://expo.dev/)
-* **Graphics:** [React Native Skia](https://shopify.github.io/react-native-skia/)
-* **Animations:** [React Native Reanimated](https://docs.swmansion.com/react-native-reanimated/)
-* **Language:** [TypeScript](https://www.typescriptlang.org/)
+* Core: [React Native](https://reactnative.dev/)
+* Framework: [Expo (Go)](https://expo.dev/)
+* Graphics: [React Native Skia](https://shopify.github.io/react-native-skia/)
+* Animations: [React Native Reanimated](https://docs.swmansion.com/react-native-reanimated/)
+* Language: [TypeScript](https://www.typescriptlang.org/)
 
 ---
 
 ## Usage
 
-### Prerequisites
+There are two ways to get the game.
 
-* **Node.js & npm:** [Download & Install Node.js](https://nodejs.org/) (which includes npm).
-* **Expo CLI:** Install it globally on your machine.
+### 1. Recommended: Direct Download (Android)
+> Download Latest Build
+>
+> * Link: [Download Game (Android)](https://expo.dev/artifacts/eas/t9efdZ8GLTAuZdTMk7wMmj.aab)
+>
+> Note: This is an `.aab` (Android App Bundle) file. You may need to enable "sideloading" or use a specific installer app on your Android device to install it. For the simplest developer setup, see the "Manual Setup" section below.
+
+---
+
+### 2. Manual Setup
+
+This method lets you run the project from the source code using Expo Go. It works on both iOS and Android.
+
+#### Prerequisites
+
+* Node.js & npm: [Download & Install Node.js](https://nodejs.org/) (which includes npm).
+* Expo CLI: Install it globally on your machine.
     ```bash
     npm install -g expo-cli
     ```
-* **Expo Go App:** Install the **Expo Go** app on your physical iOS or Android device.
+* Expo Go App: Install the Expo Go app on your physical iOS or Android device.
     * [Download for iOS](https://apps.apple.com/us/app/expo-go/id982107779)
     * [Download for Android](https://play.google.com/store/apps/details?id=host.exp.exponent)
-* **Emulator:** If you have an emulator set up, you can run the game by executing `npx expo start` and pressing `i` for iOS Simulator or `a` for Android Emulator.
+* Emulator: (Optional) If you have an emulator set up, you can run the game by executing `npx expo start` and pressing `i` for iOS Simulator or `a` for Android Emulator.
 
-### Running the Project
+#### Running the Project
 
-1.  **Clone the repository:**
+1. Clone the repository:
     ```bash
     git clone https://github.com/relextm19/Jonklero/
     ```
 
-2.  **Navigate into the folder:**
+2. Navigate into the folder:
     ```bash
     cd Jonklero
     ```
 
-3.  **Install dependencies:**
+3. Install dependencies:
     ```bash
     npm install
     ```
 
-4.  **Start the Expo server:**
+4. Start the Expo server:
     ```bash
     npx expo start
     ```
 
-5.  **Run on your device:**
+5. Run on your device:
     * A QR code will appear in your terminal.
-    * Open the **Expo Go** app on your phone.
+    * Open the Expo Go app on your phone.
     * Scan the QR code with your phone's camera (or through the app).
     * The project will build and launch on your device!
 
-Alternatively, you can run it on an **iOS Simulator** (press `i`) or **Android Emulator** (press `a`) from the terminal.
+Alternatively, you can run it on an iOS Simulator (press `i`) or Android Emulator (press `a`) from the terminal.
