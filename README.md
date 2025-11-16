@@ -34,7 +34,7 @@
 
 ## About the Game
 
-This is a single-player roguelike game built for mobile, heavily inspired by Balatro. The core gameplay loop revolves around playing poker hands to score points, defeating Blinds, building your deck with specially modified cards, and improving your scoring with planet cards.
+This is a single-player roguelike game built for mobile, heavily inspired by Balatro. The gameplay revolves around playing poker hands to score points, defeating Blinds, building your deck with specially modified cards, and improving your scoring with planet cards.
 
 ---
 
@@ -63,10 +63,9 @@ There are two ways to get the game.
 ### 1. Recommended: Direct Download (Android)
 > Download Latest Build
 >
-> * Link: [Download Game (Android)](https://expo.dev/artifacts/eas/t9efdZ8GLTAuZdTMk7wMmj.aab)
+> * Link: [Download Game (Android)](https://expo.dev/accounts/relextm19/projects/balatro/builds/56d9f89b-85a4-4e04-9db8-6907683a4db1)
 >
-> Note: This is an `.aab` (Android App Bundle) file. You may need to enable "sideloading" or use a specific installer app on your Android device to install it. For the simplest developer setup, see the "Manual Setup" section below.
-
+> Note: This is an `.apk` file.
 ---
 
 ### 2. Manual Setup
