@@ -70,7 +70,7 @@ export default function Shop(): ReactElement | null {
     const cardPrice = Math.floor(3 * store.shopDiscount);
     const voucherPrice = Math.floor(10 * store.shopDiscount);
 
-    const planetShopIndexOffset = 50;
+    const planetShopIndexOffset = 100;
 
     const [containterMinHeight, setContainerMinHeight] = useState(0);
 
