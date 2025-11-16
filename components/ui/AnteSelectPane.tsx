@@ -1,16 +1,18 @@
 import React, { ReactElement, useEffect } from "react";
 import { View, Text, Pressable } from "react-native";
-import { Skia, Canvas, Atlas, SkImage, SkRect } from "@shopify/react-native-skia";
+import { Skia, Canvas, Atlas, SkImage, SkRect, SkHostRect } from "@shopify/react-native-skia";
 import { blindsArray, BlindState } from "../../assets/chips/Blinds";
 import { useAppStore, Views } from "../../GameState";
 import { playSound } from "../../logic/Sounds";
 import { applyBlindEffects } from "../../logic/ApplyBlindEffects";
+import type { Mutable } from "react-native-reanimated/lib/typescript/commonTypes";
+import { blindSliceData, stakeSliceData } from "../../assets/sliceData";
 
 type AnteSelectPaneProps = {
     stakeSpriteSheet: SkImage;
     blindSpriteSheet: SkImage;
-    stakeSourceRect: SkRect;
-    blindSourceRect: SkRect;
+    stakeRects: Mutable<SkHostRect[]>,
+    blindRects: Mutable<SkHostRect[]>,
     requiredScore: number,
     title: String,
     rewardAmount: number,
@@ -23,8 +25,8 @@ type AnteSelectPaneProps = {
 export default function AnteSelectPane({
     stakeSpriteSheet,
     blindSpriteSheet,
-    stakeSourceRect,
-    blindSourceRect,
+    stakeRects,
+    blindRects,
     requiredScore,
     title,
     rewardAmount,
@@ -35,6 +37,7 @@ export default function AnteSelectPane({
 }: AnteSelectPaneProps): ReactElement {
     const stakeTransforms = [Skia.RSXform(1, 0, 0, 0)];
     const blindImgScale = 1.5;
+    const stakeImgScale = 1;
     const blindTransforms = [Skia.RSXform(blindImgScale, 0, 0, 0)];
     const soundAsset = require("../../assets/sounds/ante_select.mp3")
 
@@ -69,14 +72,14 @@ export default function AnteSelectPane({
                 <View>
                     <Canvas
                         style={{
-                            width: blindSourceRect.width * blindImgScale,
-                            height: blindSourceRect.width * blindImgScale,
+                            width: blindSliceData.spriteWidth * blindImgScale,
+                            height: blindSliceData.spriteHeight * blindImgScale,
                         }}
                     >
                         {stakeSpriteSheet && (
                             <Atlas
                                 image={blindSpriteSheet}
-                                sprites={[blindSourceRect]}
+                                sprites={[blindRects.value[blindIndex]]}
                                 transforms={blindTransforms}
                             />
                         )}
@@ -90,14 +93,14 @@ export default function AnteSelectPane({
                         <View>
                             <Canvas
                                 style={{
-                                    width: stakeSourceRect.width,
-                                    height: stakeSourceRect.width,
+                                    width: stakeSliceData.spriteWidth * stakeImgScale,
+                                    height: stakeSliceData.spriteHeight * stakeImgScale,
                                 }}
                             >
                                 {stakeSpriteSheet && (
                                     <Atlas
                                         image={stakeSpriteSheet}
-                                        sprites={[stakeSourceRect]}
+                                        sprites={[stakeRects.value[store.currentStake.index]]}
                                         transforms={stakeTransforms}
                                     />
                                 )}

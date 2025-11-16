@@ -19,8 +19,8 @@ export default function RoundSummary(): ReactElement | null {
     const blindsSpriteSheet = useImage(require("../../assets/chips/blind_chips.png"));
     const cashOutButtonImageAsset = require("../../assets/ui/cash_out_button.png");
 
-    const stakeSourceRect = useSpriteRects(stakeSliceData).value[store.currentStake.index];
-    const blindSourceRect = useSpriteRects(blindSliceData).value[store.currentBlind.index];
+    const stakeRects = useSpriteRects(stakeSliceData);
+    const blindRects = useSpriteRects(blindSliceData);
 
     const blindScale = 2;
     const stakeScale = 1;
@@ -46,7 +46,7 @@ export default function RoundSummary(): ReactElement | null {
         }
     }
 
-    if (!stakeSourceRect || !blindSourceRect || !stakeSpriteSheet || !blindsSpriteSheet) return null;
+    if (!stakeRects || !blindRects || !stakeSpriteSheet || !blindsSpriteSheet) return null;
     return (
         <View className="flex-row flex-1 justify-between items-end">
             <StatusPane />
@@ -57,13 +57,13 @@ export default function RoundSummary(): ReactElement | null {
                             <View className="">
                                 <Canvas
                                     style={{
-                                        width: blindSourceRect.width * blindScale,
-                                        height: blindSourceRect.width * blindScale,
+                                        width: blindSliceData.spriteWidth * blindScale,
+                                        height: blindSliceData.spriteHeight * blindScale,
                                     }}
                                 >
                                     <Atlas
                                         image={blindsSpriteSheet}
-                                        sprites={[blindSourceRect]}
+                                        sprites={[blindRects.value[store.currentBlind.index]]}
                                         transforms={[Skia.RSXform(blindScale, 0, 0, 0)]}
                                     />
                                 </Canvas>
@@ -76,13 +76,13 @@ export default function RoundSummary(): ReactElement | null {
                                     <View className="justify-center items-center">
                                         <Canvas
                                             style={{
-                                                width: stakeSourceRect.width * stakeScale,
-                                                height: stakeSourceRect.width * stakeScale,
+                                                width: stakeSliceData.spriteWidth * stakeScale,
+                                                height: stakeSliceData.spriteHeight * stakeScale,
                                             }}
                                         >
                                             <Atlas
                                                 image={stakeSpriteSheet}
-                                                sprites={[stakeSourceRect]}
+                                                sprites={[stakeRects.value[store.currentStake.index]]}
                                                 transforms={[Skia.RSXform(stakeScale, 0, 0, 0)]}
                                             />
                                         </Canvas>

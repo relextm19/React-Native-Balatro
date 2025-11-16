@@ -19,14 +19,14 @@ export default function AnteSelectScreen(): ReactElement | null {
     const stakeSpriteSheet = useImage(require("../../assets/chips/stake_chips.png"));
     const blindsSpriteSheet = useImage(require("../../assets/chips/blind_chips.png"));
 
-    const stakeSpriteRects = useSpriteRects(stakeSliceData).value ?? [];
-    const blindSpriteRects = useSpriteRects(blindSliceData).value ?? [];
+    const stakeRects = useSpriteRects(stakeSliceData);
+    const blindRects = useSpriteRects(blindSliceData);
 
     if (!stakeSpriteSheet || !blindsSpriteSheet) return null;
 
     let bossBlindIndex: number;
     if (!store.currentBossBlind) {
-        bossBlindIndex = getRandomInt(3, blindSpriteRects.length - 1);// the first 2 blinds are normal 
+        bossBlindIndex = getRandomInt(3, blindRects.value.length - 1);// the first 2 blinds are normal 
         store.setCurrentBossBlind(blindsArray[bossBlindIndex]);
     } else {
         bossBlindIndex = store.currentBossBlind.index;
@@ -42,9 +42,9 @@ export default function AnteSelectScreen(): ReactElement | null {
         panes.push(
             <AnteSelectPane
                 stakeSpriteSheet={stakeSpriteSheet}
-                stakeSourceRect={stakeSpriteRects[store.currentStake.index]}
+                stakeRects={stakeRects}
+                blindRects={blindRects}
                 blindSpriteSheet={blindsSpriteSheet}
-                blindSourceRect={blindSpriteRects[blindIndex]}
                 requiredScore={requiredScore}
                 title={blindsArray[blindIndex].name}
                 rewardAmount={anteWinReward}
