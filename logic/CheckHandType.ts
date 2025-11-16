@@ -1,6 +1,5 @@
-import { IPlayingCard } from "../interfaces/Card";
+import { IPlayingCard, Ranks } from "../interfaces/Card";
 
-//the order has to match the order in the Planets.ts planetsArray
 export enum HandType {
     Pair = "Pair",
     Three = "Three Of a Kind",
@@ -27,19 +26,6 @@ const handTypeBaseValues: Record<HandType, [number, number]> = {
     [HandType.StraightFlush]: [100, 8],
 };
 
-// const handTypeLevels: Record<HandType, number> = {
-//     [HandType.None]: 1,
-//     [HandType.HighCard]: 1,
-//     [HandType.Pair]: 1,
-//     [HandType.TwoPair]: 1,
-//     [HandType.Three]: 1,
-//     [HandType.Straight]: 1,
-//     [HandType.Flush]: 1,
-//     [HandType.FullHouse]: 1,
-//     [HandType.Four]: 1,
-//     [HandType.StraightFlush]: 1,
-// };
-
 export function getHandTypeForIndex(index: number): HandType {
     return Object.values(HandType)[index];
 }
@@ -62,7 +48,7 @@ export function addChipsForHandType(handType: HandType, toAdd: number) {
 export function checkHandType(hand: IPlayingCard[]): [HandType, number[]] {
     if (hand.length === 0) return [HandType.None, []];
 
-    const sortedHand = [...hand].sort((a, b) => a.rank - b.rank);
+    const sortedHand = [...hand].sort((a, b) => b.rank - a.rank);
 
     const isFlush = checkFlush(sortedHand);
     const isStraight = checkStraight(sortedHand);
@@ -83,14 +69,13 @@ export function checkHandType(hand: IPlayingCard[]): [HandType, number[]] {
     if (multiples.includes(3)) return [HandType.Three, scoringCards];
 
     const pairCount = multiples.filter(m => m === 2).length;
+
     if (pairCount === 2) return [HandType.TwoPair, scoringCards];
 
     if (pairCount === 1) return [HandType.Pair, scoringCards];
 
-    return [HandType.HighCard, [sortedHand.at(-1)!.id]];// if its a high card return the last index cuz its the biggest
+    return [HandType.HighCard, [sortedHand.at(0)!.id]];
 }
-
-
 
 function checkMultiples(hand: IPlayingCard[]): [number[], number[]] {
     const streaks: number[] = [];
@@ -135,10 +120,21 @@ function checkFlush(hand: IPlayingCard[]): boolean {
 
 function checkStraight(hand: IPlayingCard[]): boolean {
     if (hand.length != 5) return false;
+
+    const isWheel =
+        hand[0].rank === Ranks.Ace &&
+        hand[1].rank === Ranks.Five &&
+        hand[2].rank === Ranks.Four &&
+        hand[3].rank === Ranks.Three &&
+        hand[4].rank === Ranks.Two;
+
+    if (isWheel) return true;
+
     for (let i = 1; i < hand.length; i++) {
-        if (hand[i].rank !== hand[i - 1].rank + 1) {
+        if (hand[i].rank !== hand[i - 1].rank - 1) {
             return false;
         }
     }
+
     return true;
 }
