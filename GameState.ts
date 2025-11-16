@@ -5,8 +5,8 @@ import { IPlayingCard, Suits } from "./interfaces/Card";
 import { Blind, blindsArray } from "./assets/chips/Blinds";
 
 export const defaultHandSize = 8;
-export const handsToPlay = 4;
-export const handsToDiscard = 3;
+export const defaultHandsToPlay = 4;
+export const defaultHandsToDiscard = 3;
 export const planetCardsDefault = 2;
 export const cardsInShopDefault = 3;
 
@@ -26,7 +26,7 @@ export function setDeckSize(value: number): void {
 }
 export let winReward = 3;
 export function setWinReward(value: number): void {
-    winReward = value
+    winReward = value;
 }
 
 type AppState = {
@@ -35,7 +35,10 @@ type AppState = {
     currentStake: Stake;
     currentDeck: Deck;
     currentAnteScore: number;
+    currentRequiredScore: number;
+
     currentBlind: Blind;
+    currentBossBlind: Blind | undefined;
     currentAnte: number;
     currentRound: number;
 
@@ -43,28 +46,32 @@ type AppState = {
     hands: number;
     discards: number;
     handSize: number;
+    handsToPlay: number;
+    handsToDiscard: number;
     shopDiscount: number;
 
     planetCardsInShop: number;
     cardsInShop: number;
     boughtVouchers: number[];
+
+    setCurrentRequiredScore: (update: number | ((prev: number) => number)) => void;
     setBoughtVouchers: (update: number[] | ((prev: number[]) => number[])) => void;
-
-
     setCurrentView: (view: Views) => void;
     setCurrentDeck: (deck: Deck) => void;
     setCurrentDeckCards: (cards: Map<Suits, Map<number, IPlayingCard>>) => void;
     setCurrentStake: (stake: Stake) => void;
     setCurrentBlind: (blind: Blind) => void;
+    setCurrentBossBlind: (blind: Blind | undefined) => void;
     setCurrentAnteScore: (score: number) => void;
     setCurrentAnte: (ante: number) => void;
     setCurrentRound: (round: number) => void;
     setMoney: (update: number | ((prev: number) => number)) => void;
     setDiscards: (update: number | ((prev: number) => number)) => void;
     setHands: (update: number | ((prev: number) => number)) => void;
+    setHandsToPlay: (update: number | ((prev: number) => number)) => void;
+    setHandsToDiscard: (update: number | ((prev: number) => number)) => void;
     setShopDiscount: (discount: number) => void;
     setHandSize: (update: number | ((prev: number) => number)) => void;
-
 
     setPlanetCardsInShop: (update: number | ((prev: number) => number)) => void;
     setCardsInShop: (update: number | ((prev: number) => number)) => void;
@@ -76,13 +83,17 @@ export const useAppStore = create<AppState>((set) => ({
     currentStake: stakeArray[0],
     currentDeck: deckArray[0],
     currentBlind: blindsArray[0],
+    currentBossBlind: undefined,
     currentAnteScore: 300,
+    currentRequiredScore: 300,
     currentAnte: 1,
     currentRound: 1,
 
     money: 5,
-    hands: handsToPlay,
-    discards: handsToDiscard,
+    hands: defaultHandsToPlay,
+    handsToPlay: defaultHandsToPlay,
+    discards: defaultHandsToDiscard,
+    handsToDiscard: defaultHandsToDiscard,
     handSize: defaultHandSize,
     shopDiscount: 1,
 
@@ -98,7 +109,10 @@ export const useAppStore = create<AppState>((set) => ({
 
     setCurrentStake: (stake: Stake) => set({ currentStake: stake }),
     setCurrentDeck: (deck: Deck) => set({ currentDeck: deck }),
-
+    setCurrentRequiredScore: (update) =>
+        set((state) => ({
+            currentRequiredScore: typeof update === "function" ? update(state.currentRequiredScore) : update,
+        })),
     setCurrentDeckCards: (cardsBySuits) =>
         set((state) => ({
             currentDeck: {
@@ -108,6 +122,7 @@ export const useAppStore = create<AppState>((set) => ({
         })),
 
     setCurrentBlind: (blind: Blind) => set({ currentBlind: blind }),
+    setCurrentBossBlind: (blind: Blind | undefined) => set({ currentBossBlind: blind }),
     setCurrentAnteScore: (score: number) => set({ currentAnteScore: score }),
     setCurrentAnte: (ante: number) => set({ currentAnte: ante }),
     setCurrentRound: (round: number) => set({ currentRound: round }),
@@ -124,6 +139,14 @@ export const useAppStore = create<AppState>((set) => ({
     setHands: (update) =>
         set((state) => ({
             hands: typeof update === "function" ? update(state.hands) : update,
+        })),
+    setHandsToPlay: (update) =>
+        set((state) => ({
+            handsToPlay: typeof update === "function" ? update(state.handsToPlay) : update,
+        })),
+    setHandsToDiscard: (update) =>
+        set((state) => ({
+            handsToDiscard: typeof update === "function" ? update(state.handsToDiscard) : update,
         })),
 
     setDiscards: (update) =>

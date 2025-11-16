@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import { View, Text } from "react-native";
 import { Skia, Canvas, Atlas, useImage } from "@shopify/react-native-skia";
-import { handsToPlay, useAppStore, Views, winReward } from "../../GameState";
+import { useAppStore, Views, winReward } from "../../GameState";
 
 import MenuButton from "./MenuButton";
 import StatusPane from "./StatusPane";
@@ -9,6 +9,7 @@ import StatusPane from "./StatusPane";
 import { useSpriteRects } from "../../logic/SpriteSheet";
 
 import { buttonSliceData, stakeSliceData, blindSliceData } from "../../assets/sliceData";
+import { revertBlindEffects } from "../../logic/ApplyBlindEffects";
 
 
 export default function RoundSummary(): ReactElement | null {
@@ -18,8 +19,8 @@ export default function RoundSummary(): ReactElement | null {
     const blindsSpriteSheet = useImage(require("../../assets/chips/blind_chips.png"));
     const cashOutButtonImageAsset = require("../../assets/ui/cash_out_button.png");
 
-    const stakeSourceRect = useSpriteRects(stakeSliceData).value[store.currentStake.index] ?? undefined;
-    const blindSourceRect = useSpriteRects(blindSliceData).value[store.currentBlind.index] ?? undefined;
+    const stakeSourceRect = useSpriteRects(stakeSliceData).value[store.currentStake.index];
+    const blindSourceRect = useSpriteRects(blindSliceData).value[store.currentBlind.index];
 
     const blindScale = 2;
     const stakeScale = 1;
@@ -31,6 +32,7 @@ export default function RoundSummary(): ReactElement | null {
     function cashOut() {
         store.setMoney((prev) => prev + totalReward);
         store.setCurrentView(Views.Shop);
+        revertBlindEffects(store.currentBlind.index);
     }
 
     if (!stakeSourceRect || !blindSourceRect || !stakeSpriteSheet || !blindsSpriteSheet) return null;
@@ -75,7 +77,7 @@ export default function RoundSummary(): ReactElement | null {
                                         </Canvas>
                                     </View>
                                     <View className="justify-center items-center">
-                                        <Text className="text-customRed text-3xl">{store.currentAnteScore}</Text>
+                                        <Text className="text-customRed text-3xl">{store.currentRequiredScore}</Text>
                                     </View>
                                 </View>
                             </View>

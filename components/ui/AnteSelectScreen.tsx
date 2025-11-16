@@ -6,7 +6,7 @@ import AnteSelectPane from "./AnteSelectPane";
 import { useSpriteRects } from "../../logic/SpriteSheet";
 
 import { stakeSliceData, blindSliceData, deckSliceData } from "../../assets/sliceData";
-import { useAppStore } from "../../GameState";
+import { useAppStore, winReward } from "../../GameState";
 import { getRandomInt } from "../../logic/Random";
 import { blindsArray, BlindState } from "../../assets/chips/Blinds";
 import StatusPane from "./StatusPane";
@@ -24,22 +24,29 @@ export default function AnteSelectScreen(): ReactElement | null {
 
     if (!stakeSpriteSheet || !blindsSpriteSheet) return null;
 
-    const bossBlindIndex = getRandomInt(3, blindSpriteRects.length - 1);// the first two blinds are normal and the last 5 are special and will be implemented later
+    let bossBlindIndex: number;
+    if (!store.currentBossBlind) {
+        bossBlindIndex = getRandomInt(3, blindSpriteRects.length - 1);// the first 2 blinds are normal 
+        store.setCurrentBossBlind(blindsArray[bossBlindIndex]);
+    } else {
+        bossBlindIndex = store.currentBossBlind.index;
+    }
 
-    const rewardAmount = [3, 4, 5]
     let panes: ReactElement[] = [];
     for (let i = 0; i < 3; i++) {
         const blindIndex = i < 2 ? i : bossBlindIndex;
         const blindState = i < (store.currentRound - 1) % 3 ? BlindState.defeated : i === (store.currentRound - 1) % 3 ? BlindState.selected : BlindState.upcoming;
+        //not the best way but no time so
+        const requiredScore = blindIndex === 4 ? store.currentAnteScore * (i + 1) * 3 : store.currentAnteScore * (i + 1);
         panes.push(
             <AnteSelectPane
                 stakeSpriteSheet={stakeSpriteSheet}
                 stakeSourceRect={stakeSpriteRects[store.currentStake.index]}
                 blindSpriteSheet={blindsSpriteSheet}
                 blindSourceRect={blindSpriteRects[blindIndex]}
-                requiredScore={store.currentAnteScore * (i + 1)}
+                requiredScore={requiredScore}
                 title={blindsArray[blindIndex].name}
-                rewardAmount={rewardAmount[i]}
+                rewardAmount={winReward}
                 blindState={blindState}
                 isBossBlind={i === 2}
                 blindIndex={blindIndex}

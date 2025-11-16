@@ -1,7 +1,7 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useEffect } from "react";
 import { View, Text, Pressable } from "react-native";
 import { Skia, Canvas, Atlas, SkImage, SkRect } from "@shopify/react-native-skia";
-import { BlindState } from "../../assets/chips/Blinds";
+import { blindsArray, BlindState } from "../../assets/chips/Blinds";
 import { useAppStore, Views } from "../../GameState";
 import { playSound } from "../../logic/Sounds";
 import { applyBlindEffects } from "../../logic/ApplyBlindEffects";
@@ -44,6 +44,8 @@ export default function AnteSelectPane({
         if (isBossBlind) {
             applyBlindEffects(blindIndex);
         }
+        store.setCurrentBlind(blindsArray[blindIndex]);
+        store.setCurrentRequiredScore(requiredScore)
         store.setCurrentView(Views.GameScreen)
     }
 

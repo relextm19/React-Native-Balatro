@@ -57,7 +57,7 @@ export default function StatusPane({ headerText, toScore, setWidth, handName, ch
                                             />
                                         )}
                                     </Canvas>
-                                    <Text className="text-customRed text-2xl">{toScore}</Text>
+                                    <Text className="text-customRed text-2xl">{store.currentRequiredScore}</Text>
                                 </View>
                             </View>
                         )}

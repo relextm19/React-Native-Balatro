@@ -7,10 +7,10 @@ export function applyVoucherEffects(voucherIndex: number) {
             store.setShopDiscount(0.75);
             break;
         case 1:
-            store.setDiscards(prev => prev + 1);
+            store.setHandsToDiscard(prev => prev + 1)
             break;
         case 2:
-            store.setHands(prev => prev + 1);
+            store.setHandsToPlay(prev => prev + 1);
             break;
         case 3:
             store.setCardsInShop(prev => prev + 1);

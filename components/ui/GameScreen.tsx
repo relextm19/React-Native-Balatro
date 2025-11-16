@@ -1,7 +1,7 @@
 import { ReactElement, useEffect, useRef, useState } from "react";
 import { View, Text } from "react-native";
 import { Skia, useImage, rect, Canvas, Atlas } from "@shopify/react-native-skia";
-import { handsToDiscard, handsToPlay, useAppStore, Views } from "../../GameState";
+import { useAppStore, Views } from "../../GameState";
 import { Pressable } from "react-native";
 
 import DeckIcon from "./DeckIcon";
@@ -53,8 +53,8 @@ export default function GameScreen(): ReactElement | null {
         //reset the state at the begining of ante
         deckState.avaliable = 52;
         makeAllCardsAvailable(cardsBySuits);
-        store.hands = handsToPlay;
-        store.discards = handsToDiscard;
+        store.hands = store.handsToPlay;
+        store.discards = store.handsToDiscard;
 
         const startingHand = getNRandomCards(store.handSize)?.sort((a, b) => b.rank - a.rank) || [];
         setHand(sortHand(startingHand))
@@ -228,8 +228,7 @@ export default function GameScreen(): ReactElement | null {
                 roundScore.current += chips.current * mult.current;
                 chips.current = 0;
                 setScoringLock(false);
-                const handType = checkHandType(selectedCards.length > 0 ? selectedCards : playedHand)[0];
-                if (roundScore.current >= store.currentAnteScore) {
+                if (roundScore.current >= store.currentRequiredScore) {
                     playSound(roundBeatSound);
                     store.setCurrentView(Views.RoundSummary)
                 } else if (tmp <= 0) {
