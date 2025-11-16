@@ -7,8 +7,8 @@ import { Blind, blindsArray } from "./assets/chips/Blinds";
 export const defaultHandSize = 8;
 export const handsToPlay = 4;
 export const handsToDiscard = 3;
-export const planetCardsInShop = 2;
-export const cardsInShop = 3;
+export const planetCardsDefault = 2;
+export const cardsInShopDefault = 3;
 
 export enum Views {
     Menu,
@@ -39,6 +39,10 @@ type AppState = {
     hands: number;
     discards: number;
     handSize: number;
+    shopDiscount: number;
+
+    planetCardsInShop: number;
+    cardsInShop: number;
 
     setCurrentView: (view: Views) => void;
     setCurrentDeck: (deck: Deck) => void;
@@ -51,6 +55,10 @@ type AppState = {
     setMoney: (update: number | ((prev: number) => number)) => void;
     setDiscards: (update: number | ((prev: number) => number)) => void;
     setHands: (update: number | ((prev: number) => number)) => void;
+    setShopDiscount: (discount: number) => void;
+
+    setPlanetCardsInShop: (update: number | ((prev: number) => number)) => void;
+    setCardsInShop: (update: number | ((prev: number) => number)) => void;
 };
 
 export const useAppStore = create<AppState>((set) => ({
@@ -67,14 +75,20 @@ export const useAppStore = create<AppState>((set) => ({
     hands: handsToPlay,
     discards: handsToDiscard,
     handSize: defaultHandSize,
-    remainingHands: 0,
+    shopDiscount: 1,
 
-    setCurrentView: (view: Views) => set((state) => ({
-        lastView: state.currentView,
-        currentView: view,
-    })),
+    planetCardsInShop: planetCardsDefault,
+    cardsInShop: cardsInShopDefault,
+
+    setCurrentView: (view: Views) =>
+        set((state) => ({
+            lastView: state.currentView,
+            currentView: view,
+        })),
+
     setCurrentStake: (stake: Stake) => set({ currentStake: stake }),
     setCurrentDeck: (deck: Deck) => set({ currentDeck: deck }),
+
     setCurrentDeckCards: (cardsBySuits) =>
         set((state) => ({
             currentDeck: {
@@ -82,20 +96,36 @@ export const useAppStore = create<AppState>((set) => ({
                 cardsBySuits,
             },
         })),
+
     setCurrentBlind: (blind: Blind) => set({ currentBlind: blind }),
     setCurrentAnteScore: (score: number) => set({ currentAnteScore: score }),
     setCurrentAnte: (ante: number) => set({ currentAnte: ante }),
     setCurrentRound: (round: number) => set({ currentRound: round }),
-    setMoney: (update: number | ((prev: number) => number)) =>
+
+    setMoney: (update) =>
         set((state) => ({
             money: typeof update === "function" ? update(state.money) : update,
         })),
-    setHands: (update: number | ((prev: number) => number)) =>
+
+    setHands: (update) =>
         set((state) => ({
             hands: typeof update === "function" ? update(state.hands) : update,
         })),
-    setDiscards: (update: number | ((prev: number) => number)) =>
+
+    setDiscards: (update) =>
         set((state) => ({
             discards: typeof update === "function" ? update(state.discards) : update,
+        })),
+
+    setShopDiscount: (discount: number) => set({ shopDiscount: discount }),
+
+    setPlanetCardsInShop: (update: number | ((prev: number) => number)) =>
+        set((state) => ({
+            planetCardsInShop: typeof update === "function" ? update(state.planetCardsInShop) : update,
+        })),
+
+    setCardsInShop: (update: number | ((prev: number) => number)) =>
+        set((state) => ({
+            cardsInShop: typeof update === "function" ? update(state.cardsInShop) : update,
         })),
 }));

@@ -9,7 +9,7 @@ import { ShopItem } from "./ShopItem";
 import { buttonSliceData, cardModifierSliceData, cardSliceData, planetCardSliceData, voucherSliceData } from "../../assets/sliceData";
 import { useSpriteRects } from "../../logic/SpriteSheet";
 import { getRandomInt } from "../../logic/Random";
-import { cardsInShop, planetCardsInShop, useAppStore, Views } from "../../GameState";
+import { useAppStore, Views } from "../../GameState";
 import { useScreenDimensions } from "../../logic/ResponsiveDimensions";
 import { createCard, addCardToDeck, ModifierArray, RanksArray, SuitsArray } from "../../interfaces/Card";
 import { modifierDescs } from "../../assets/cards/ModifierDescs";
@@ -17,6 +17,7 @@ import { planetsArray } from "../../assets/planets/Planets";
 import { voucherArray } from "../../assets/vouchers/VoucherArray";
 import { addChipsForHandType, addMultForHandType, getHandTypeForIndex } from "../../logic/CheckHandType";
 import { playSound } from "../../logic/Sounds";
+import { applyVoucherEffects } from "../../logic/ApplyVoucherEffects";
 
 enum SelectedItemType {
     PlanetCard,
@@ -65,9 +66,9 @@ export default function Shop(): ReactElement | null {
     const animationHeight = 15;
     const [selectedItem, setSelectedItem] = useState<SelectedItem | undefined>(undefined);
 
-    const planetCardPrice = 5;
-    const cardPrice = 3;
-    const voucherPrice = 10;
+    const planetCardPrice = Math.floor(5 * store.shopDiscount);
+    const cardPrice = Math.floor(3 * store.shopDiscount);
+    const voucherPrice = Math.floor(10 * store.shopDiscount);
 
     const planetShopIndexOffset = 50;
 
@@ -85,7 +86,7 @@ export default function Shop(): ReactElement | null {
 
     useEffect(() => {
         rerollShop();
-    }, []);
+    }, [store.cardsInShop, store.planetCardsInShop]);
 
     function changeSelectedItem(newItem: SelectedItem) {
         if (selectedItem?.type === newItem.type && selectedItem?.index === newItem.index) {
@@ -99,7 +100,7 @@ export default function Shop(): ReactElement | null {
 
     function rerollShop() {
         const newPlanetCardRandomIndexes: number[] = [];
-        while (newPlanetCardRandomIndexes.length < planetCardsInShop) {
+        while (newPlanetCardRandomIndexes.length < store.planetCardsInShop) {
             const randIndex = getRandomInt(0, planetCardRects.value.length - 1);
             if (!newPlanetCardRandomIndexes.includes(randIndex)) newPlanetCardRandomIndexes.push(randIndex);
         }
@@ -107,7 +108,7 @@ export default function Shop(): ReactElement | null {
 
         const newCardRandomIndexes: number[] = [];
         const newModifierRandomIndexes: number[] = [];
-        while (newCardRandomIndexes.length < cardsInShop) {
+        while (newCardRandomIndexes.length < store.cardsInShop) {
             const cardIndex = getRandomInt(0, cardRects.value.length - 1);
             if (!newCardRandomIndexes.includes(cardIndex)) {
                 newCardRandomIndexes.push(cardIndex);
@@ -129,7 +130,7 @@ export default function Shop(): ReactElement | null {
     function buyItem() {
         if (!selectedItem) return;
         const priceToSubtract = selectedItem.type === SelectedItemType.Card ? cardPrice : selectedItem.type === SelectedItemType.PlanetCard ? planetCardPrice : voucherPrice;
-        if (priceToSubtract > store.money) return;
+        // if (priceToSubtract > store.money) return;
 
         store.setMoney((prev) => prev - priceToSubtract);
         //if we buy its no longer there so reset
@@ -159,6 +160,7 @@ export default function Shop(): ReactElement | null {
                 prev.filter((_, idx) => idx !== selectedItem.indexInShop)
             );
         } else {
+            applyVoucherEffects(voucherRandomIndex!);
             setVoucherRandomIndex(undefined);
         }
         playSound(buySound);
@@ -284,7 +286,7 @@ export default function Shop(): ReactElement | null {
                         <View className="justify-evenly items-center gap-2 w-3/4">
                             <View className="flex-row justify-evenly items-center gap-2 rounded-md">
                                 <View
-                                    className="flex-row flex-1 justify-center items-center bg-darkGrey rounded-md"
+                                    className="flex-row justify-center items-center bg-darkGrey rounded-md w-1/3"
                                     style={{ minHeight: containterMinHeight }}
                                     onLayout={(e) => setContainerMinHeight(e.nativeEvent.layout.height)}
                                 >
