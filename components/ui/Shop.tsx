@@ -140,7 +140,7 @@ export default function Shop(): ReactElement | null {
     function buyItem() {
         if (!selectedItem) return;
         const priceToSubtract = selectedItem.type === SelectedItemType.Card ? cardPrice : selectedItem.type === SelectedItemType.PlanetCard ? planetCardPrice : voucherPrice;
-        // if (priceToSubtract > store.money) return;
+        if (priceToSubtract > store.money) return;
 
         store.setMoney((prev) => prev - priceToSubtract);
         //if we buy its no longer there so reset

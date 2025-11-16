@@ -128,14 +128,17 @@ export function generateCardsBySuits(): Map<Suits, Map<number, IPlayingCard>> {
         const suitMap = cardsBySuits.get(suit)!;
 
         for (const rank of RanksArray) {
-            const card = createCard(suit, rank, Modifier.Bonus);
+            const chance = getRandomInt(0, 1);
+            let modifier: Modifier;
+            if (chance === 1) {
+                const randomModifierIndex = getRandomInt(0, ModifierArray.length - 1);
+                modifier = ModifierArray[randomModifierIndex];
+            } else {
+                modifier = Modifier.Normal;
+            }
+            const card = createCard(suit, rank, modifier);
             suitMap.set(card.id, card);
         }
-    }
-    for (let i = 0; i < 10; i++) {
-        const suitMap = cardsBySuits.get(Suits.Clubs)!;
-        const card = createCard(Suits.Clubs, Ranks.Ace, Modifier.Glass);
-        suitMap.set(card.id, card);
     }
 
     return cardsBySuits;

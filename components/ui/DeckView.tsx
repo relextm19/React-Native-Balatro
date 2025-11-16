@@ -38,7 +38,7 @@ export default function DeckView({ setShowDeck }: deckViewProps): ReactElement |
     let rowIndex = 0;
     for (let j = 0; j < suitArray.length; j++) {
         const suitCards = suitArray[j];
-        const cardsArray = Array.from(suitCards.values());
+        const cardsArray = Array.from(suitCards.values()).sort((a, b) => a.rank - b.rank);
         if (cardsArray.length === 0) continue;
 
         const numCardsInRow = cardsArray.length;

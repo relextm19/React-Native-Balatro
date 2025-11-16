@@ -4,9 +4,11 @@ export function applyDeckEffects(deckIndex: number) {
     const store = useAppStore.getState();
     switch (deckIndex) {
         case 0:
-            store.setDiscards(prev => prev + 1);
+            store.setHandsToDiscard(prev => prev + 1);
+            store.setDiscards(prev => prev + 1)
             break;
         case 1:
+            store.setHandsToPlay(prev => prev + 1);
             store.setHands(prev => prev + 1);
             break;
         case 2:
