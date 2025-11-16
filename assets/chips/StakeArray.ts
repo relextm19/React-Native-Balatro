@@ -6,8 +6,8 @@ export type Stake = {
 
 export const stakeArray: Stake[] = [
     { index: 0, name: "White", desc: "Base difficulty" },
-    { index: 1, name: "Red", desc: "Base difficulty (for now)" },
-    { index: 2, name: "Green", desc: "Base difficulty (for now)" },
+    { index: 1, name: "Red", desc: "1$ lower win reward" },
+    { index: 2, name: "Green", desc: "-1 hand size" },
     { index: 3, name: "Blue", desc: "Base difficulty (for now)" },
     { index: 4, name: "Black", desc: "Base difficulty (for now)" },
     { index: 5, name: "Purple", desc: "Base difficulty (for now)" },

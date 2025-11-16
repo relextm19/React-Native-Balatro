@@ -12,6 +12,7 @@ import { useSpriteRects } from "../../logic/SpriteSheet";
 import { deckSliceData, buttonSliceData, stakeSliceData } from "../../assets/sliceData";
 import { generateCardsBySuits } from "../../interfaces/Card";
 import { applyDeckEffects } from "../../logic/ApplyDeckEffects";
+import { applyStakeEffects } from "../../logic/ApplyStakeEffects";
 
 export default function DifficultySelectScreen() {
     const decksSpriteSheet = useImage(require("../../assets/cards/decks.png"));
@@ -46,10 +47,11 @@ export default function DifficultySelectScreen() {
         deckArray[deckIndex].state = { total: 52, avaliable: 52 }
         state.setCurrentDeck(deckArray[deckIndex])
         state.setCurrentStake(stakeArray[stakeIndex])
+        applyDeckEffects(deckIndex);
+        applyStakeEffects(stakeIndex);
         const cardsBySuits = generateCardsBySuits();
         if (!cardsBySuits) { return }
         state.setCurrentDeckCards(cardsBySuits);
-        applyDeckEffects(deckIndex);
         state.setCurrentView(Views.AnteSelect)
     }
     function returnToMenu(): void {

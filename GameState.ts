@@ -24,6 +24,10 @@ export let deckSize = 0;
 export function setDeckSize(value: number): void {
     deckSize = value;
 }
+export let winReward = 3;
+export function setWinReward(value: number): void {
+    winReward = value
+}
 
 type AppState = {
     currentView: Views;
@@ -59,6 +63,8 @@ type AppState = {
     setDiscards: (update: number | ((prev: number) => number)) => void;
     setHands: (update: number | ((prev: number) => number)) => void;
     setShopDiscount: (discount: number) => void;
+    setHandSize: (update: number | ((prev: number) => number)) => void;
+
 
     setPlanetCardsInShop: (update: number | ((prev: number) => number)) => void;
     setCardsInShop: (update: number | ((prev: number) => number)) => void;
@@ -105,6 +111,10 @@ export const useAppStore = create<AppState>((set) => ({
     setCurrentAnteScore: (score: number) => set({ currentAnteScore: score }),
     setCurrentAnte: (ante: number) => set({ currentAnte: ante }),
     setCurrentRound: (round: number) => set({ currentRound: round }),
+    setHandSize: (update) =>
+        set((state) => ({
+            handSize: typeof update === "function" ? update(state.handSize) : update,
+        })),
 
     setMoney: (update) =>
         set((state) => ({

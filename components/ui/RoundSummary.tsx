@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import { View, Text } from "react-native";
 import { Skia, Canvas, Atlas, useImage } from "@shopify/react-native-skia";
-import { handsToPlay, useAppStore, Views } from "../../GameState";
+import { handsToPlay, useAppStore, Views, winReward } from "../../GameState";
 
 import MenuButton from "./MenuButton";
 import StatusPane from "./StatusPane";
@@ -26,7 +26,7 @@ export default function RoundSummary(): ReactElement | null {
 
     const remainingHands = store.hands;
 
-    const totalReward = 3 + remainingHands;
+    const totalReward = winReward + remainingHands;
 
     function cashOut() {
         store.setMoney((prev) => prev + totalReward);
@@ -81,7 +81,7 @@ export default function RoundSummary(): ReactElement | null {
                             </View>
                             <View className="ml-auto">
                                 <Text className="text-accentGold text-3xl">
-                                    {`${"$".repeat(3)}`}
+                                    {`${"$".repeat(winReward)}`}
                                 </Text>
                             </View>
                         </View>
