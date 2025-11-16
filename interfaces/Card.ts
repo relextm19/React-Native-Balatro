@@ -118,14 +118,14 @@ export function createCard(suit: Suits, rank: Ranks, modifier: Modifier): IPlayi
     };
 }
 
-export function generateDeck(): Map<Suits, Map<number, IPlayingCard>> {
-    const deck = new Map<Suits, Map<number, IPlayingCard>>();
+export function generateCardsBySuits(): Map<Suits, Map<number, IPlayingCard>> {
+    const cardsBySuits = new Map<Suits, Map<number, IPlayingCard>>();
 
     for (const suit of SuitsArray) {
-        if (!deck.has(suit)) {
-            deck.set(suit, new Map<number, IPlayingCard>());
+        if (!cardsBySuits.has(suit)) {
+            cardsBySuits.set(suit, new Map<number, IPlayingCard>());
         }
-        const suitMap = deck.get(suit)!;
+        const suitMap = cardsBySuits.get(suit)!;
 
         for (const rank of RanksArray) {
             const card = createCard(suit, rank, Modifier.Bonus);
@@ -133,12 +133,12 @@ export function generateDeck(): Map<Suits, Map<number, IPlayingCard>> {
         }
     }
     for (let i = 0; i < 10; i++) {
-        const suitMap = deck.get(Suits.Clubs)!;
+        const suitMap = cardsBySuits.get(Suits.Clubs)!;
         const card = createCard(Suits.Clubs, Ranks.Ace, Modifier.Glass);
         suitMap.set(card.id, card);
     }
 
-    return deck;
+    return cardsBySuits;
 }
 
 export function getRandomCard(cardsBySuits: Map<Suits, Map<number, IPlayingCard>>): IPlayingCard | undefined {
