@@ -54,6 +54,7 @@ This is a single-player roguelike game built for mobile, heavily inspired by Bal
 * Graphics: [React Native Skia](https://shopify.github.io/react-native-skia/)
 * Animations: [React Native Reanimated](https://docs.swmansion.com/react-native-reanimated/)
 * Language: [TypeScript](https://www.typescriptlang.org/)
+* Styling: [NativeWind](https://www.nativewind.dev/)
 
 ---
 
