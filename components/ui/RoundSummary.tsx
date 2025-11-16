@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import { Skia, Canvas, Atlas, useImage } from "@shopify/react-native-skia";
 import { useAppStore, Views, winReward } from "../../GameState";
@@ -25,9 +25,16 @@ export default function RoundSummary(): ReactElement | null {
     const blindScale = 2;
     const stakeScale = 1;
 
-    const remainingHands = store.hands;
+    const [totalReward, setTotalReward] = useState(0);
+    const [remainingHands, setRemaingHands] = useState(0);
+    useEffect(() => {
+        //reset the state for visual effect
+        setTotalReward(store.hands + winReward)
+        setRemaingHands(store.hands);
+        store.setHands(store.handsToPlay)
+        store.setDiscards(store.handsToDiscard);
 
-    const totalReward = winReward + remainingHands;
+    }, [])
 
     function cashOut() {
         store.setMoney((prev) => prev + totalReward);

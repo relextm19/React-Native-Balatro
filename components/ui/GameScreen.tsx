@@ -208,7 +208,6 @@ export default function GameScreen(): ReactElement | null {
             setPlayedHand(removed);
             //use the local variable so i dont have to wait for the async state to update to get the scoring card ids
             const [_, scoringCardIds] = checkHandType(removed);
-            console.log(scoringCardIds)
             const scoringIndexes = scoringCardIds.map((id) => removed.findIndex((card) => card.id === id));
 
             scoringIndexes.forEach((i, _) => {
@@ -234,7 +233,7 @@ export default function GameScreen(): ReactElement | null {
                 } else if (tmp <= 0) {
                     store.setCurrentView(Views.DefeatScreen);
                 }
-            }, removed.length * shakeDuration + shakeDuration);
+            }, scoringIndexes.length * shakeDuration + shakeDuration);
 
             const cardsToDraw = store.handSize - kept.length;
             const newCards = getNRandomCards(cardsToDraw) || [];
