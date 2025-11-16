@@ -43,6 +43,9 @@ type AppState = {
 
     planetCardsInShop: number;
     cardsInShop: number;
+    boughtVouchers: number[];
+    setBoughtVouchers: (update: number[] | ((prev: number[]) => number[])) => void;
+
 
     setCurrentView: (view: Views) => void;
     setCurrentDeck: (deck: Deck) => void;
@@ -79,6 +82,7 @@ export const useAppStore = create<AppState>((set) => ({
 
     planetCardsInShop: planetCardsDefault,
     cardsInShop: cardsInShopDefault,
+    boughtVouchers: [],
 
     setCurrentView: (view: Views) =>
         set((state) => ({
@@ -127,5 +131,10 @@ export const useAppStore = create<AppState>((set) => ({
     setCardsInShop: (update: number | ((prev: number) => number)) =>
         set((state) => ({
             cardsInShop: typeof update === "function" ? update(state.cardsInShop) : update,
+        })),
+
+    setBoughtVouchers: (update) =>
+        set((state) => ({
+            boughtVouchers: typeof update === "function" ? update(state.boughtVouchers) : update,
         })),
 }));

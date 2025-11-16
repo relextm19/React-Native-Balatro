@@ -116,8 +116,18 @@ export default function Shop(): ReactElement | null {
                 newModifierRandomIndexes.push(modIndex);
             }
         }
+        if (store.boughtVouchers.length === 4) {
+            setVoucherRandomIndex(undefined);
+        } else {
+            let voucherIndex = getRandomInt(0, voucherRects.value.length - 1);
 
-        setVoucherRandomIndex(getRandomInt(0, voucherRects.value.length - 1));
+            while (store.boughtVouchers.includes(voucherIndex)) {
+                voucherIndex = getRandomInt(0, voucherRects.value.length - 1);
+            }
+
+            setVoucherRandomIndex(voucherIndex);
+        }
+
         setCardRandomIndexes(newCardRandomIndexes);
         setModifierRandomIndexes(newModifierRandomIndexes);
     }
@@ -161,6 +171,7 @@ export default function Shop(): ReactElement | null {
             );
         } else {
             applyVoucherEffects(voucherRandomIndex!);
+            store.setBoughtVouchers(prev => [...prev, voucherRandomIndex!]);
             setVoucherRandomIndex(undefined);
         }
         playSound(buySound);
