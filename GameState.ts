@@ -62,7 +62,7 @@ type AppState = {
     setCurrentStake: (stake: Stake) => void;
     setCurrentBlind: (blind: Blind) => void;
     setCurrentBossBlind: (blind: Blind | undefined) => void;
-    setCurrentAnteScore: (score: number) => void;
+    setCurrentAnteScore: (update: number | ((prev: number) => number)) => void;
     setCurrentAnte: (ante: number) => void;
     setCurrentRound: (round: number) => void;
     setMoney: (update: number | ((prev: number) => number)) => void;
@@ -123,7 +123,10 @@ export const useAppStore = create<AppState>((set) => ({
 
     setCurrentBlind: (blind: Blind) => set({ currentBlind: blind }),
     setCurrentBossBlind: (blind: Blind | undefined) => set({ currentBossBlind: blind }),
-    setCurrentAnteScore: (score: number) => set({ currentAnteScore: score }),
+    setCurrentAnteScore: (update) =>
+        set((state) => ({
+            currentAnteScore: typeof update === "function" ? update(state.currentAnteScore) : update,
+        })),
     setCurrentAnte: (ante: number) => set({ currentAnte: ante }),
     setCurrentRound: (round: number) => set({ currentRound: round }),
     setHandSize: (update) =>

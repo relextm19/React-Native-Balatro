@@ -33,6 +33,10 @@ export default function RoundSummary(): ReactElement | null {
         store.setMoney((prev) => prev + totalReward);
         store.setCurrentView(Views.Shop);
         revertBlindEffects(store.currentBlind.index);
+        if (store.currentBlind.index > 2) {
+            store.setCurrentBossBlind(undefined);
+            store.setCurrentAnteScore(prev => prev + 300);
+        }
     }
 
     if (!stakeSourceRect || !blindSourceRect || !stakeSpriteSheet || !blindsSpriteSheet) return null;
