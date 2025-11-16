@@ -36,6 +36,7 @@ type AppState = {
     currentDeck: Deck;
     currentAnteScore: number;
     currentRequiredScore: number;
+    currentRoundScore: number;
 
     currentBlind: Blind;
     currentBossBlind: Blind | undefined;
@@ -63,7 +64,7 @@ type AppState = {
     setCurrentBlind: (blind: Blind) => void;
     setCurrentBossBlind: (blind: Blind | undefined) => void;
     setCurrentAnteScore: (update: number | ((prev: number) => number)) => void;
-    setCurrentAnte: (ante: number) => void;
+    setCurrentAnte: (ante: number | ((prev: number) => number)) => void;
     setCurrentRound: (round: number) => void;
     setMoney: (update: number | ((prev: number) => number)) => void;
     setDiscards: (update: number | ((prev: number) => number)) => void;
@@ -72,9 +73,11 @@ type AppState = {
     setHandsToDiscard: (update: number | ((prev: number) => number)) => void;
     setShopDiscount: (discount: number) => void;
     setHandSize: (update: number | ((prev: number) => number)) => void;
+    setCurrentRoundSore: (score: number) => void;
 
     setPlanetCardsInShop: (update: number | ((prev: number) => number)) => void;
     setCardsInShop: (update: number | ((prev: number) => number)) => void;
+    resetGame: () => void;
 };
 
 export const useAppStore = create<AppState>((set) => ({
@@ -86,6 +89,7 @@ export const useAppStore = create<AppState>((set) => ({
     currentBossBlind: undefined,
     currentAnteScore: 300,
     currentRequiredScore: 300,
+    currentRoundScore: 0,
     currentAnte: 1,
     currentRound: 1,
 
@@ -127,7 +131,13 @@ export const useAppStore = create<AppState>((set) => ({
         set((state) => ({
             currentAnteScore: typeof update === "function" ? update(state.currentAnteScore) : update,
         })),
-    setCurrentAnte: (ante: number) => set({ currentAnte: ante }),
+    setCurrentRoundSore(score) { set({ currentRoundScore: score }) },
+    setCurrentAnte: (update: number | ((prev: number) => number)) =>
+        set((state) => ({
+            currentAnte:
+                typeof update === "function" ? update(state.currentAnte) : update,
+        })),
+
     setCurrentRound: (round: number) => set({ currentRound: round }),
     setHandSize: (update) =>
         set((state) => ({
@@ -173,4 +183,31 @@ export const useAppStore = create<AppState>((set) => ({
         set((state) => ({
             boughtVouchers: typeof update === "function" ? update(state.boughtVouchers) : update,
         })),
+
+    resetGame: () =>
+        set(() => ({
+            currentView: Views.Menu,
+            lastView: Views.Menu,
+            currentStake: stakeArray[0],
+            currentDeck: deckArray[0],
+            currentBlind: blindsArray[0],
+            currentBossBlind: undefined,
+            currentAnteScore: 300,
+            currentRequiredScore: 300,
+            currentAnte: 1,
+            currentRound: 1,
+
+            money: 5,
+            hands: defaultHandsToPlay,
+            handsToPlay: defaultHandsToPlay,
+            discards: defaultHandsToDiscard,
+            handsToDiscard: defaultHandsToDiscard,
+            handSize: defaultHandSize,
+            shopDiscount: 1,
+
+            planetCardsInShop: planetCardsDefault,
+            cardsInShop: cardsInShopDefault,
+            boughtVouchers: [],
+        })),
+
 }));

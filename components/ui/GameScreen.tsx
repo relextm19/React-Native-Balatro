@@ -225,6 +225,7 @@ export default function GameScreen(): ReactElement | null {
                 setShakingIndex(-1)
                 setPlayedHand([]);
                 roundScore.current += chips.current * mult.current;
+                store.setCurrentRoundSore(roundScore.current);
                 chips.current = 0;
                 setScoringLock(false);
                 if (roundScore.current >= store.currentRequiredScore) {
@@ -232,6 +233,7 @@ export default function GameScreen(): ReactElement | null {
                     store.setCurrentView(Views.RoundSummary)
                 } else if (tmp <= 0) {
                     store.setCurrentView(Views.DefeatScreen);
+                    store.resetGame();
                 }
             }, scoringIndexes.length * shakeDuration + shakeDuration);
 

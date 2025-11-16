@@ -43,6 +43,8 @@ export default function RoundSummary(): ReactElement | null {
         if (store.currentBlind.index > 2) {
             store.setCurrentBossBlind(undefined);
             store.setCurrentAnteScore(prev => prev + 300);
+            store.setCurrentAnte(prev => prev + 1);
+            store.setCurrentRoundSore(0);
         }
     }
 

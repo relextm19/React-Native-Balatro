@@ -52,7 +52,6 @@ export function getMultForHandType(handType: HandType): number {
 }
 
 export function addMultForHandType(handType: HandType, toAdd: number) {
-    console.log("adding mult for ", handType, toAdd)
     handTypeBaseValues[handType][1] += toAdd;
 }
 

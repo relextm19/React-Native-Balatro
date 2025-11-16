@@ -19,7 +19,6 @@ function getHighlitedText(text: string, keywords: [string, string][], colors: st
 
             const group = parts.slice(i, i + wordsForward).join(" ");
 
-            console.log(colorClass)
             output.push(
                 <Text key={i} className={`${colorClass} font-bold`}>
                     {group + " "}
