@@ -57,21 +57,6 @@ This is a single-player roguelike game built for mobile, heavily inspired by Bal
 ---
 
 ## Usage
-
-There are two ways to get the game.
-
-### 1. Recommended: Direct Download (Android)
-> Download Latest Build
->
-> * Link: [Download Game (Android)](https://expo.dev/accounts/relextm19/projects/balatro/builds/56d9f89b-85a4-4e04-9db8-6907683a4db1)
->
-> Note: This is an `.apk` file.
----
-
-### 2. Manual Setup
-
-This method lets you run the project from the source code using Expo Go. It works on both iOS and Android.
-
 #### Prerequisites
 
 * Node.js & npm: [Download & Install Node.js](https://nodejs.org/) (which includes npm).
