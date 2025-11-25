@@ -28,9 +28,7 @@ https://github.com/user-attachments/assets/462c90ac-5dcd-4e7a-998e-9d0d82f61230
 * [Key Features](#key-features)
 * [Tech Stack](#tech-stack)
 * [Usage](#usage)
-  * [1. Recommended: Direct Download (Android)](#1-recommended-direct-download-android)
-  * [2. Manual Setup (For Developers)](#2-manual-setup-for-developers)
-
+  
 ---
 
 ## About the Game
